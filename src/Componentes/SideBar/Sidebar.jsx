@@ -1,5 +1,6 @@
 import logo from "../../imagens/LOGO.svg";
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   SidebarContainer,
   SidebarMenu,
@@ -35,25 +36,25 @@ function Sidebar() {
         )}
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink href="#home" title="Tela Inicial">
+            <SidebarLink as={Link} to="/home" title="Tela Inicial">
               <Icon><FaHome /></Icon>
               {isExpanded && 'Tela Inicial'}
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink href="#customers" title="Clientes">
+            <SidebarLink as={Link} to="/clientes" title="Clientes">
               <Icon><FaUser /></Icon>
               {isExpanded && 'Clientes'}
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink href="#employees" title="Funcionários">
+            <SidebarLink as={Link} to="/funcionarios" title="Funcionários">
               <Icon><FaUsers /></Icon>
               {isExpanded && 'Funcionários'}
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink href="#services" title="Serviços">
+            <SidebarLink as={Link} to="/servicos" title="Serviços">
               <Icon><FaTools /></Icon>
               {isExpanded && 'Serviços'}
             </SidebarLink>
@@ -63,7 +64,7 @@ function Sidebar() {
       <SidebarFooter>
         <Divider />
         <SidebarFooterItem>
-          <SidebarLink href="#settings" title="Configurações">
+          <SidebarLink as={Link} to="/settings" title="Configurações">
             <Icon><FaCog /></Icon>
             {isExpanded && 'Configurações'}
           </SidebarLink>
@@ -80,5 +81,3 @@ function Sidebar() {
 }
 
 export default Sidebar;
-
-
