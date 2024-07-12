@@ -10,6 +10,7 @@ import LoginPage from './Componentes/LoginPage/LoginPageComponent';
 import Cliente from './pages/Clientes/ClientesPage';
 import Funcionarios from './pages/Funcionarios/FuncionariosPage';
 import Servicos from './pages/Servicos/ServicosPage';
+import Register from './pages/Register/RegisterPage.jsx';
 
 const Content = styled.div`
   margin-left: 250px;
@@ -22,6 +23,7 @@ function App() {
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/home" element={
           <>
             <Header />

@@ -34,6 +34,11 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    // Redirecione para o endpoint de autenticação do Google
+    window.location.href = 'https://cyberos-sistemadeordemdeservico-api.onrender.com/google';
+  };
+
   return (
     <section className='login-form'>
       {loading && <Loading />} {/* Mostra a tela de loading enquanto os dados estão sendo carregados */}
@@ -42,7 +47,7 @@ const Login = () => {
         <div className="login-form">
           <h1 className="titulo">Já tem cadastro?</h1>
           <h2 className="subtitulo">Faça seu login__</h2>
-          <button className="google-login">
+          <button className="google-login" onClick={handleGoogleLogin}>
             <img src="./public/google.png" alt="Google Logo" /> Login com Google
           </button>
           <div className="or-separator">- ou -</div>
@@ -67,7 +72,7 @@ const Login = () => {
           </form>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="login-links">
-            <a href="/forgot-password">esqueceu sua senha?</a>
+            <a href="/forgot-password">Esqueci minha senha</a>
             <a href="/register">Novo no cyberos? Cadastre-se aqui</a>
           </div>
         </div>
