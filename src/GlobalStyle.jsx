@@ -12,6 +12,26 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
+/* Estilo para navegadores WebKit (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 10px; /* largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* torna o fundo da área da barra de rolagem transparente */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* cor semi-transparente do botão da barra de rolagem */
+  border-radius: 5px; /* borda arredondada do botão da barra de rolagem */
+}
+
+/* Estilo para outros navegadores */
+/* Este estilo pode não funcionar em todos os navegadores */
+scrollbar-width: thin; /* largura da barra de rolagem */
+scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* cor semi-transparente do botão e fundo transparente da barra de rolagem */
+
 `;
 
 export default GlobalStyle;

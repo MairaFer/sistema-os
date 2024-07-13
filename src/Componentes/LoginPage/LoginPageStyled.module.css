@@ -7,12 +7,12 @@
   --bg-base: #213356;
 }
 
-.login-form{
+.loginForm {
   align-items: center;
   justify-content: space-between;
 }
 
-.login-container {
+.loginContainer {
   display: flex;
   flex-direction: row; /* Muda a direção para linha */
   align-items: center; /* Centraliza verticalmente */
@@ -23,20 +23,20 @@
   padding: 0% 10% 0% 10%;
 }
 
-.logo-login {
-  width: 40%; /* Ajuste o tamanho conforme necessário */
+.logoLogin {
+  width: 37%; /* Ajuste o tamanho conforme necessário */
   margin-right: 2rem; /* Espaço entre o logotipo e o formulário */
   padding-bottom: 6%;
 }
 
-.login-form {
+.loginForm {
   background-color: var(--bg-base);
   padding: 0rem 3rem 0rem 3rem; /* Ajuste o padding conforme necessário */
   text-align: center;
 }
 
-.login-logo img {
-  width: 150px;
+.loginLogo img {
+  width: 1rem;
 }
 
 .titulo {
@@ -60,7 +60,7 @@
   margin-bottom: 1.2rem;
 }
 
-.google-login {
+.googleLogin {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,12 +77,12 @@
   transition: 0.25s;
 }
 
-.google-login img {
+.googleLogin img {
   width: 20px;
   margin-right: 10px;
 }
 
-.or-separator {
+.orSeparator {
   margin: 10px 0;
   color: white;
   font-family: var(--font-principal);
@@ -124,7 +124,7 @@ form button:hover {
   background-color: #EF5E22;
 }
 
-.login-links {
+.loginLinks {
   margin-top: 1rem;
   margin-left: 3rem;
   margin-right: 3rem;
@@ -132,7 +132,7 @@ form button:hover {
   gap: 1rem; /* Adiciona espaçamento entre os links */
 }
 
-.login-links a {
+.loginLinks a {
   color: whitesmoke;
   font-family: var(--font-principal);
   font-weight: 500;
@@ -140,11 +140,11 @@ form button:hover {
   display: flex;
 }
 
-.login-links a:hover {
+.loginLinks a:hover {
   color: #5eb9ff;
 }
 
-.google-login:hover{
+.googleLogin:hover {
   scale: 102%;
   background-color: #e6f4ff;
 }

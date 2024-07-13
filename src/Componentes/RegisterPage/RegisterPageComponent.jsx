@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../../Componentes/RegisterPage/RegisterPageStyled.css'; 
+import styles from './RegisterPageStyled.module.css'; // Importando o CSS Module
 import Loading from '../../pages/Loading/Loading'; // Importe o componente de loading
 
 const Register = () => {
@@ -19,6 +19,13 @@ const Register = () => {
     setLoading(true);
     setError('');
 
+    // Validação da senha
+    if (password.length < 8) {
+      setError('A senha deve ter pelo menos 8 caracteres.');
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('As senhas não coincidem.');
       setLoading(false);
@@ -27,31 +34,36 @@ const Register = () => {
 
     try {
       const response = await axios.post('https://cyberos-sistemadeordemdeservico-api.onrender.com/register', {
-        name,
-        email,
+        nome_user: name,
+        email_user: email,
         password
       });
       console.log('Registration successful:', response.data);
       // Redireciona o usuário para a página de login após registro bem-sucedido
-      navigate('/login');
+      navigate('/');
     } catch (err) {
-      console.error('Registration failed:', err);
-      setError('Falha no registro. Por favor, tente novamente.');
+      console.error('Registration failed:', err.response);
+      if (err.response && err.response.data.error) {
+        setError(err.response.data.error); // Mostra a mensagem de erro vinda da API
+      } else {
+        setError('Falha no registro. Por favor, tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className='login-form'>
+    <section className={styles.registerForm}>
       {loading && <Loading />} {/* Mostra a tela de loading enquanto os dados estão sendo carregados */}
-      <div className="login-container">
-        <img className='logo-login' src="./public/LOGO.svg" alt="CyberOS Logo" />
-        <div className="login-form">
-          <h1 className="titulo">Comece agora!</h1>
-          <h2 className="subtitulo">Faça seu cadastro__</h2>
+      <div className={styles.registerContainer}>
+        <img className={styles.logoRegister} src="./public/LOGO.svg" alt="CyberOS Logo" />
+        <div className={styles.registerForm}>
+          <h1 className={styles.titulo}>Comece agora!</h1>
+          <h2 className={styles.subtitulo}>Faça seu cadastro__</h2>
           <form onSubmit={handleRegister}>
             <input
+              className={styles.registerInput}
               type="text"
               placeholder="Nome completo"
               value={name}
@@ -59,6 +71,7 @@ const Register = () => {
               required
             />
             <input
+              className={styles.registerInput}
               type="email"
               placeholder="Email"
               value={email}
@@ -66,6 +79,7 @@ const Register = () => {
               required
             />
             <input
+              className={styles.registerInput}
               type="password"
               placeholder="Digite sua senha"
               value={password}
@@ -73,13 +87,14 @@ const Register = () => {
               required
             />
             <input
+              className={styles.registerInput}
               type="password"
               placeholder="Confirme sua senha"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
-            <button type="submit" disabled={loading}>
+            <button className={styles.registerButton} type="submit" disabled={loading}>
               {loading ? 'Criando Conta...' : 'Criar Conta'}
             </button>
           </form>
