@@ -60,7 +60,7 @@ const Register = () => {
         <img className={styles.logoRegister} src="./public/LOGO.svg" alt="CyberOS Logo" />
         <div className={styles.registerForm}>
           <h1 className={styles.titulo}>Comece agora!</h1>
-          <h2 className={styles.subtitulo}>Faça seu cadastro__</h2>
+          <h2 className={styles.subtitulo}>Faça seu cadastro_</h2>
           <form onSubmit={handleRegister}>
             <input
               className={styles.registerInput}

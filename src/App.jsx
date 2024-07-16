@@ -11,6 +11,7 @@ import Cliente from './pages/Clientes/ClientesPage';
 import Funcionarios from './pages/Funcionarios/FuncionariosPage';
 import Servicos from './pages/Servicos/ServicosPage';
 import Register from './pages/Register/RegisterPage.jsx';
+import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx'
 
 const Content = styled.div`
   margin-left: 250px;
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/redefinir-senha" element={<ForgotPassword />} />
         <Route path="/home" element={
           <>
             <Header />

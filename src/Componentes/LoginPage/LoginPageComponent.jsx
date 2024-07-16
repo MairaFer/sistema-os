@@ -44,7 +44,7 @@ const Login = () => {
         <img className={styles.logoLogin} src="./public/LOGO.svg" alt="CyberOS Logo" />
         <div className={styles.loginForm}>
           <h1 className={styles.titulo}>Já tem cadastro?</h1>
-          <h2 className={styles.subtitulo}>Faça seu login abaixo__</h2>
+          <h2 className={styles.subtitulo}>Faça seu login abaixo_</h2>
           <button className={styles.googleLogin} onClick={handleGoogleLogin}>
             <img src="./public/google.png" alt="Google Logo" />
             Continuar com Google
@@ -73,7 +73,7 @@ const Login = () => {
           </form>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className={styles.loginLinks}>
-            <a href="/forgot-password">Esqueci minha senha</a>
+            <a href="/redefinir-senha">Esqueci minha senha</a>
             <a href="/register">Novo no cyberos? Cadastre-se aqui</a>
           </div>
         </div>
