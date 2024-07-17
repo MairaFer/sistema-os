@@ -12,6 +12,7 @@ import Funcionarios from './pages/Funcionarios/FuncionariosPage';
 import Servicos from './pages/Servicos/ServicosPage';
 import Register from './pages/Register/RegisterPage.jsx';
 import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx'
+import ResetPassword from './Componentes/ResetPassword/ResetPasswordComponent.jsx';
 
 const Content = styled.div`
   margin-left: 250px;
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/redefinir-senha" element={<ForgotPassword />} />
+        <Route path="/account/mudar-senha/:token" element={<ResetPassword />} />
         <Route path="/home" element={
           <>
             <Header />
