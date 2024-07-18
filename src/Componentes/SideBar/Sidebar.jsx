@@ -1,4 +1,3 @@
-import logo from "../../imagens/LOGO.svg";
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -6,7 +5,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarLink,
-  LogoContainer,
   Icon,
   SidebarFooter,
   SidebarFooterItem,
@@ -25,37 +23,35 @@ function Sidebar() {
 
   return (
     <SidebarContainer isExpanded={isExpanded}>
-      <ToggleButton onClick={toggleSidebar}>
-        <ToggleIcon><FaBars /></ToggleIcon>
-      </ToggleButton>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <ToggleButton onClick={toggleSidebar}>
+          <ToggleIcon><FaBars /></ToggleIcon>
+        </ToggleButton>
+      
+      </div>
       <div>
-        {isExpanded && (
-          <LogoContainer>
-            <img src={logo} alt="Logo da Empresa" />
-          </LogoContainer>
-        )}
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/home" title="Tela Inicial">
-              <Icon><FaHome /></Icon>
+              <Icon isExpanded={isExpanded}><FaHome /></Icon>
               {isExpanded && 'Tela Inicial'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem>
+          <SidebarMenuItem isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/clientes" title="Clientes">
-              <Icon><FaUser /></Icon>
+              <Icon isExpanded={isExpanded}><FaUser /></Icon>
               {isExpanded && 'Clientes'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem>
+          <SidebarMenuItem isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/funcionarios" title="Funcionários">
-              <Icon><FaUsers /></Icon>
+              <Icon isExpanded={isExpanded}><FaUsers /></Icon>
               {isExpanded && 'Funcionários'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem>
+          <SidebarMenuItem isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/servicos" title="Serviços">
-              <Icon><FaTools /></Icon>
+              <Icon isExpanded={isExpanded}><FaTools /></Icon>
               {isExpanded && 'Serviços'}
             </SidebarLink>
           </SidebarMenuItem>
@@ -63,15 +59,15 @@ function Sidebar() {
       </div>
       <SidebarFooter>
         <Divider />
-        <SidebarFooterItem>
+        <SidebarFooterItem isExpanded={isExpanded}>
           <SidebarLink as={Link} to="/settings" title="Configurações">
-            <Icon><FaCog /></Icon>
+            <Icon isExpanded={isExpanded}><FaCog /></Icon>
             {isExpanded && 'Configurações'}
           </SidebarLink>
         </SidebarFooterItem>
-        <SidebarFooterItem>
+        <SidebarFooterItem isExpanded={isExpanded}>
           <SidebarLink href="#logout" title="Sair" red>
-            <Icon red><FaSignOutAlt /></Icon>
+            <Icon isExpanded={isExpanded} red><FaSignOutAlt /></Icon>
             {isExpanded && 'Sair'}
           </SidebarLink>
         </SidebarFooterItem>

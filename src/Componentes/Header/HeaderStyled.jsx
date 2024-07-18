@@ -9,9 +9,11 @@ export const HeaderContainer = styled.header`
   padding: 10px 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: 100%;
+width: calc(100% - ${props => (props.isExpanded ? '250px' : '80px')}); /* Ajustar a largura da header */
   top: 0;
+  left: ${props => (props.isExpanded ? '250px' : '80px')}; /* Ajustar a posição da header */
   z-index: 1000;
+  transition: width 0.3s, left 0.3s;
 `;
 
 export const Logo = styled.img`

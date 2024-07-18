@@ -1,4 +1,3 @@
-
 import styled from 'styled-components';
 
 export const SidebarContainer = styled.div`
@@ -16,13 +15,14 @@ export const SidebarContainer = styled.div`
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   font-family: 'Roboto', sans-serif;
   transition: width 0.3s;
+  z-index: 1001;
 `;
 
 export const ToggleButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 25px;
   cursor: pointer;
 `;
 
@@ -30,14 +30,7 @@ export const ToggleIcon = styled.span`
   font-size: 24px;
 `;
 
-export const LogoContainer = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  img {
-    width: 150px;
-  }
-`;
+
 
 export const SidebarMenu = styled.ul`
   list-style-type: none;
@@ -69,7 +62,7 @@ export const SidebarLink = styled.a`
 `;
 
 export const Icon = styled.span`
-  margin-right: ${props => (props.isExpanded ? '10px' : '0')};
+  margin-right: ${props => (props.isExpanded ? '20px' : '0')}; /* Aumenta o espaçamento para 20px */
   display: flex;
   align-items: center;
   justify-content: center;

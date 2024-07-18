@@ -1,14 +1,16 @@
 import React from 'react';
-import { CardIconContainer, CardTitle, CardCount } from './StatusOverviewStyled';
+import { Card, CardIcon, CardInfo, CardCount } from './StatusCardStyled';
 
-const StatusCard = ({ title, count, color, icon }) => {
+const StatusCard = ({ icon, count, label, bgColor, color }) => {
   return (
-    <CardContainer style={{ borderColor: color }}>
-      <CardIconContainer>{icon}</CardIconContainer>
-      <CardTitle>{title}</CardTitle>
-      <CardCount>{count}</CardCount>
-    </CardContainer>
+    <Card style={{ backgroundColor: bgColor, color: color }}>
+      <CardIcon>{icon}</CardIcon>
+      <CardInfo>
+        <CardCount>{count}</CardCount>
+        <div>{label}</div>
+      </CardInfo>
+    </Card>
   );
-}
+};
 
 export default StatusCard;

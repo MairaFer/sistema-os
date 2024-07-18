@@ -30,8 +30,8 @@ function App() {
         <Route path="/account/mudar-senha/:token" element={<ResetPassword />} />
         <Route path="/home" element={
           <>
-            <Header />
             <Sidebar />
+            <Header />
             <Content>
               <Home />
             </Content>
@@ -39,8 +39,8 @@ function App() {
         } />
         <Route path="/clientes" element={
           <>
-            <Header />
             <Sidebar />
+            <Header/>
             <Content>
               <Cliente />
             </Content>
@@ -48,8 +48,8 @@ function App() {
         } />
         <Route path="/funcionarios" element={
           <>
-            <Header />
             <Sidebar />
+            <Header />
             <Content>
               <Funcionarios />
             </Content>
@@ -57,8 +57,8 @@ function App() {
         } />
         <Route path="/servicos" element={
           <>
-            <Header />
             <Sidebar />
+            <Header />
             <Content>
               <Servicos />
             </Content>

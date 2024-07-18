@@ -1,39 +1,39 @@
 import React from 'react';
-import Sidebar from '../../Componentes/SideBar/Sidebar';
-import Footer from '../../Componentes/Footer/Footer';
-import Banner from '../../Componentes/Banner/Banner';
-import StatusOverview from '../../Componentes/StatusOverview/StatusOverview';
+import { Container, Greeting, StatusContainer, ActionContainer, RecentOrdersContainer, Sidebar } from './HomeStyled';
+import StatusCard from '../../Componentes/StatusOverview/StatusCard';
+import ActionButton from '../../Componentes/ActionButton/ActionButton';
 import RecentOrdersTable from '../../Componentes/RecentOrdersTable/RecentOrdersTable';
+import { FaCheck, FaExclamationCircle, FaHourglassHalf, FaClipboardList, FaPlus, FaClipboard } from 'react-icons/fa';
+
 const Home = () => {
   const recentOrders = [
-    { name: 'Ordem 1', key: '001', status: 'Em Andamento', client: 'Empresa A', date: '2024-06-28' },
-    { name: 'Ordem 2', key: '002', status: 'Concluída', client: 'Empresa B', date: '2024-06-27' },
-    { name: 'Ordem 3', key: '003', status: 'Aguardando', client: 'Empresa C', date: '2024-06-26' },
+    { name: 'REPARO DE MÁQUINA', osKey: 'OS-163', status: 'Em Aberto', client: 'Osmar Panificadora', date: '01/06/2024' }
   ];
+
   return (
-    <div>
-      <p></p>
-      <p> </p>
-      p
-      <h2></h2>
-      {">"} Pagina Inicial
-      <p></p>
-      <Sidebar />
-      <Banner />
-      <StatusOverview />
-      <RecentOrdersTable orders={recentOrders} /> {/* Renderizando a tabela de ordens recentes */}
-      <div>
-
-        <section>
-      
-        </section>
-        <section>
-          
-        </section>
-
-      </div>
-    </div>
+    <Container>
+    
+      <main>
+        <p>home</p>
+        &gt; Pagina Inicial
+        <Greeting>Olá, Usuário</Greeting>
+        <StatusContainer>
+          <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
+          <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
+          <StatusCard icon={<FaHourglassHalf />} count="32" label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
+          <StatusCard icon={<FaClipboardList />} count="129" label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
+        </StatusContainer>
+        <ActionContainer>
+          <ActionButton icon={<FaPlus />} label="Criar OS" />
+          <ActionButton icon={<FaClipboard />} label="Gerenciar OS's" />
+        </ActionContainer>
+        <RecentOrdersContainer>
+          <h2>OS's Recentes</h2>
+          <RecentOrdersTable orders={recentOrders} />
+        </RecentOrdersContainer>
+      </main>
+    </Container>
   );
-}
+};
 
 export default Home;
