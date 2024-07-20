@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalStyle from './GlobalStyle';
 import Sidebar from './Componentes/SideBar/Sidebar';
-import Home from './pages/Home/Home';
+import HomePage from './pages/Home/Home';
 import Header from './Componentes/Header/Header';
 import Footer from './Componentes/Footer/Footer';
 import LoginPage from './Componentes/LoginPage/LoginPageComponent';
@@ -28,15 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/redefinir-senha" element={<ForgotPassword />} />
         <Route path="/account/mudar-senha/:token" element={<ResetPassword />} />
-        <Route path="/home" element={
-          <>
-            <Sidebar />
-            <Header />
-            <Content>
-              <Home />
-            </Content>
-          </>
-        } />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/clientes" element={
           <>
             <Sidebar />

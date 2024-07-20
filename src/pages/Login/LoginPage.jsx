@@ -1,6 +1,5 @@
 import React from 'react';
-import Login from '../../Componentes/LoginPageComponent.jsx'; // Certifique-se de que o caminho esteja correto
-
+import Login from '../../Componentes/LoginPageComponent.jsx'; 
 const LoginPage = () => {
   return (
     <div>
