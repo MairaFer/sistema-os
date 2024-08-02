@@ -17,13 +17,13 @@ const RecentOrdersTable = ({ orders }) => {
         </TableHead>
         <TableBody>
           {orders.map((order) => (
-            <TableRow key={order.key}>
-              <TableCell>{order.name}</TableCell>
-              <TableCell>{order.key}</TableCell>
-              <TableCell>{order.status}</TableCell>
-              <TableCell>{order.client}</TableCell>
-              <TableCell>{order.date}</TableCell>
-            </TableRow>
+            <TableRow key={order.id}>
+            <TableCell>{order.name}</TableCell>
+            <TableCell>{order.key}</TableCell>
+            <TableCell>{order.status}</TableCell>
+            <TableCell>{order.client}</TableCell>
+            <TableCell>{order.date}</TableCell>
+          </TableRow>          
           ))}
         </TableBody>
       </Table>

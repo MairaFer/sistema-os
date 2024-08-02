@@ -2,28 +2,30 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './LoginPageStyled.module.css';
-import '../Footer/Footer';
 import Loading from '../../pages/Loading/Loading';
+import { useAuth } from '../../context/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await axios.post('https://cyberos-sistemadeordemdeservico-api.onrender.com/login', {
         email_user: email,
         password
       });
       console.log('Login successful:', response.data);
+      const { token, user } = response.data;
+      login(token, user); // Armazena o token e o userId
       navigate('/home');
     } catch (err) {
       console.error('Login failed:', err);
@@ -41,12 +43,12 @@ const Login = () => {
     <section className={styles.loginForm}>
       {loading && <Loading />}
       <div className={styles.loginContainer}>
-        <img className={styles.logoLogin} src="./public/LOGO.svg" alt="CyberOS Logo" />
+        <img className={styles.logoLogin} src="/LOGO.svg" alt="CyberOS Logo" />
         <div className={styles.loginForm}>
           <h1 className={styles.titulo}>Já tem cadastro?</h1>
           <h2 className={styles.subtitulo}>Faça seu login abaixo_</h2>
           <button className={styles.googleLogin} onClick={handleGoogleLogin}>
-            <img src="./public/google.png" alt="Google Logo" />
+            <img src="/google.png" alt="Google Logo" />
             Continuar com Google
           </button>
           <p className={styles.orSeparator}>ou</p>
