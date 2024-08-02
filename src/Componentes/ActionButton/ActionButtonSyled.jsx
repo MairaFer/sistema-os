@@ -3,16 +3,22 @@ import styled from 'styled-components';
 export const Button = styled.button`
   display: flex;
   align-items: center;
-  background-color: #0066ff;
+  padding: 1rem;
+  margin: 0.5rem;
+  font-size: 1.2rem;
+  background-color: #007bff;
   color: white;
-  padding: 0.5rem 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1.5rem;
-  margin: 0.5rem;
+  transition: background-color 0.3s ease;
+  min-width: 150px;
 
   &:hover {
-    background-color: #0056cc;
+    background-color: #0056b3;
+  }
+
+  svg {
+    margin-right: 0.5rem;
   }
 `;

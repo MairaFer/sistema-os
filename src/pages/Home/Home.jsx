@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, Greeting, StatusContainer, ActionContainer, RecentOrdersContainer } from './HomeStyled';
+import { Container, MainContent, GreetingContainer, Greeting, StatusContainer, ActionContainer, RecentOrdersContainer } from './HomeStyled';
 import StatusCard from '../../Componentes/StatusOverview/StatusCard';
 import ActionButton from '../../Componentes/ActionButton/ActionButton';
 import RecentOrdersTable from '../../Componentes/RecentOrdersTable/RecentOrdersTable';
@@ -32,16 +32,17 @@ const Home = () => {
 
   return (
     <Container>
-      <main>
-        <p>home</p>
-        &gt; Pagina Inicial
-        <Greeting>Olá, Usuário</Greeting>
-        <StatusContainer>
-          <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
-          <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
-          <StatusCard icon={<FaHourglassHalf />} count="32" label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
-          <StatusCard icon={<FaClipboardList />} count="129" label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
-        </StatusContainer>
+      <MainContent>
+        <p>home &gt; Pagina Inicial</p>
+        <GreetingContainer>
+          <Greeting>Olá, Usuário</Greeting>
+          <StatusContainer>
+            <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
+            <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
+            <StatusCard icon={<FaHourglassHalf />} count="32" label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
+            <StatusCard icon={<FaClipboardList />} count="129" label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
+          </StatusContainer>
+        </GreetingContainer>
         <ActionContainer>
           <ActionButton icon={<FaPlus />} label="Criar OS" />
           <ActionButton icon={<FaClipboard />} label="Gerenciar OS's" />
@@ -50,7 +51,7 @@ const Home = () => {
           <h2>OS's Recentes</h2>
           <RecentOrdersTable orders={recentOrders} />
         </RecentOrdersContainer>
-      </main>
+      </MainContent>
     </Container>
   );
 };
