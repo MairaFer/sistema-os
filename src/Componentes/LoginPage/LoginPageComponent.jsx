@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from './LoginPageStyled.module.css';
 import Loading from '../../pages/Loading/Loading';
@@ -12,6 +12,18 @@ const Login = () => {
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Verifica se há um token na URL
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get('token');
+
+    if (token) {
+      localStorage.setItem('jwtToken', token); // Armazena o token no localStorage
+      navigate('/home'); // Redireciona para a página inicial
+    }
+  }, [location.search, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,6 +48,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
+    // Redireciona o usuário para o endpoint de autenticação do Google
     window.location.href = 'https://cyberos-sistemadeordemdeservico-api.onrender.com/google';
   };
 
@@ -76,7 +89,7 @@ const Login = () => {
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className={styles.loginLinks}>
             <a href="/redefinir-senha">Esqueci minha senha</a>
-            <a href="/register">Novo no cyberos? Cadastre-se aqui</a>
+            <a href="/register">Novo no CyberOS? Cadastre-se aqui</a>
           </div>
         </div>
       </div>
