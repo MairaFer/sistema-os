@@ -1,0 +1,223 @@
+.barraPageChild {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    background-color: #ef5e22;
+    width: 133.663rem;
+    height: 20.688rem;
+}
+.barraPage {
+    position: absolute;
+    top: 0rem;
+    left: -12.375rem;
+    width: 133.663rem;
+    height: 20.688rem;
+}
+.designPageChild {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    background-color: #213356;
+    width: 124.375rem;
+    height: 7.375rem;
+}
+.designPage {
+    position: absolute;
+    top: 63.813rem;
+    left: -0.062rem;
+    width: 124.375rem;
+    height: 7.375rem;
+}
+.confirmBoxChild {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: 24px;
+    background-color: #213356;
+    width: 12.5rem;
+    height: 12.5rem;
+}
+.sortRightIcon {
+    position: absolute;
+    top: 3.438rem;
+    left: 3.5rem;
+    width: 5.625rem;
+    height: 5.625rem;
+    object-fit: cover;
+}
+.confirmBox {
+    position: absolute;
+    top: 33.813rem;
+    left: 58.688rem;
+    width: 12.5rem;
+    height: 12.5rem;
+    cursor: pointer;
+}
+.criandoOs {
+    position: absolute;
+    top: 7.688rem;
+    left: 7.313rem;
+    font-size: 6rem;
+}
+.adicioneUmCliente {
+    position: absolute;
+    top: 14.438rem;
+    left: 7.5rem;
+    font-size: 4rem;
+}
+.box {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: 24px;
+    background-color: #213356;
+    width: 43.5rem;
+    height: 7.063rem;
+}
+.nomedoclienteChild {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: 24px;
+    background-color: #fff;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.cliente {
+    position: absolute;
+    top: 0.938rem;
+    left: 1.313rem;
+    display: inline-block;
+    width: 12.938rem;
+}
+.nomedocliente {
+    position: absolute;
+    top: 1.625rem;
+    left: 2.063rem;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.expandArrowIcon {
+    position: absolute;
+    top: 1.625rem;
+    left: 38.625rem;
+    width: 2.5rem;
+    height: 3.75rem;
+    object-fit: cover;
+}
+.dropdown {
+    position: absolute;
+    top: 25.125rem;
+    left: 7.875rem;
+    width: 43.5rem;
+    height: 7.063rem;
+    color: #213356;
+}
+.selecionarClienteExistente {
+    position: absolute;
+    top: 21.563rem;
+    left: 7.875rem;
+    font-size: 2.5rem;
+}
+.box1 {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: 24px;
+    background-color: #213356;
+    width: 44.125rem;
+    height: 24.375rem;
+}
+.contatoinserir {
+    position: absolute;
+    top: 7.938rem;
+    left: 2.438rem;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.nomedoclienteinserir {
+    position: absolute;
+    top: 2.813rem;
+    left: 2.438rem;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.endereo {
+    position: absolute;
+    top: 0.938rem;
+    left: 1.313rem;
+    display: inline-block;
+    width: 14.75rem;
+}
+.endereoinserir {
+    position: absolute;
+    top: 13.063rem;
+    left: 2.438rem;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.cpfOuCnpj {
+    position: absolute;
+    top: 0.938rem;
+    left: 1.313rem;
+    display: inline-block;
+    width: 15.313rem;
+}
+.cpfinserir {
+    position: absolute;
+    top: 18.188rem;
+    left: 2.438rem;
+    width: 39.325rem;
+    height: 3.75rem;
+}
+.containerNovoCliente {
+    position: absolute;
+    top: 37.25rem;
+    left: 7.25rem;
+    width: 44.125rem;
+    height: 24.375rem;
+    color: #213356;
+}
+.ouCriarNovo {
+    position: absolute;
+    top: 33.313rem;
+    left: 7.875rem;
+    font-size: 2.5rem;
+}
+.backButtonChild {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: 50%;
+    background-color: #0047ff;
+    width: 6.188rem;
+    height: 6.188rem;
+}
+.goBackIcon {
+    position: absolute;
+    top: 0.688rem;
+    left: 0.75rem;
+    width: 4.688rem;
+    height: 4.688rem;
+    object-fit: cover;
+}
+.backButton {
+    position: absolute;
+    top: 1.5rem;
+    left: 7.25rem;
+    width: 6.188rem;
+    height: 6.188rem;
+    cursor: pointer;
+}
+.criaoDeOs2 {
+    width: 100%;
+    position: relative;
+    background-color: #252630;
+    height: 67.5rem;
+    overflow: hidden;
+    text-align: left;
+    font-size: 1.5rem;
+    color: #fff;
+    font-family: Lexend;
+}
+

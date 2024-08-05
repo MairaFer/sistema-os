@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Container, MainContent, GreetingContainer, Greeting, StatusContainer, ActionContainer, RecentOrdersContainer } from './HomeStyled';
-import StatusCard from '../../Componentes/StatusOverview/StatusCard';
-import ActionButton from '../../Componentes/ActionButton/ActionButton';
-import RecentOrdersTable from '../../Componentes/RecentOrdersTable/RecentOrdersTable';
+import StatusCard from '../../Componentes/HomeComponents/StatusCard';
+import RecentOrdersTable from '../../Componentes/HomeComponents/RecentOrdersTable';
 import { FaCheck, FaExclamationCircle, FaHourglassHalf, FaClipboardList, FaPlus, FaClipboard } from 'react-icons/fa';
 import { useAuth } from '../../context/authContext';
-import homeStyle from './Home.module.css';
+import styles from './Home.module.css';
 
 const Home = () => {
   const location = useLocation();
@@ -17,6 +15,16 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noRecentOrders, setNoRecentOrders] = useState(false);
+
+  const createOsHandle = () => {
+    console.log("Navegando para /criaros/tipo-da-os");
+    navigate("/criaros/tipo-da-os");
+  };
+
+  const manageOsHandle = () => {
+    console.log("Navegando para /gerenciaros");
+    navigate("/gerenciaros");
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -61,36 +69,40 @@ const Home = () => {
   }, []);
 
   return (
-    <Container>
-      <MainContent>
+    <div className={styles.container}>
+      <main className={styles.mainContent}>
         <p>home &gt; Pagina Inicial</p>
-        <GreetingContainer>
-          <Greeting>Olá, Usuário</Greeting>
-          <StatusContainer>
+        <div className={styles.greetingContainer}>
+          <h1 className={styles.greeting}>Olá, Usuário</h1>
+          <div className={styles.statusContainer}>
             <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
             <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
             <StatusCard icon={<FaHourglassHalf />} count="32" label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
             <StatusCard icon={<FaClipboardList />} count="129" label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
-          </StatusContainer>
-        </GreetingContainer>
-        <ActionContainer>
-          <ActionButton icon={<FaPlus />} label="Criar OS" />
-          <ActionButton icon={<FaClipboard />} label="Gerenciar OS's" />
-        </ActionContainer>
-        <RecentOrdersContainer>
+          </div>
+        </div>
+        <div className={styles.actionContainer}>
+          <button className={styles.actionButton} onClick={createOsHandle}>
+            <FaPlus /> Criar OS
+          </button>
+          <button className={styles.actionButton} onClick={manageOsHandle}>
+            <FaClipboard /> Gerenciar OS's
+          </button>
+        </div>
+        <div className={styles.recentOrdersContainer}>
           <h2>OS's Recentes</h2>
           {loading ? (
             <p>Carregando...</p>
           ) : noRecentOrders ? (
-            <p className={homeStyle.erroOS}>Não existe nenhuma OS recente.</p>
+            <p className={styles.erroOS}>Não existe nenhuma OS recente.</p>
           ) : recentOrders.length > 0 ? (
             <RecentOrdersTable orders={recentOrders} />
           ) : (
-            <p className={homeStyle.erroOS}>{error}</p>
+            <p className={styles.erroOS}>{error}</p>
           )}
-        </RecentOrdersContainer>
-      </MainContent>
-    </Container>
+        </div>
+      </main>
+    </div>
   );
 };
 

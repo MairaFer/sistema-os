@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalStyle from './GlobalStyle';
-import Sidebar from './Componentes/SideBar/Sidebar';
+import Sidebar from './Componentes/HomeComponents/Sidebar.jsx';
 import Home from './pages/Home/Home';
 import Header from './Componentes/Header/Header';
 import Footer from './Componentes/Footer/Footer';
 import LoginPage from './Componentes/LoginPage/LoginPageComponent';
 import Cliente from './pages/Clientes/ClientesPage';
 import Funcionarios from './pages/Funcionarios/FuncionariosPage';
+import CriarOsFuncionario from './pages/CriarOs/'
 import Servicos from './pages/Servicos/ServicosPage';
 import Register from './pages/Register/RegisterPage.jsx';
 import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx';
@@ -46,11 +47,20 @@ function App() {
             } />
             <Route path="/criaros/tipo-da-os" element={
               <>
-                <Header />
-                <Sidebar />
-                <Content>
+                  <Sidebar />
                   <SelectTypeOsPage />
-                </Content>
+              </>
+            } />
+            <Route path="/criaros/funcionario" element={
+              <>
+                  <Sidebar />
+                  <CriarOsFuncionario />
+              </>
+            } />
+            <Route path="/criaros/cliente" element={
+              <>
+                  <Sidebar />
+                  <CriarOsCliente />
               </>
             } />
             <Route path="/clientes" element={
