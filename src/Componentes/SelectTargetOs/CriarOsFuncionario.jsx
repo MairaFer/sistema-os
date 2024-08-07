@@ -1,61 +1,49 @@
-import { useCallback } from 'react';
-import styles from './CRIAODEOS.module.css';
+import React from "react";
+import styles from './CriarOsFuncionario.module.css';
+import { useNavigate } from 'react-router-dom';
 
+export const SelectTypeOS = () => {
+    const navigate = useNavigate();
 
-const CRIAODEOS = () => {
-  	
-  	const onConfirmBoxContainerClick = useCallback(() => {
-    		// Add your code here
-  	}, []);
-  	
-  	return (
-    		<div className={styles.criaoDeOs2}>
-      			<div className={styles.barraPage}>
-        				<div className={styles.barraPageChild} />
-      			</div>
-      			<div className={styles.designPage}>
-        				<div className={styles.designPageChild} />
-      			</div>
-      			<div className={styles.confirmBox} onClick={onConfirmBoxContainerClick}>
-        				<div className={styles.confirmBoxChild} />
-        				<img className={styles.sortRightIcon} alt="Botão de Confirmar" src="Sort Right.png" />
-      			</div>
-      			<div className={styles.criandoOs}>Criando OS</div>
-      			<div className={styles.adicioneUmCliente}>Adicione um Cliente</div>
-      			<div className={styles.dropdown}>
-        				<div className={styles.box} />
-        				<div className={styles.nomedocliente}>
-          					<div className={styles.nomedoclienteChild} />
-          					<div className={styles.cliente}>Cliente</div>
-        				</div>
-        				<img className={styles.expandArrowIcon} alt="" src="Expand Arrow.png" />
-      			</div>
-      			<div className={styles.selecionarClienteExistente}>Selecionar Cliente Existente</div>
-      			<div className={styles.containerNovoCliente}>
-        				<div className={styles.box1} />
-        				<div className={styles.contatoinserir}>
-          					<div className={styles.nomedoclienteChild} />
-          					<div className={styles.cliente}>contato</div>
-        				</div>
-        				<div className={styles.nomedoclienteinserir}>
-          					<div className={styles.nomedoclienteChild} />
-          					<div className={styles.cliente}>nome do cliente*</div>
-        				</div>
-        				<div className={styles.endereoinserir}>
-          					<div className={styles.nomedoclienteChild} />
-          					<div className={styles.endereo}>endereço</div>
-        				</div>
-        				<div className={styles.cpfinserir}>
-          					<div className={styles.nomedoclienteChild} />
-          					<div className={styles.cpfOuCnpj}>cpf ou cnpj*</div>
-        				</div>
-      			</div>
-      			<div className={styles.ouCriarNovo}>Ou Criar novo cliente</div>
-      			<div className={styles.backButton} onClick={onConfirmBoxContainerClick}>
-        				<div className={styles.backButtonChild} />
-        				<img className={styles.goBackIcon} alt="" src="Go Back.png" />
-      			</div>
-    		</div>);
+    const handleNavigateHome = () => {
+        navigate("/criaros/tipo-da-os");
+    };
+
+    return (
+      <div className={styles.selecaoTipoOs}>
+      <div className={styles.div}>
+          <div className={styles.overlapGroup}>
+              <div className={styles.barraPage} />
+              <div className={styles.textWrapper}>Criando OS</div>
+              <p className={styles.p}>2. Adicione um Funcionário à OS</p>
+              <button className={styles.backButton} onClick={handleNavigateHome} >
+                  <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
+              </button>
+              <section className={styles.funcionarioFormContainer}>
+                  <label className="texto" htmlFor="selectFuncionario">Selecionar Funcionário Existente</label>
+                  <div className={styles.selectFuncionarioWrapper}>
+                      <select id="selectFuncionario" className={styles.selectFuncionario}>
+                          <option>Funcionário</option>
+                          {/* Consumo da Api */}
+                      </select>
+                  </div>
+                  <label className="texto">Ou Criar novo funcionário</label>
+                  <div className={styles.newFuncionarioWrapperAndButton}>
+                      <div className={styles.newFuncionarioWrapper}>
+                          <input type="text" placeholder="Nome do funcionário*" className={styles.inputField} />
+                          <input type="text" placeholder="Contato" className={styles.inputField} />
+                          <input type="text" placeholder="Setor*" className={styles.inputField} />
+                      </div>
+                      <button className={styles.submitButton}>
+                          <img className={styles.submitIcon} src="/public/confirm.png" alt="avançar" />
+                      </button>
+                  </div>
+              </section>
+          </div>
+          <div className={styles.designPage} />
+      </div>
+  </div>
+    );
 };
 
-export default CRIAODEOS;
+export default SelectTypeOS;

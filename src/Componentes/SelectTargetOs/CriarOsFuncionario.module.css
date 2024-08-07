@@ -1,223 +1,183 @@
-.barraPageChild {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    background-color: #ef5e22;
-    width: 133.663rem;
-    height: 20.688rem;
-}
-.barraPage {
-    position: absolute;
-    top: 0rem;
-    left: -12.375rem;
-    width: 133.663rem;
-    height: 20.688rem;
-}
-.designPageChild {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    background-color: #213356;
-    width: 124.375rem;
-    height: 7.375rem;
-}
-.designPage {
-    position: absolute;
-    top: 63.813rem;
-    left: -0.062rem;
-    width: 124.375rem;
-    height: 7.375rem;
-}
-.confirmBoxChild {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    border-radius: 24px;
-    background-color: #213356;
-    width: 12.5rem;
-    height: 12.5rem;
-}
-.sortRightIcon {
-    position: absolute;
-    top: 3.438rem;
-    left: 3.5rem;
-    width: 5.625rem;
-    height: 5.625rem;
-    object-fit: cover;
-}
-.confirmBox {
-    position: absolute;
-    top: 33.813rem;
-    left: 58.688rem;
-    width: 12.5rem;
-    height: 12.5rem;
-    cursor: pointer;
-}
-.criandoOs {
-    position: absolute;
-    top: 7.688rem;
-    left: 7.313rem;
-    font-size: 6rem;
-}
-.adicioneUmCliente {
-    position: absolute;
-    top: 14.438rem;
-    left: 7.5rem;
-    font-size: 4rem;
-}
-.box {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    border-radius: 24px;
-    background-color: #213356;
-    width: 43.5rem;
-    height: 7.063rem;
-}
-.nomedoclienteChild {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    border-radius: 24px;
-    background-color: #fff;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.cliente {
-    position: absolute;
-    top: 0.938rem;
-    left: 1.313rem;
-    display: inline-block;
-    width: 12.938rem;
-}
-.nomedocliente {
-    position: absolute;
-    top: 1.625rem;
-    left: 2.063rem;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.expandArrowIcon {
-    position: absolute;
-    top: 1.625rem;
-    left: 38.625rem;
-    width: 2.5rem;
-    height: 3.75rem;
-    object-fit: cover;
-}
-.dropdown {
-    position: absolute;
-    top: 25.125rem;
-    left: 7.875rem;
-    width: 43.5rem;
-    height: 7.063rem;
-    color: #213356;
-}
-.selecionarClienteExistente {
-    position: absolute;
-    top: 21.563rem;
-    left: 7.875rem;
-    font-size: 2.5rem;
-}
-.box1 {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    border-radius: 24px;
-    background-color: #213356;
-    width: 44.125rem;
-    height: 24.375rem;
-}
-.contatoinserir {
-    position: absolute;
-    top: 7.938rem;
-    left: 2.438rem;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.nomedoclienteinserir {
-    position: absolute;
-    top: 2.813rem;
-    left: 2.438rem;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.endereo {
-    position: absolute;
-    top: 0.938rem;
-    left: 1.313rem;
-    display: inline-block;
-    width: 14.75rem;
-}
-.endereoinserir {
-    position: absolute;
-    top: 13.063rem;
-    left: 2.438rem;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.cpfOuCnpj {
-    position: absolute;
-    top: 0.938rem;
-    left: 1.313rem;
-    display: inline-block;
-    width: 15.313rem;
-}
-.cpfinserir {
-    position: absolute;
-    top: 18.188rem;
-    left: 2.438rem;
-    width: 39.325rem;
-    height: 3.75rem;
-}
-.containerNovoCliente {
-    position: absolute;
-    top: 37.25rem;
-    left: 7.25rem;
-    width: 44.125rem;
-    height: 24.375rem;
-    color: #213356;
-}
-.ouCriarNovo {
-    position: absolute;
-    top: 33.313rem;
-    left: 7.875rem;
-    font-size: 2.5rem;
-}
-.backButtonChild {
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    border-radius: 50%;
-    background-color: #0047ff;
-    width: 6.188rem;
-    height: 6.188rem;
-}
-.goBackIcon {
-    position: absolute;
-    top: 0.688rem;
-    left: 0.75rem;
-    width: 4.688rem;
-    height: 4.688rem;
-    object-fit: cover;
-}
-.backButton {
-    position: absolute;
-    top: 1.5rem;
-    left: 7.25rem;
-    width: 6.188rem;
-    height: 6.188rem;
-    cursor: pointer;
-}
-.criaoDeOs2 {
-    width: 100%;
-    position: relative;
+.selecaoTipoOs {
     background-color: #252630;
-    height: 67.5rem;
-    overflow: hidden;
-    text-align: left;
-    font-size: 1.5rem;
-    color: #fff;
-    font-family: Lexend;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
 }
 
+.div {
+    background-color: #252630;
+    height: 56.75rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 120rem;
+}
+
+.overlapGroup {
+    height: 56.75rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.barraPage {
+    background-color: #0047ff;
+    height: 17.5rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.textWrapper {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 5rem;
+    font-weight: 400;
+    left: 19.6875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 7.625rem;
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 2.375rem;
+    font-weight: 400;
+    left: 19.875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 13.4375rem;
+}
+
+.backButton {
+    background-color: #EF5E22;
+    border-style: none;
+    border-radius: 3rem;
+    height: 5rem;
+    left: 19.5rem;
+    position: absolute;
+    top: 1.5rem;
+    width: 5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.goBack {
+    filter: invert();
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    width: 60%;
+}
+
+.backButton:hover {
+    scale: 99%;
+    background-color: #c24f1d;
+}
+
+.funcionarioFormContainer {
+    position: absolute;
+    top: 20rem;
+    left: 19.5rem;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    gap: 0.7rem;
+}
+
+.selectFuncionarioWrapper {
+    gap: 0.5rem;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #213356;
+    border-radius: 2rem;
+    border: solid 1rem #213356;
+    width: fit-content; /* Ajusta o tamanho do contêiner para caber apenas o conteúdo */
+}
+
+
+.newFuncionarioWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Ajusta os itens ao topo, para não alinhar ao centro */
+    gap: 3rem;
+    border: none;
+    background-color: transparent;
+}
+
+
+.newFuncionarioWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2px;
+    border: solid 1rem #213356; /* Mantém a borda aqui */
+    background-color: #213356;  /* Mantém o fundo aqui */
+    border-radius: 2rem;
+}
+
+
+.selectFuncionario {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 2rem;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 32rem; /* Garanta que o select tenha uma largura definida */
+}
+
+
+.inputField {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    border: none;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 32rem;
+}
+
+.submitButton {
+    background-color: #1C53E2;
+    border-radius: 1.5rem;
+    width: 8rem;
+    height: 8rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.25s, scale 0.25s;
+    align-self: flex-start; /* Alinha o botão ao topo */
+}
+
+.submitButton:active {
+    scale: 105%;
+    background-color: #EF5E22;
+}
+
+.submitButton:hover {
+    scale: 101%;
+    background-color: #EF5E22;
+}
+
+.submitIcon {
+    filter: invert();
+    width: 50%;
+    height: 50%;
+    position: relative;
+    left: 0.2rem;
+    top: 0rem;
+}

@@ -10,11 +10,11 @@ export const SelectTypeOS = () => {
     };
 
     const handleNavigateFuncionario = () => {
-        navigate("/criasOs-funcionario");
+        navigate("/criaros/funcionario");
     };
 
     const handleNavigateCliente = () => {
-        navigate("/criasOs-cliente");
+        navigate("/criaros/cliente");
     };
 
     return (

@@ -9,7 +9,8 @@ import Footer from './Componentes/Footer/Footer';
 import LoginPage from './Componentes/LoginPage/LoginPageComponent';
 import Cliente from './pages/Clientes/ClientesPage';
 import Funcionarios from './pages/Funcionarios/FuncionariosPage';
-import CriarOsFuncionario from './pages/CriarOs/'
+import CriarOsFuncionarioPage from './pages/CriarOs/SelectFuncionarioPage.jsx'
+import CriarOsClientePage from './pages/CriarOs/SelectClientePage.jsx'
 import Servicos from './pages/Servicos/ServicosPage';
 import Register from './pages/Register/RegisterPage.jsx';
 import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx';
@@ -54,13 +55,13 @@ function App() {
             <Route path="/criaros/funcionario" element={
               <>
                   <Sidebar />
-                  <CriarOsFuncionario />
+                  <CriarOsFuncionarioPage />
               </>
             } />
             <Route path="/criaros/cliente" element={
               <>
                   <Sidebar />
-                  <CriarOsCliente />
+                  <CriarOsClientePage />
               </>
             } />
             <Route path="/clientes" element={
