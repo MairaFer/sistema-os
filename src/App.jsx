@@ -16,12 +16,16 @@ import Register from './pages/Register/RegisterPage.jsx';
 import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx';
 import ResetPassword from './Componentes/ResetPassword/ResetPasswordComponent.jsx';
 import SelectTypeOsPage from './pages/SelectTypeOS/SelectTypeOsPage.jsx';
+import Relatorios from './pages/Relatorios/RelatoriosPage.jsx';
 import { AuthProvider } from './context/authContext';
 import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
 
 const Content = styled.div`
   margin-left: 250px;
   padding: 20px;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
 `;
 
 function App() {
@@ -34,7 +38,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/redefinir-senha" element={<ForgotPassword />} />
           <Route path="/account/mudar-senha/:token" element={<ResetPassword />} />
-          
+
           {/* Protected routes */}
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={
@@ -44,24 +48,34 @@ function App() {
                 <Content>
                   <Home />
                 </Content>
+                <Footer />
               </>
             } />
             <Route path="/criaros/tipo-da-os" element={
               <>
-                  <Sidebar />
+                <Sidebar />
+                <Content>
                   <SelectTypeOsPage />
+                </Content>
+                <Footer />
               </>
             } />
             <Route path="/criaros/funcionario" element={
               <>
-                  <Sidebar />
+                <Sidebar />
+                <Content>
                   <CriarOsFuncionarioPage />
+                </Content>
+                <Footer />
               </>
             } />
             <Route path="/criaros/cliente" element={
               <>
-                  <Sidebar />
+                <Sidebar />
+                <Content>
                   <CriarOsClientePage />
+                </Content>
+                <Footer />
               </>
             } />
             <Route path="/clientes" element={
@@ -71,6 +85,7 @@ function App() {
                 <Content>
                   <Cliente />
                 </Content>
+                <Footer />
               </>
             } />
             <Route path="/funcionarios" element={
@@ -80,6 +95,7 @@ function App() {
                 <Content>
                   <Funcionarios />
                 </Content>
+                <Footer />
               </>
             } />
             <Route path="/servicos" element={
@@ -89,11 +105,21 @@ function App() {
                 <Content>
                   <Servicos />
                 </Content>
+                <Footer />
+              </>
+            } />
+            <Route path="/relatorios" element={
+              <>
+                <Header />
+                <Sidebar />
+                <Content>
+                  <Relatorios />
+                </Content>
+                <Footer />
               </>
             } />
           </Route>
         </Routes>
-        <Footer />
       </AuthProvider>
     </Router>
   );

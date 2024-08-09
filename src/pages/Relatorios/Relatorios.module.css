@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+  }
+  .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding-right: 20%;
+    }
+    
+    .mainContent {
+      width: 100%;
+      max-width: 1200px;
+      padding: 1rem;
+    }
+    
+    .greetingContainer {
+      background-color: #213356;
+      padding: 1rem;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .greeting {
+      color: #ff6600;
+      margin: 1rem 0;
+      text-align: left;
+    }
+    
+    .statusContainer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    
+    .actionContainer {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1rem;
+      margin: 1rem 0;
+      width: 100%;
+    }
+    
+    .recentOrdersContainer {
+      margin: 1rem 0;
+      width: 100%;
+    }
+    
+  .erroOS{
+      color: white;
+      font-weight: 400;
+  }
+  
+  .actionButton {
+    font-size: 1.5rem;
+    font-weight: 450;
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    width: 15rem;
+    height: 4rem;
+    transition: 0.3s;
+  }
+  
+  .actionButton:hover {
+    background-color: #0056b3;
+    scale: 99%;
+  }
+  

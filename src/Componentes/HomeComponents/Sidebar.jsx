@@ -12,7 +12,7 @@ import {
   ToggleButton,
   ToggleIcon
 } from './SidebarStyled';
-import { FaHome, FaUser, FaUsers, FaTools, FaCog, FaSignOutAlt, FaBars } from 'react-icons/fa';
+import { FaHome, FaUser, FaUsers, FaTools, FaCog, FaSignOutAlt, FaBars, FaChartLine } from 'react-icons/fa';
 
 function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,7 +27,6 @@ function Sidebar() {
         <ToggleButton onClick={toggleSidebar}>
           <ToggleIcon><FaBars /></ToggleIcon>
         </ToggleButton>
-      
       </div>
       <div>
         <SidebarMenu>
@@ -53,6 +52,12 @@ function Sidebar() {
             <SidebarLink as={Link} to="/servicos" title="Serviços">
               <Icon isExpanded={isExpanded}><FaTools /></Icon>
               {isExpanded && 'Serviços'}
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem isExpanded={isExpanded}>
+            <SidebarLink as={Link} to="/relatorios" title="Relatórios">
+              <Icon isExpanded={isExpanded}><FaChartLine /></Icon>
+              {isExpanded && 'Relatórios'}
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
