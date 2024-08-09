@@ -50,7 +50,7 @@ const Home = () => {
         if (!token) {
           throw new Error('Token não encontrado.');
         }
-        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss`, {
+        const response = await axios.get('https://cyberos-sistemadeordemdeservico-api.onrender.com/oss', {
           params: { token }
         });
         const orders = response.data.slice(0, 5);
