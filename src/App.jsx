@@ -19,7 +19,7 @@ import SelectTypeOsPage from './pages/SelectTypeOS/SelectTypeOsPage.jsx';
 import Relatorios from './pages/Relatorios/RelatoriosPage.jsx';
 import { AuthProvider } from './context/authContext';
 import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
-
+import SettingsPage from './pages/Settings/SettingsPages.jsx';
 const Content = styled.div`
   margin-left: 250px;
   padding: 20px;
@@ -114,6 +114,16 @@ function App() {
                 <Sidebar />
                 <Content>
                   <Relatorios />
+                </Content>
+                <Footer />
+              </>
+            } />
+             <Route path="/settings" element={
+              <>
+                <Header />
+                <Sidebar />
+                <Content>
+                  <SettingsPage />
                 </Content>
                 <Footer />
               </>
