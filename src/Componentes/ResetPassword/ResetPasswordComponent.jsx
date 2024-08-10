@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ConfirmationModal from '../ConfirmBox/ConfirmBoxComponent.jsx';
 import styles from './ResetPassword.module.css'; // Importando o CSS Module
+import Footer from '../Footer/Footer';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -35,7 +36,8 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className={styles.resetPasswordContainer}>
+    <section>
+       <div className={styles.resetPasswordContainer}>
       <form className={styles.resetPasswordForm} onSubmit={handleSubmit}>
         <img className={styles.logo} src="../../public/LOGO.svg" alt="CyberOS Logo" />
         <h1>Redefinir Senha</h1>
@@ -67,6 +69,8 @@ const ResetPassword = () => {
         onConfirm={closeModal} // Navegar após confirmar
       />
     </div>
+    <Footer />
+    </section>
   );
 };
 

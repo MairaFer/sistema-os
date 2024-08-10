@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from './LoginPageStyled.module.css';
 import Loading from '../../pages/Loading/Loading';
+import Footer from '../Footer/Footer';
 import { useAuth } from '../../context/authContext';
 
 const Login = () => {
@@ -64,7 +65,7 @@ const Login = () => {
             <img src="/google.png" alt="Google Logo" />
             Continuar com Google
           </button>
-          <p className={styles.orSeparator}>ou</p>
+          <p className={styles.orSeparator}>- ou -</p>
           <form onSubmit={handleLogin}>
             <input
               className={styles.loginInput}
@@ -93,6 +94,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </section>
   );
 };
