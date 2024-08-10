@@ -5,17 +5,9 @@ import StatusCard from '../../Componentes/HomeComponents/StatusCard';
 import styles from './Relatorios.module.css';
 
 const RelatoriosPage = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [reportStats, setReportStats] = useState({
-    total: 0,
-    delayed: 0,
-    pending: 0,
-    completed: 0,
-  });
 
-  
 
   useEffect(() => {
  
