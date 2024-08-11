@@ -80,7 +80,7 @@ function Sidebar() {
           </SidebarLink>
         </SidebarFooterItem>
         <SidebarFooterItem isExpanded={isExpanded}>
-          <SidebarLink href="#logout" title="Sair" red onClick={handleLogout}>
+          <SidebarLink href='' title="Sair" red onClick={handleLogout}>
             <Icon isExpanded={isExpanded} red><FaSignOutAlt /></Icon>
             {isExpanded && 'Sair'}
           </SidebarLink>

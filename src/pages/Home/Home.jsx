@@ -13,15 +13,19 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noRecentOrders, setNoRecentOrders] = useState(false);
-  const [userName, setUserName] = useState('Usuário'); // Estado para armazenar o nome do usuário
+  const [userName, setUserName] = useState('Usuário');
+  const [osStatus, setOsStatus] = useState({
+    active: 0,
+    late: 0,
+    pendingAuthorization: 0,
+    finished: 0,
+  });
 
   const createOsHandle = () => {
-    console.log("Navegando para /criaros/tipo-da-os");
     navigate("/criaros/tipo-da-os");
   };
 
   const manageOsHandle = () => {
-    console.log("Navegando para /gerenciaros");
     navigate("/gerenciaros");
   };
 
@@ -30,14 +34,13 @@ const Home = () => {
     const token = urlParams.get('token');
 
     if (token) {
-      sessionStorage.setItem('token', token); // Armazena o token no sessionStorage
-      navigate('/home'); // Redireciona para a página inicial
+      sessionStorage.setItem('token', token);
+      navigate('/home');
     } else {
-      // Verifica se o token já está presente no sessionStorage
       const storedToken = sessionStorage.getItem('token');
       if (!storedToken) {
         console.error('Token não encontrado.');
-        navigate('/'); // Redireciona para a página de login se o token não estiver presente
+        navigate('/');
       }
     }
   }, [location.search, navigate]);
@@ -50,14 +53,49 @@ const Home = () => {
           throw new Error('Token não encontrado.');
         }
         const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/user/${token}`);
-        setUserName(response.data.nome_user); // Assume que o nome do usuário está em response.data.name
+        setUserName(response.data.nome_user);
       } catch (error) {
         console.error('Erro ao buscar informações do usuário:', error);
-        setUserName('Usuário'); // Fallback caso haja erro
+        setUserName('Usuário');
       }
     };
 
     fetchUserName();
+  }, []);
+
+  useEffect(() => {
+    const fetchOsStatus = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token não encontrado.');
+        }
+
+        console.log('Fetching OS status with token:', token);
+
+        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
+
+        console.log('OS status response:', response.data);
+
+        // Ajuste a estrutura dos dados conforme o retorno da API
+        const active = response.data.filter(os => os.status_os === 'Em Aberto').length;
+        const late = response.data.filter(os => os.status_os === 'Em Atraso').length;
+        const pendingAuthorization = response.data.filter(os => os.status_os === 'Aguardando Autorização').length;
+        const finished = response.data.filter(os => os.status_os === 'Finalizada').length;
+
+        setOsStatus({
+          active,
+          late,
+          pendingAuthorization,
+          finished,
+        });
+      } catch (error) {
+        console.error('Erro ao buscar status das ordens de serviço:', error);
+        setError('Erro ao buscar status das ordens de serviço.');
+      }
+    };
+
+    fetchOsStatus();
   }, []);
 
   useEffect(() => {
@@ -79,21 +117,21 @@ const Home = () => {
         setLoading(false);
       }
     };
-  
+
     fetchRecentOrders();
   }, []);
 
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
-        <p>home &gt; Pagina Inicial</p>
+        <p>home &gt; Página Inicial</p>
         <div className={styles.greetingContainer}>
-          <h1 className={styles.greeting}>Olá, {userName}</h1> {/* Exibe o nome do usuário */}
+          <h1 className={styles.greeting}>Olá, {userName}</h1>
           <div className={styles.statusContainer}>
-            <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
-            <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
-            <StatusCard icon={<FaHourglassHalf />} count="32" label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
-            <StatusCard icon={<FaClipboardList />} count="129" label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
+            <StatusCard icon={<FaCheck />} count={osStatus.active} label="OS's Ativas" bgColor="#00cc66" color="#fff" />
+            <StatusCard icon={<FaExclamationCircle />} count={osStatus.late} label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
+            <StatusCard icon={<FaHourglassHalf />} count={osStatus.pendingAuthorization} label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
+            <StatusCard icon={<FaClipboardList />} count={osStatus.finished} label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
           </div>
         </div>
         <div className={styles.actionContainer}>
