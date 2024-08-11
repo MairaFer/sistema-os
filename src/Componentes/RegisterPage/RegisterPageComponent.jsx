@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './RegisterPageStyled.module.css'; // Importando o CSS Module
 import Loading from '../../pages/Loading/Loading'; // Importe o componente de loading
+import Footer from '../Footer/Footer';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -101,6 +102,7 @@ const Register = () => {
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
       </div>
+      <Footer />
     </section>
   );
 };

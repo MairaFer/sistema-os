@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TableWrapper, Table, TableHead, TableHeadRow, TableHeadCell, TableBody, TableRow, TableCell } from './RecentOrdersTableStyled';
 
@@ -18,12 +17,12 @@ const RecentOrdersTable = ({ orders }) => {
         <TableBody>
           {orders.map((order) => (
             <TableRow key={order.id}>
-            <TableCell>{order.name}</TableCell>
-            <TableCell>{order.key}</TableCell>
-            <TableCell>{order.status}</TableCell>
-            <TableCell>{order.client}</TableCell>
-            <TableCell>{order.date}</TableCell>
-          </TableRow>          
+              <TableCell>{order.nome_os}</TableCell>
+              <TableCell>{order.key_search}</TableCell>
+              <TableCell>{order.status_os}</TableCell>
+              <TableCell>{order.cliente_os}</TableCell>
+              <TableCell>{new Date(order.createdAt).toLocaleDateString('pt-BR')}</TableCell>
+            </TableRow>          
           ))}
         </TableBody>
       </Table>

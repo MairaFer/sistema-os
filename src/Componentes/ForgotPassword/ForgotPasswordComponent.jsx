@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './ForgotPassword.module.css'; // Importando o CSS Module
 import ConfirmationModal from '../ConfirmBox/ConfirmBoxComponent.jsx';
 import { useNavigate } from 'react-router-dom'; // Importe useNavigate para navegação
+import Footer from '../Footer/Footer';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -46,7 +47,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className={styles.forgotPasswordContainer}>
+    <section>
+        <div className={styles.forgotPasswordContainer}>
       <form className={styles.forgotPasswordForm} onSubmit={handleSubmit}>
         <img className={styles.logo} src="./public/LOGO.svg" alt="CyberOS Logo" />
         <h1>Esqueceu sua senha?</h1>
@@ -72,6 +74,8 @@ const ForgotPassword = () => {
         message="Um e-mail com instruções para redefinir sua senha foi enviado."
       />
     </div>
+     <Footer />
+    </section>
   );
 };
 

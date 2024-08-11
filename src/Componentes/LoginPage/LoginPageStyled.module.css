@@ -31,7 +31,7 @@
 
 .loginForm {
   background-color: var(--bg-base);
-  padding: 0rem 3rem 0rem 3rem; /* Ajuste o padding conforme necessário */
+  padding: 0rem 0rem 0rem 0rem; /* Ajuste o padding conforme necessário */
   text-align: center;
 }
 

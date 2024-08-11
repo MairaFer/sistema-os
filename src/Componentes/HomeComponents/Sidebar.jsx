@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   SidebarContainer,
   SidebarMenu,
@@ -11,15 +11,24 @@ import {
   Divider,
   ToggleButton,
   ToggleIcon
-} from './SidebarStyled';
+} from '../../Componentes/HomeComponents/SidebarStyled';
 import { FaHome, FaUser, FaUsers, FaTools, FaCog, FaSignOutAlt, FaBars, FaChartLine } from 'react-icons/fa';
+import { useAuth } from '../../context/authContext'; // Importar o AuthContext
 
 function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const location = useLocation(); // Usar useLocation para obter a URL atual
+  const { logout } = useAuth(); // Obter o método de logout do AuthContext
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
+
+  const handleLogout = () => {
+    logout(); // Chamar o método de logout
+  };
+
+  const isActive = (path) => location.pathname === path ? 'active' : '';
 
   return (
     <SidebarContainer isExpanded={isExpanded}>
@@ -30,31 +39,31 @@ function Sidebar() {
       </div>
       <div>
         <SidebarMenu>
-          <SidebarMenuItem isExpanded={isExpanded}>
+          <SidebarMenuItem className={isActive('/home')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/home" title="Tela Inicial">
               <Icon isExpanded={isExpanded}><FaHome /></Icon>
               {isExpanded && 'Tela Inicial'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem isExpanded={isExpanded}>
+          <SidebarMenuItem className={isActive('/clientes')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/clientes" title="Clientes">
               <Icon isExpanded={isExpanded}><FaUser /></Icon>
               {isExpanded && 'Clientes'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem isExpanded={isExpanded}>
+          <SidebarMenuItem className={isActive('/funcionarios')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/funcionarios" title="Funcionários">
               <Icon isExpanded={isExpanded}><FaUsers /></Icon>
               {isExpanded && 'Funcionários'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem isExpanded={isExpanded}>
+          <SidebarMenuItem className={isActive('/servicos')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/servicos" title="Serviços">
               <Icon isExpanded={isExpanded}><FaTools /></Icon>
               {isExpanded && 'Serviços'}
             </SidebarLink>
           </SidebarMenuItem>
-          <SidebarMenuItem isExpanded={isExpanded}>
+          <SidebarMenuItem className={isActive('/relatorios')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/relatorios" title="Relatórios">
               <Icon isExpanded={isExpanded}><FaChartLine /></Icon>
               {isExpanded && 'Relatórios'}
@@ -71,7 +80,7 @@ function Sidebar() {
           </SidebarLink>
         </SidebarFooterItem>
         <SidebarFooterItem isExpanded={isExpanded}>
-          <SidebarLink href="#logout" title="Sair" red>
+          <SidebarLink href="#logout" title="Sair" red onClick={handleLogout}>
             <Icon isExpanded={isExpanded} red><FaSignOutAlt /></Icon>
             {isExpanded && 'Sair'}
           </SidebarLink>
