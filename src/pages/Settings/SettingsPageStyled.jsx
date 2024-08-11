@@ -55,6 +55,6 @@ export const Button = styled.button`
   transition: background 0.3s ease;
   
   &:hover {
-    background: #d58a00;
+    background-color: #0056b3;
   }
 `;

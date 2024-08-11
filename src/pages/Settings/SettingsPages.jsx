@@ -24,7 +24,7 @@ const SettingsPage = () => {
       <Title>Configurações da Conta</Title>
       <Form onSubmit={handleSubmit}>
         <Section>
-          <label htmlFor="username">Nome de Usuário</label>
+          <label htmlFor="username">Nome da empresa</label>
           <Input
             type="text"
             id="username"
@@ -40,6 +40,16 @@ const SettingsPage = () => {
             id="email"
             name="email"
             value={formData.email}
+            onChange={handleChange}
+          />
+        </Section>
+        <Section>
+          <label htmlFor="phone">Telefone</label>
+          <Input
+            type="text"
+            id="phone"
+            name="phone"
+            value={formData.telefone}
             onChange={handleChange}
           />
         </Section>
