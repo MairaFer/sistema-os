@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+// Container da Sidebar
 export const SidebarContainer = styled.div`
   height: 100vh;
   width: ${props => (props.isExpanded ? '250px' : '80px')};
@@ -7,7 +8,6 @@ export const SidebarContainer = styled.div`
   top: 0;
   left: 0;
   background-color: #213356;
-  padding-top: 0px;
   color: white;
   display: flex;
   flex-direction: column;
@@ -16,8 +16,10 @@ export const SidebarContainer = styled.div`
   font-family: 'Roboto', sans-serif;
   transition: width 0.3s;
   z-index: 1001;
+  overflow: hidden;
 `;
 
+// Botão de Toggle
 export const ToggleButton = styled.div`
   display: flex;
   justify-content: center;
@@ -26,29 +28,34 @@ export const ToggleButton = styled.div`
   cursor: pointer;
 `;
 
+// Ícone do Botão de Toggle
 export const ToggleIcon = styled.span`
   font-size: 24px;
 `;
 
-
-
+// Menu da Sidebar
 export const SidebarMenu = styled.ul`
   list-style-type: none;
   padding: 0;
   width: 100%;
 `;
 
+// Item do Menu da Sidebar
 export const SidebarMenuItem = styled.li`
   padding: 15px 20px;
   display: flex;
   align-items: center;
   justify-content: ${props => (props.isExpanded ? 'flex-start' : 'center')};
+  &.active {
+    background-color: #34495e; /* Cor para a tela ativa */
+  }
   &:hover {
     background-color: #34495e;
     transition: background-color 0.3s;
   }
 `;
 
+// Link da Sidebar
 export const SidebarLink = styled.a`
   color: ${props => (props.red ? '#e74c3c' : 'white')};
   text-decoration: none;
@@ -61,6 +68,7 @@ export const SidebarLink = styled.a`
   }
 `;
 
+// Ícone da Sidebar
 export const Icon = styled.span`
   margin-right: ${props => (props.isExpanded ? '20px' : '0')}; /* Aumenta o espaçamento para 20px */
   display: flex;
@@ -70,11 +78,13 @@ export const Icon = styled.span`
   color: ${props => (props.red ? '#e74c3c' : 'white')};
 `;
 
+// Rodapé da Sidebar
 export const SidebarFooter = styled.div`
   width: 100%;
   margin-bottom: 20px;
 `;
 
+// Item do Rodapé da Sidebar
 export const SidebarFooterItem = styled.div`
   padding: 15px 20px;
   display: flex;
@@ -86,6 +96,7 @@ export const SidebarFooterItem = styled.div`
   }
 `;
 
+// Divisor do Rodapé da Sidebar
 export const Divider = styled.div`
   height: 0.5px;
   background-color: #ecf0f1;

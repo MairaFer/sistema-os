@@ -4,17 +4,16 @@ import axios from 'axios';
 import StatusCard from '../../Componentes/HomeComponents/StatusCard';
 import RecentOrdersTable from '../../Componentes/HomeComponents/RecentOrdersTable';
 import { FaCheck, FaExclamationCircle, FaHourglassHalf, FaClipboardList, FaPlus, FaClipboard } from 'react-icons/fa';
-import { useAuth } from '../../context/authContext';
 import styles from './Home.module.css';
 
 const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { auth } = useAuth();
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noRecentOrders, setNoRecentOrders] = useState(false);
+  const [userName, setUserName] = useState('Usuário'); // Estado para armazenar o nome do usuário
 
   const createOsHandle = () => {
     console.log("Navegando para /criaros/tipo-da-os");
@@ -44,15 +43,31 @@ const Home = () => {
   }, [location.search, navigate]);
 
   useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token não encontrado.');
+        }
+        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/user/${token}`);
+        setUserName(response.data.nome_user); // Assume que o nome do usuário está em response.data.name
+      } catch (error) {
+        console.error('Erro ao buscar informações do usuário:', error);
+        setUserName('Usuário'); // Fallback caso haja erro
+      }
+    };
+
+    fetchUserName();
+  }, []);
+
+  useEffect(() => {
     const fetchRecentOrders = async () => {
       try {
         const token = sessionStorage.getItem('token');
         if (!token) {
           throw new Error('Token não encontrado.');
         }
-        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss`, {
-          params: { token }
-        });
+        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
         const orders = response.data.slice(0, 5);
         if (orders.length === 0) {
           setNoRecentOrders(true);
@@ -64,7 +79,7 @@ const Home = () => {
         setLoading(false);
       }
     };
-
+  
     fetchRecentOrders();
   }, []);
 
@@ -73,7 +88,7 @@ const Home = () => {
       <main className={styles.mainContent}>
         <p>home &gt; Pagina Inicial</p>
         <div className={styles.greetingContainer}>
-          <h1 className={styles.greeting}>Olá, Usuário</h1>
+          <h1 className={styles.greeting}>Olá, {userName}</h1> {/* Exibe o nome do usuário */}
           <div className={styles.statusContainer}>
             <StatusCard icon={<FaCheck />} count="10" label="OS's Ativas" bgColor="#00cc66" color="#fff" />
             <StatusCard icon={<FaExclamationCircle />} count="2" label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
