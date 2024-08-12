@@ -105,7 +105,7 @@ export const SelectTypeOS = () => {
         if (selectedClient) {
             // Armazenar o ID do cliente no sessionStorage
             sessionStorage.setItem('selectedClientId', selectedClient.id);
-            
+            console.log('Cliente criado:', selectedClient);
             // Navegar para a página de finalização
             navigate("/criar-os/finalizar");
             return;

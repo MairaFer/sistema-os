@@ -102,16 +102,14 @@ const CreateOrder = () => {
         console.log(payload);
 
         try {
-            await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-os`, payload, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            // Inclua o token diretamente na URL da rota
+            const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-os/${token}`, payload);
             console.log('Ordem de serviço criada com sucesso');
             navigate('/home'); // Redirecionar para a página inicial após a criação
         } catch (error) {
             console.error('Erro ao criar ordem de serviço', error);
         }
+        
     };
 
     return (
@@ -234,8 +232,14 @@ const CreateOrder = () => {
                                 getOptionLabel={(option) => option.nome_servico || ''}
                                 onChange={(event, value) => {
                                     setSelectedServico(value);
-                                    if (value && value.valor_servico) {
+                                    if (value) {
+                                        // Setando o nome e o valor do serviço selecionado
+                                        setValue('nome_servico', value.nome_servico, { shouldValidate: true });
                                         setValue('valor_servico', value.valor_servico, { shouldValidate: true });
+                                    } else {
+                                        // Limpando os campos caso nenhum serviço seja selecionado
+                                        setValue('nome_servico', '', { shouldValidate: true });
+                                        setValue('valor_servico', '', { shouldValidate: true });
                                     }
                                 }}
                                 renderInput={(params) => (
