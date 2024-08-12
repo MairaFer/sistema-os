@@ -20,6 +20,8 @@ import Relatorios from './pages/Relatorios/RelatoriosPage.jsx';
 import { AuthProvider } from './context/authContext';
 import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
 import SettingsPage from './pages/Settings/SettingsPages.jsx';
+import CompleteOsPage from './pages/CriarOs/CompleteOsPage.jsx';
+
 const Content = styled.div`
   margin-left: 250px;
   padding: 20px;
@@ -56,6 +58,15 @@ function App() {
                 <Sidebar />
                 <Content>
                   <SelectTypeOsPage />
+                </Content>
+                <Footer />
+              </>
+            } />
+             <Route path="/criar-os/finalizar" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <CompleteOsPage />
                 </Content>
                 <Footer />
               </>

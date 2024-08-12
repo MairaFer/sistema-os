@@ -5,10 +5,10 @@ import { OverviewContainer, OverviewTitle, CardContainer, CardTitle, CardCount, 
 
 const StatusOverview = () => {
   const data = [
-    { title: 'Ativas', count: 10, color: '#4CAF50', icon: <FaHome /> },
-    { title: 'Atrasadas', count: 2, color: '#FF5722', icon: <FaUser /> },
-    { title: 'Em Espera', count: 5, color: '#FFC107', icon: <FaUsers /> },
-    { title: 'Finalizadas', count: 20, color: '#2196F3', icon: <FaTools /> }
+    { title: 'Ativas', count: 0, color: '#4CAF50', icon: <FaHome /> },
+    { title: 'Atrasadas', count: 0, color: '#FF5722', icon: <FaUser /> },
+    { title: 'Em Espera', count: 0, color: '#FFC107', icon: <FaUsers /> },
+    { title: 'Finalizadas', count: 0, color: '#2196F3', icon: <FaTools /> }
   ];
 
   return (
