@@ -101,31 +101,39 @@ export const SelectTypeOS = () => {
             console.error('Token não encontrado.');
             return;
         }
-
+    
         if (selectedClient) {
+            // Armazenar o ID do cliente no sessionStorage
             sessionStorage.setItem('selectedClientId', selectedClient.id);
+            
+            // Navegar para a página de finalização
             navigate("/criar-os/finalizar");
             return;
         }
-
+    
         if (!validateForm()) return;
-
+    
         try {
+            // Remover caracteres não numéricos do contato
             const cleanContact = newClient.contato_cliente.replace(/\D+/g, '');
-
+    
+            // Enviar dados para criar um novo cliente
             const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-cliente/${token}`, {
                 ...newClient,
                 contato_cliente: cleanContact
             });
+    
+            // Recuperar o cliente criado e armazenar seu ID no sessionStorage
             const createdClient = response.data;
             sessionStorage.setItem('selectedClientId', createdClient.id);
-
+    
+            // Navegar para a página de finalização
             navigate("/criar-os/finalizar");
         } catch (error) {
             console.error('Erro ao enviar dados:', error);
         }
     };
-
+    
     const handleNavigateHome = () => {
         navigate("/criaros/tipo-da-os");
     };
