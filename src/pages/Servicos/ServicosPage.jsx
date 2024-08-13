@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ItemList from '../../Componentes/ItemList/ItemList';
 import AddButton from '../../Componentes/AddButton/AddButton';
 import SearchBar from '../../Componentes/SearchBar/SearchBar';
+import { HeaderContainer, MainContainer, ContentContainer, Title, TitleContainer, ButtonContainer } from './ServicosStyled';
 
 const Servicos = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,12 +20,22 @@ const Servicos = () => {
   );
 
   return (
-    <div>
-      <h1>Serviços</h1>
-      <SearchBar onChange={handleSearch} />
-      <ItemList items={filteredServices} />
-      <AddButton onClick={() => alert('Adicionar novo serviço')} />
-    </div>
+    <MainContainer>
+      <HeaderContainer>
+        <div style={{ marginBottom: '1rem' }} /> {/* Espaço acima da SearchBar */}
+        <SearchBar onChange={handleSearch} />
+      </HeaderContainer>
+      <ContentContainer>
+        <TitleContainer>
+          <Title>Serviço</Title>
+          <Title>Preço</Title>
+        </TitleContainer>
+        <ItemList items={filteredServices} />
+        <ButtonContainer>
+          <AddButton onClick={() => alert('Adicionar novo serviço')} />
+        </ButtonContainer>
+      </ContentContainer>
+    </MainContainer>
   );
 };
 

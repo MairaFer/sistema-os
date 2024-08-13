@@ -5,7 +5,7 @@ import { FaPlus } from 'react-icons/fa';
 const AddButton = ({ onClick }) => {
   return (
     <Button onClick={onClick}>
-      <FaPlus /> Adicionar Novo
+      <FaPlus /> Adicionar
     </Button>
   );
 };

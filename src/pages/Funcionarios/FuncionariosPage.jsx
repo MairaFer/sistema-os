@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ItemList from '../../Componentes/ItemList/ItemList';
 import AddButton from '../../Componentes/AddButton/AddButton';
 import SearchBar from '../../Componentes/SearchBar/SearchBar';
+import { HeaderContainer, MainContainer, ContentContainer, Title, TitleContainer, ButtonContainer } from './FuncionarioStyled';
 
 const Funcionarios = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,12 +20,22 @@ const Funcionarios = () => {
   );
 
   return (
-    <div>
-      <h1>Funcionários</h1>
-      <SearchBar onChange={handleSearch} />
-      <ItemList items={filteredEmployees} />
-      <AddButton onClick={() => alert('Adicionar novo funcionário')} />
-    </div>
+    <MainContainer>
+      <HeaderContainer>
+        <div style={{ marginBottom: '1rem' }} /> {/* Espaço acima da SearchBar */}
+        <SearchBar onChange={handleSearch} />
+      </HeaderContainer>
+      <ContentContainer>
+        <TitleContainer>
+          <Title>Funcionário</Title>
+          <Title>CPF/CNPJ</Title>
+        </TitleContainer>
+        <ItemList items={filteredEmployees} />
+        <ButtonContainer>
+          <AddButton onClick={() => alert('Adicionar novo funcionário')} />
+        </ButtonContainer>
+      </ContentContainer>
+    </MainContainer>
   );
 };
 

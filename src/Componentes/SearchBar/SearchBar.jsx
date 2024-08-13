@@ -1,8 +1,13 @@
 import React from 'react';
-import { Input } from './SearchBarStyled';
+import { Input, TextInput, SearchIcon } from './SearchBarStyled';
 
 const SearchBar = ({ onChange }) => {
-  return <Input type="text" placeholder="Pesquisar..." onChange={onChange} />;
+  return (
+    <Input>
+      <TextInput type="text" placeholder="Pesquisar..." onChange={onChange} />
+      <SearchIcon />
+    </Input>
+  );
 };
 
 export default SearchBar;
