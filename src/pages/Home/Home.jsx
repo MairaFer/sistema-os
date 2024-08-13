@@ -4,6 +4,7 @@ import axios from 'axios';
 import StatusCard from '../../Componentes/HomeComponents/StatusCard';
 import RecentOrdersTable from '../../Componentes/HomeComponents/RecentOrdersTable';
 import { FaCheck, FaExclamationCircle, FaHourglassHalf, FaClipboardList, FaPlus, FaClipboard } from 'react-icons/fa';
+import Skeleton from '@mui/material/Skeleton';
 import styles from './Home.module.css';
 
 const Home = () => {
@@ -77,7 +78,6 @@ const Home = () => {
 
         console.log('OS status response:', response.data);
 
-        // Ajuste a estrutura dos dados conforme o retorno da API
         const active = response.data.filter(os => os.status_os === 'Em Aberto').length;
         const late = response.data.filter(os => os.status_os === 'Em Atraso').length;
         const pendingAuthorization = response.data.filter(os => os.status_os === 'Aguardando Autorização').length;
@@ -106,21 +106,17 @@ const Home = () => {
           throw new Error('Token não encontrado.');
         }
   
-        // Buscar ordens de serviço
         const ordersResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
         const orders = ordersResponse.data.slice(0, 5);
   
-        // Buscar todos os clientes
         const clientsResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
         const clients = clientsResponse.data;
   
-        // Criar um mapa de IDs de clientes para nomes de clientes para busca rápida
         const clientMap = clients.reduce((map, client) => {
           map[client._id] = client.nome_cliente;
           return map;
         }, {});
   
-        // Adicionar nome do cliente a cada ordem de serviço
         const ordersWithClientNames = orders.map(order => {
           const clientName = order.cliente_os ? clientMap[order.cliente_os] || 'Cliente não encontrado' : 'Cliente não especificado';
           return { ...order, cliente_os: clientName };
@@ -145,12 +141,24 @@ const Home = () => {
       <main className={styles.mainContent}>
         <p>home &gt; Página Inicial</p>
         <div className={styles.greetingContainer}>
-          <h1 className={styles.greeting}>Olá, {userName}</h1>
+          {loading ? (
+            <Skeleton variant="text" width={200} height={50} />
+          ) : (
+            <h1 className={styles.greeting}>Olá, {userName}</h1>
+          )}
           <div className={styles.statusContainer}>
-            <StatusCard icon={<FaCheck />} count={osStatus.active} label="OS's Ativas" bgColor="#00cc66" color="#fff" />
-            <StatusCard icon={<FaExclamationCircle />} count={osStatus.late} label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
-            <StatusCard icon={<FaHourglassHalf />} count={osStatus.pendingAuthorization} label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
-            <StatusCard icon={<FaClipboardList />} count={osStatus.finished} label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
+            {loading ? (
+              Array(4).fill().map((_, index) => (
+                <Skeleton key={index} variant="rectangular" width={200} height={100} style={{ marginRight: '10px' }} />
+              ))
+            ) : (
+              <>
+                <StatusCard icon={<FaCheck />} count={osStatus.active} label="OS's Ativas" bgColor="#00cc66" color="#fff" />
+                <StatusCard icon={<FaExclamationCircle />} count={osStatus.late} label="OS's Em Atraso" bgColor="#ff3333" color="#fff" />
+                <StatusCard icon={<FaHourglassHalf />} count={osStatus.pendingAuthorization} label="OS's Em Espera" bgColor="#ff9933" color="#fff" />
+                <StatusCard icon={<FaClipboardList />} count={osStatus.finished} label="OS's Finalizadas" bgColor="#3399ff" color="#fff" />
+              </>
+            )}
           </div>
         </div>
         <div className={styles.actionContainer}>
@@ -164,7 +172,9 @@ const Home = () => {
         <div className={styles.recentOrdersContainer}>
           <h2>OS's Recentes</h2>
           {loading ? (
-            <p>Carregando...</p>
+            Array(5).fill().map((_, index) => (
+              <Skeleton key={index} variant="rectangular" width="100%" height={50} style={{ marginBottom: '10px' }} />
+            ))
           ) : noRecentOrders ? (
             <p className={styles.erroOS}>Não existe nenhuma OS recente.</p>
           ) : recentOrders.length > 0 ? (
