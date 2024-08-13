@@ -105,22 +105,41 @@ const Home = () => {
         if (!token) {
           throw new Error('Token não encontrado.');
         }
-        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
-        const orders = response.data.slice(0, 5);
-        if (orders.length === 0) {
+  
+        // Buscar ordens de serviço
+        const ordersResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
+        const orders = ordersResponse.data.slice(0, 5);
+  
+        // Buscar todos os clientes
+        const clientsResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
+        const clients = clientsResponse.data;
+  
+        // Criar um mapa de IDs de clientes para nomes de clientes para busca rápida
+        const clientMap = clients.reduce((map, client) => {
+          map[client._id] = client.nome_cliente;
+          return map;
+        }, {});
+  
+        // Adicionar nome do cliente a cada ordem de serviço
+        const ordersWithClientNames = orders.map(order => {
+          const clientName = order.cliente_os ? clientMap[order.cliente_os] || 'Cliente não encontrado' : 'Cliente não especificado';
+          return { ...order, cliente_os: clientName };
+        });
+  
+        if (ordersWithClientNames.length === 0) {
           setNoRecentOrders(true);
         }
-        setRecentOrders(orders);
+        setRecentOrders(ordersWithClientNames);
       } catch (error) {
         setError('Erro ao buscar ordens de serviço recentes.');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchRecentOrders();
   }, []);
-
+  
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
