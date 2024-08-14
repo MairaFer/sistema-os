@@ -4,6 +4,31 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+    nome_cliente: yup.string().required("Nome do cliente é obrigatório."),
+    contato_cliente: yup
+        .string()
+        .matches(/^\d{11}$/, "Contato deve ter exatamente 11 dígitos.")
+        .required("Contato é obrigatório."),
+    endereco_cliente: yup.string().max(250, "Endereço pode ter no máximo 250 caracteres."),
+    cpfCnpj: yup
+        .string()
+        .required("CPF ou CNPJ é obrigatório.")
+        .matches(/^\d{11}$|^\d{14}$/, "CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos.") // Modificação aqui
+        .test('is-valid-cpf-or-cnpj', 'CPF ou CNPJ inválido.', value => {
+            if (!value) return false;
+            const isValidCpf = /^\d{11}$/.test(value);
+            const isValidCnpj = /^\d{14}$/.test(value);
+            return isValidCpf || isValidCnpj;
+        }),
+    email_cliente: yup
+        .string()
+        .email("Email inválido.")
+        .required("Email é obrigatório."),
+});
+
 
 export const SelectTypeOS = () => {
     const [clients, setClients] = useState([]);
@@ -13,7 +38,7 @@ export const SelectTypeOS = () => {
         nome_cliente: '',
         contato_cliente: '',
         endereco_cliente: '',
-        cpf_cliente: '',
+        cpfCnpj: '',
         email_cliente: ''
     });
     const [errors, setErrors] = useState({});
@@ -51,97 +76,72 @@ export const SelectTypeOS = () => {
     const handleNewClientChange = (event) => {
         const { name, value } = event.target;
 
-        if (name === 'contato_cliente') {
-            const formattedValue = formatContact(value);
-            setNewClient(prevState => ({
-                ...prevState,
-                [name]: formattedValue
-            }));
-        } else {
-            setNewClient(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
+        setNewClient(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const validateForm = async () => {
+        try {
+            await validationSchema.validate(newClient, { abortEarly: false });
+            setErrors({});
+            return true;
+        } catch (err) {
+            const validationErrors = {};
+            err.inner.forEach(error => {
+                validationErrors[error.path] = error.message;
+            });
+            setErrors(validationErrors);
+            return false;
         }
     };
 
-    const formatContact = (value) => {
-        const cleaned = value.replace(/\D+/g, '');
-        return cleaned.length > 11 ? cleaned.slice(0, 11) : cleaned;
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        const { nome_cliente, contato_cliente, endereco_cliente, cpf_cliente, email_cliente } = newClient;
-
-        if (!nome_cliente) newErrors.nome_cliente = "Nome do cliente é obrigatório.";
-
-        const cleanedContact = contato_cliente.replace(/\D+/g, '');
-        if (cleanedContact.length !== 11) {
-            newErrors.contato_cliente = "Contato deve ter exatamente 11 dígitos.";
+    const handleSubmit = async () => {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            console.error('Token não encontrado.');
+            return;
         }
 
-        const cpfPattern = /^\d{11}$/;
-        if (!cpf_cliente.match(cpfPattern)) {
-            newErrors.cpf_cliente = "CPF deve ter 11 dígitos.";
-        }
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email_cliente.match(emailPattern)) {
-            newErrors.email_cliente = "Email inválido.";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-   const handleSubmit = async () => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-        console.error('Token não encontrado.');
-        return;
-    }
-
-    if (selectedClient) {
-        console.log('Cliente selecionado:', selectedClient); // Verifique o que está sendo logado aqui
-        if (selectedClient._id) {
-            sessionStorage.setItem('selectedClientId', selectedClient._id);
-        } else {
-            console.error('ID do cliente selecionado não encontrado.');
-        }
-        navigate("/criar-os/finalizar");
-        return;
-    }
-
-    if (!validateForm()) return;
-
-    try {
-        const cleanContact = newClient.contato_cliente.replace(/\D+/g, '');
-
-        // Enviar dados para criar um novo cliente
-        const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-cliente/${token}`, {
-            ...newClient,
-            contato_cliente: cleanContact
-        });
-
-        const createdClient = response.data;
-        console.log('Cliente criado:', createdClient); // Verifique o que está sendo retornado aqui
-
-        if (createdClient._id) {
-            sessionStorage.setItem('selectedClientId', createdClient._id);
+        if (selectedClient) {
+            if (selectedClient._id) {
+                sessionStorage.setItem('selectedClientId', selectedClient._id);
+            } else {
+                console.error('ID do cliente selecionado não encontrado.');
+            }
             navigate("/criar-os/finalizar");
-        } else {
-            console.error('ID do cliente criado não encontrado.');
+            return;
         }
 
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-    }
-};
+        const isValid = await validateForm();
+        if (!isValid) return;
 
-const handleNavigateHome = () => {
-    navigate("/criaros/tipo-da-os");
-};
+        const { cpfCnpj, ...rest } = newClient;
+        const clientData = {
+            ...rest,
+            cpfCnpj: cpfCnpj || null,
+        };
+
+        try {
+            // Enviar dados para criar um novo cliente
+            const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-cliente/${token}`, clientData);
+
+            const createdClient = response.data;
+            if (createdClient._id) {
+                sessionStorage.setItem('selectedClientId', createdClient._id);
+                navigate("/criar-os/finalizar");
+            } else {
+                console.error('ID do cliente criado não encontrado.');
+            }
+        } catch (error) {
+            console.error('Erro ao enviar dados:', error);
+        }
+    };
+
+    const handleNavigateHome = () => {
+        navigate("/criaros/tipo-da-os");
+    };
 
     return (
         <div className={styles.selecaoTipoOs}>
@@ -206,13 +206,13 @@ const handleNavigateHome = () => {
                                 
                                 <input
                                     type="text"
-                                    name="cpf_cliente"
-                                    placeholder="CPF*"
-                                    value={newClient.cpf_cliente}
+                                    name="cpfCnpj"
+                                    placeholder="CPF ou CNPJ*"
+                                    value={newClient.cpfCnpj}
                                     onChange={handleNewClientChange}
                                     className={styles.inputField}
                                 />
-                                {errors.cpf_cliente && <p className={styles.error}>{errors.cpf_cliente}</p>}
+                                {errors.cpfCnpj && <p className={styles.error}>{errors.cpfCnpj}</p>}
                                 
                                 <input
                                     type="email"
