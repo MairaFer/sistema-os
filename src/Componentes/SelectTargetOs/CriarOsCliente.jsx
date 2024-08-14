@@ -10,13 +10,13 @@ const validationSchema = yup.object().shape({
     nome_cliente: yup.string().required("Nome do cliente é obrigatório."),
     contato_cliente: yup
         .string()
-        .matches(/^\d{11}$/, "Contato deve ter exatamente 11 dígitos.")
+        .matches(/^\d{11}$|^\d{10}$/, "Contato deve ter exatamente 11 dígitos.")
         .required("Contato é obrigatório."),
     endereco_cliente: yup.string().max(250, "Endereço pode ter no máximo 250 caracteres."),
     cpfCnpj: yup
         .string()
         .required("CPF ou CNPJ é obrigatório.")
-        .matches(/^\d{11}$|^\d{14}$/, "CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos.") // Modificação aqui
+        .matches(/^\d{11}$|^\d{14}$/, "CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos.")
         .test('is-valid-cpf-or-cnpj', 'CPF ou CNPJ inválido.', value => {
             if (!value) return false;
             const isValidCpf = /^\d{11}$/.test(value);
@@ -28,7 +28,6 @@ const validationSchema = yup.object().shape({
         .email("Email inválido.")
         .required("Email é obrigatório."),
 });
-
 
 export const SelectTypeOS = () => {
     const [clients, setClients] = useState([]);
@@ -105,11 +104,7 @@ export const SelectTypeOS = () => {
         }
 
         if (selectedClient) {
-            if (selectedClient._id) {
-                sessionStorage.setItem('selectedClientId', selectedClient._id);
-            } else {
-                console.error('ID do cliente selecionado não encontrado.');
-            }
+            sessionStorage.setItem('selectedClientId', selectedClient._id);
             navigate("/criar-os/finalizar");
             return;
         }
@@ -117,19 +112,19 @@ export const SelectTypeOS = () => {
         const isValid = await validateForm();
         if (!isValid) return;
 
-        const { cpfCnpj, ...rest } = newClient;
         const clientData = {
-            ...rest,
-            cpfCnpj: cpfCnpj || null,
+            ...newClient,
+            cpfCnpj: newClient.cpfCnpj || null,
         };
 
         try {
             // Enviar dados para criar um novo cliente
             const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-cliente/${token}`, clientData);
 
-            const createdClient = response.data;
-            if (createdClient._id) {
-                sessionStorage.setItem('selectedClientId', createdClient._id);
+            const clientId = response.data;
+
+            if (clientId) {
+                sessionStorage.setItem('selectedClientId', clientId);
                 navigate("/criar-os/finalizar");
             } else {
                 console.error('ID do cliente criado não encontrado.');
@@ -184,7 +179,7 @@ export const SelectTypeOS = () => {
                                     className={styles.inputField}
                                 />
                                 {errors.nome_cliente && <p className={styles.error}>{errors.nome_cliente}</p>}
-                                
+
                                 <input
                                     type="text"
                                     name="contato_cliente"
@@ -194,7 +189,7 @@ export const SelectTypeOS = () => {
                                     className={styles.inputField}
                                 />
                                 {errors.contato_cliente && <p className={styles.error}>{errors.contato_cliente}</p>}
-                                
+
                                 <input
                                     type="text"
                                     name="endereco_cliente"
@@ -203,7 +198,7 @@ export const SelectTypeOS = () => {
                                     onChange={handleNewClientChange}
                                     className={styles.inputField}
                                 />
-                                
+
                                 <input
                                     type="text"
                                     name="cpfCnpj"
@@ -213,7 +208,7 @@ export const SelectTypeOS = () => {
                                     className={styles.inputField}
                                 />
                                 {errors.cpfCnpj && <p className={styles.error}>{errors.cpfCnpj}</p>}
-                                
+
                                 <input
                                     type="email"
                                     name="email_cliente"

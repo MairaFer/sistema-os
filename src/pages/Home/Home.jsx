@@ -6,6 +6,7 @@ import RecentOrdersTable from '../../Componentes/HomeComponents/RecentOrdersTabl
 import { FaCheck, FaExclamationCircle, FaHourglassHalf, FaClipboardList, FaPlus, FaClipboard } from 'react-icons/fa';
 import Skeleton from '@mui/material/Skeleton';
 import styles from './Home.module.css';
+import { Snackbar, Alert } from '@mui/material';
 
 const Home = () => {
   const location = useLocation();
@@ -21,6 +22,18 @@ const Home = () => {
     pendingAuthorization: 0,
     finished: 0,
   });
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.success) {
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   const createOsHandle = () => {
     navigate("/criaros/tipo-da-os");
@@ -105,23 +118,23 @@ const Home = () => {
         if (!token) {
           throw new Error('Token não encontrado.');
         }
-  
+
         const ordersResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
         const orders = ordersResponse.data.slice(0, 5);
-  
+
         const clientsResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
         const clients = clientsResponse.data;
-  
+
         const clientMap = clients.reduce((map, client) => {
           map[client._id] = client.nome_cliente;
           return map;
         }, {});
-  
+
         const ordersWithClientNames = orders.map(order => {
           const clientName = order.cliente_os ? clientMap[order.cliente_os] || 'Cliente não encontrado' : 'Cliente não especificado';
           return { ...order, cliente_os: clientName };
         });
-  
+
         if (ordersWithClientNames.length === 0) {
           setNoRecentOrders(true);
         }
@@ -132,10 +145,10 @@ const Home = () => {
         setLoading(false);
       }
     };
-  
+
     fetchRecentOrders();
   }, []);
-  
+
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
@@ -184,7 +197,17 @@ const Home = () => {
           )}
         </div>
       </main>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          Ordem de Serviço criada com sucesso!
+        </Alert>
+      </Snackbar>
     </div>
+
   );
 };
 
