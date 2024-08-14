@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ItemList from '../../Componentes/ItemList/ItemList';
 import AddButton from '../../Componentes/AddButton/AddButton';
 import SearchBar from '../../Componentes/SearchBar/SearchBar';
+import { HeaderContainer, MainContainer, ContentContainer, Title, TitleContainer, ButtonContainer } from './ClienteStyled';
 
 const Cliente = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,12 +20,22 @@ const Cliente = () => {
   );
 
   return (
-    <div>
-      <h1>Clientes</h1>
-      <SearchBar onChange={handleSearch} />
-      <ItemList items={filteredClients} />
-      <AddButton onClick={() => alert('Adicionar novo cliente')} />
-    </div>
+    <MainContainer>
+      <HeaderContainer>
+        <div style={{ marginBottom: '1rem' }} /> {/* Espaço acima da SearchBar */}
+        <SearchBar onChange={handleSearch} />
+      </HeaderContainer>
+      <ContentContainer>
+        <TitleContainer>
+          <Title>Cliente</Title>
+          <Title>CPF/CNPJ</Title>
+        </TitleContainer>
+        <ItemList items={filteredClients} />
+        <ButtonContainer>
+          <AddButton onClick={() => alert('Adicionar novo cliente')} />
+        </ButtonContainer>
+      </ContentContainer>
+    </MainContainer>
   );
 };
 

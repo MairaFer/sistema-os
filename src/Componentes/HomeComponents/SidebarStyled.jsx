@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// Container da Sidebar
 export const SidebarContainer = styled.div`
   height: 100vh;
   width: ${props => (props.isExpanded ? '250px' : '80px')};
