@@ -1,141 +1,92 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from './CriarOsCliente.module.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import * as yup from 'yup';
-
-const validationSchema = yup.object().shape({
-    nome_cliente: yup.string().required("Nome do cliente é obrigatório."),
-    contato_cliente: yup
-        .string()
-        .matches(/^\d{11}$|^\d{10}$/, "Contato deve ter exatamente 11 dígitos.")
-        .required("Contato é obrigatório."),
-    endereco_cliente: yup.string().max(250, "Endereço pode ter no máximo 250 caracteres."),
-    cpfCnpj: yup
-        .string()
-        .required("CPF ou CNPJ é obrigatório.")
-        .matches(/^\d{11}$|^\d{14}$/, "CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos.")
-        .test('is-valid-cpf-or-cnpj', 'CPF ou CNPJ inválido.', value => {
-            if (!value) return false;
-            const isValidCpf = /^\d{11}$/.test(value);
-            const isValidCnpj = /^\d{14}$/.test(value);
-            return isValidCpf || isValidCnpj;
-        }),
-    email_cliente: yup
-        .string()
-        .email("Email inválido.")
-        .required("Email é obrigatório."),
-});
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
 
 export const SelectTypeOS = () => {
     const [clients, setClients] = useState([]);
     const [search, setSearch] = useState("");
     const [selectedClient, setSelectedClient] = useState(null);
-    const [newClient, setNewClient] = useState({
-        nome_cliente: '',
-        contato_cliente: '',
-        endereco_cliente: '',
-        cpfCnpj: '',
-        email_cliente: ''
-    });
-    const [errors, setErrors] = useState({});
-
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogContent, setDialogContent] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchClients = async () => {
+    const handleSearch = async () => {
+        if (search) {
             const token = sessionStorage.getItem('token');
             if (!token) {
                 console.error('Token não encontrado.');
                 return;
             }
 
+            let response;
+
             try {
-                const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
-                setClients(response.data);
+                if (search.length === 11) {
+                    // CPF: 11 dígitos
+                    response = await axios.post(
+                        `https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/buscar-cpf/${token}`,
+                        { cpf: search }
+                    );
+                } else if (search.length === 14) {
+                    // CNPJ: 14 dígitos
+                    response = await axios.post(
+                        `https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/buscar-cnpj/${token}`,
+                        { cnpj: search }
+                    );
+                } else {
+                    setDialogContent("CPF ou CNPJ inválido. Verifique o número e tente novamente.");
+                    setDialogOpen(true);
+                    return;
+                }
+
+                if (response.data.length > 0) {
+                    setClients(response.data);
+                    if (search.length === 11) {
+                        setDialogContent(`Cliente Selecionado: Nome - ${response.data[0].nome_cliente} / CPF - ${response.data[0].cpf_cliente}`);
+                    } else {
+                        setDialogContent(`Cliente Selecionado: Nome - ${response.data[0].nome_cliente} / CNPJ - ${response.data[0].cnpj_cliente}`);
+                    }
+                } else {
+                    setClients([]);
+                    setDialogContent("Cliente não encontrado.");
+                }
+                setDialogOpen(true);
             } catch (error) {
-                console.error('Erro ao buscar clientes:', error);
+                console.error('Erro ao buscar cliente:', error);
+                setDialogContent("Erro ao buscar cliente. Tente novamente.");
+                setDialogOpen(true);
             }
-        };
-
-        fetchClients();
-    }, []);
-
-    const handleSearch = (event, value) => {
-        setSearch(value);
+        }
     };
 
     const handleClientSelect = (event, selectedClient) => {
         setSelectedClient(selectedClient || null);
-        setSearch(selectedClient ? selectedClient.nome_cliente : "");
+        setSearch(selectedClient ? selectedClient.cpfCnpj : "");
     };
 
-    const handleNewClientChange = (event) => {
-        const { name, value } = event.target;
-
-        setNewClient(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const validateForm = async () => {
-        try {
-            await validationSchema.validate(newClient, { abortEarly: false });
-            setErrors({});
-            return true;
-        } catch (err) {
-            const validationErrors = {};
-            err.inner.forEach(error => {
-                validationErrors[error.path] = error.message;
-            });
-            setErrors(validationErrors);
-            return false;
-        }
-    };
-
-    const handleSubmit = async () => {
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-            console.error('Token não encontrado.');
-            return;
-        }
-
-        if (selectedClient) {
-            sessionStorage.setItem('selectedClientId', selectedClient._id);
-            navigate("/criar-os/finalizar");
-            return;
-        }
-
-        const isValid = await validateForm();
-        if (!isValid) return;
-
-        const clientData = {
-            ...newClient,
-            cpfCnpj: newClient.cpfCnpj || null,
-        };
-
-        try {
-            // Enviar dados para criar um novo cliente
-            const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-cliente/${token}`, clientData);
-
-            const clientId = response.data;
-
-            if (clientId) {
-                sessionStorage.setItem('selectedClientId', clientId);
-                navigate("/criar-os/finalizar");
-            } else {
-                console.error('ID do cliente criado não encontrado.');
-            }
-        } catch (error) {
-            console.error('Erro ao enviar dados:', error);
-        }
+    const handleAddClient = () => {
+        navigate("/criaros/adicionar-cliente");
     };
 
     const handleNavigateHome = () => {
         navigate("/criaros/tipo-da-os");
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        if (clients.length > 0) {
+            sessionStorage.setItem('selectedClientId', clients[0]._id);
+            navigate("/criar-os/finalizar");
+        }
     };
 
     return (
@@ -149,84 +100,54 @@ export const SelectTypeOS = () => {
                         <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
                     </button>
                     <section className={styles.clientFormContainer}>
-                        <label className="texto" htmlFor="selectClient">Selecionar Cliente Existente</label>
-                        <Autocomplete
-                            id="selectClient"
-                            options={clients}
-                            getOptionLabel={(option) => `${option.nome_cliente} - ${option.email_cliente}`}
-                            value={selectedClient}
-                            onChange={handleClientSelect}
-                            inputValue={search}
-                            onInputChange={handleSearch}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    placeholder="Pesquisar cliente"
-                                    className={styles.searchInput}
-                                />
-                            )}
-                            sx={{ width: 300 }}
-                        />
-                        <label className="texto">Ou Criar novo cliente</label>
-                        <div className={styles.newClientWrapperAndButton}>
-                            <div className={styles.newClientWrapper}>
-                                <input
-                                    type="text"
-                                    name="nome_cliente"
-                                    placeholder="Nome do cliente*"
-                                    value={newClient.nome_cliente}
-                                    onChange={handleNewClientChange}
-                                    className={styles.inputField}
-                                />
-                                {errors.nome_cliente && <p className={styles.error}>{errors.nome_cliente}</p>}
-
-                                <input
-                                    type="text"
-                                    name="contato_cliente"
-                                    placeholder="Contato"
-                                    value={newClient.contato_cliente}
-                                    onChange={handleNewClientChange}
-                                    className={styles.inputField}
-                                />
-                                {errors.contato_cliente && <p className={styles.error}>{errors.contato_cliente}</p>}
-
-                                <input
-                                    type="text"
-                                    name="endereco_cliente"
-                                    placeholder="Endereço"
-                                    value={newClient.endereco_cliente}
-                                    onChange={handleNewClientChange}
-                                    className={styles.inputField}
-                                />
-
-                                <input
-                                    type="text"
-                                    name="cpfCnpj"
-                                    placeholder="CPF ou CNPJ*"
-                                    value={newClient.cpfCnpj}
-                                    onChange={handleNewClientChange}
-                                    className={styles.inputField}
-                                />
-                                {errors.cpfCnpj && <p className={styles.error}>{errors.cpfCnpj}</p>}
-
-                                <input
-                                    type="email"
-                                    name="email_cliente"
-                                    placeholder="Email*"
-                                    value={newClient.email_cliente}
-                                    onChange={handleNewClientChange}
-                                    className={styles.inputField}
-                                />
-                                {errors.email_cliente && <p className={styles.error}>{errors.email_cliente}</p>}
-                            </div>
-                            <button className={styles.submitButton} onClick={handleSubmit}>
-                                <img className={styles.submitIcon} src="/public/confirm.png" alt="avançar" />
-                            </button>
+                        <label className="texto" htmlFor="selectClient">Pesquisar Cliente por CPF/CNPJ</label>
+                        <div className={styles.searchWrapper}>
+                            <TextField
+                                id="searchClient"
+                                placeholder="Digite CPF ou CNPJ"
+                                className={styles.searchInput}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                sx={{ width: 300 }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={handleSearch}
+                                sx={{ marginLeft: 1 }}
+                            >
+                                Buscar
+                            </Button>
+                        </div>
+                        <Typography variant="body1" sx={{ marginTop: 2 }}>
+                            {selectedClient ? `${selectedClient.nome_cliente} - ${selectedClient.cpfCnpj}` : "Nenhum cliente selecionado"}
+                        </Typography>
+                        <div className={styles.addButtonWrapper}>
+                            <Typography variant="body1">Adicionar Novo Cliente</Typography>
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                onClick={handleAddClient}
+                                sx={{ marginTop: 1 }}
+                            >
+                                Adicionar
+                            </Button>
                         </div>
                     </section>
                 </div>
                 <div className={styles.designPage} />
             </div>
+
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>Aviso</DialogTitle>
+                <DialogContent>
+                    <Typography>{dialogContent}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
