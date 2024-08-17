@@ -14,6 +14,7 @@ import {
 } from '../../Componentes/HomeComponents/SidebarStyled';
 import { FaHome, FaUser, FaUsers, FaTools, FaCog, FaSignOutAlt, FaBars, FaChartLine } from 'react-icons/fa';
 import { useAuth } from '../../context/authContext'; // Importar o AuthContext
+import StyleSidebar from './Sidebar.module.css'
 
 function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -33,15 +34,13 @@ function Sidebar() {
   return (
     <SidebarContainer isExpanded={isExpanded}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <ToggleButton onClick={toggleSidebar}>
-          <ToggleIcon><FaBars /></ToggleIcon>
-        </ToggleButton>
+        <ToggleButton onClick={toggleSidebar}> <FaBars /></ToggleButton>
       </div>
       <div>
         <SidebarMenu>
           <SidebarMenuItem className={isActive('/home')} isExpanded={isExpanded}>
             <SidebarLink as={Link} to="/home" title="Tela Inicial">
-              <Icon isExpanded={isExpanded}><FaHome /></Icon>
+              <Icon isExpanded={isExpanded}><img className={StyleSidebar.img} src="/Ativo 2.svg" alt="Logo Cyberos" /></Icon>
               {isExpanded && 'Tela Inicial'}
             </SidebarLink>
           </SidebarMenuItem>
