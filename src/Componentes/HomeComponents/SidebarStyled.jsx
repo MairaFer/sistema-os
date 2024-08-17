@@ -101,3 +101,4 @@ export const Divider = styled.div`
   background-color: #ecf0f1;
   margin: 10px 0;
 `;
+

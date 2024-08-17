@@ -21,6 +21,7 @@ import { AuthProvider } from './context/authContext';
 import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
 import SettingsPage from './pages/Settings/SettingsPages.jsx';
 import CompleteOsPage from './pages/CriarOs/CompleteOsPage.jsx';
+import AddClienteOs from './pages/AddClienteOS/AddClienteOSPage.jsx'
 
 const Content = styled.div`
   margin-left: 250px;
@@ -58,6 +59,15 @@ function App() {
                 <Sidebar />
                 <Content>
                   <SelectTypeOsPage />
+                </Content>
+                <Footer />
+              </>
+            } />
+             <Route path="/criaros/adicionar-cliente" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <AddClienteOs />
                 </Content>
                 <Footer />
               </>
