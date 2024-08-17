@@ -67,7 +67,9 @@ const Home = () => {
           throw new Error('Token não encontrado.');
         }
         const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/user/${token}`);
-        setUserName(response.data.nome_user);
+        // Divide o nome no primeiro espaço e pega a primeira parte
+        const primeiroNome = response.data.nome_user.split(' ')[0];
+        setUserName(primeiroNome);
       } catch (error) {
         console.error('Erro ao buscar informações do usuário:', error);
         setUserName('Usuário');
@@ -76,6 +78,7 @@ const Home = () => {
 
     fetchUserName();
   }, []);
+
 
   useEffect(() => {
     const fetchOsStatus = async () => {
