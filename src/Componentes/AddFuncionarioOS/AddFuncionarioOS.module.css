@@ -1,0 +1,167 @@
+.selecaoTipoOs {
+    background-color: #252630;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.paragraph {
+    font-size: 2rem;
+    padding-left: 2%;
+}
+
+.div {
+    background-color: #252630;
+    height: 56.75rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 120rem;
+}
+
+.overlapGroup {
+    height: 56.75rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.barraPage {
+    background-color: #0047ff;
+    height: 17.5rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.textWrapper {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 5rem;
+    font-weight: 400;
+    left: 19.6875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 7.625rem;
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 2.375rem;
+    font-weight: 400;
+    left: 19.875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 13.4375rem;
+}
+
+.backButton {
+    background-color: #EF5E22;
+    border-style: none;
+    border-radius: 3rem;
+    height: 5rem;
+    left: 19.5rem;
+    position: absolute;
+    top: 1.5rem;
+    width: 5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.goBack {
+    filter: invert();
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    width: 60%;
+}
+
+.backButton:hover {
+    scale: 99%;
+    background-color: #d65721;
+}
+
+/* Estilo da div que contém o formulário de funcionário */
+.funcionarioFormContainer {
+    position: absolute;
+    top: 20rem;
+    left: 19.5rem;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    gap: 0.7rem;
+}
+
+/* Wrapper que contém os inputs e o botão */
+.newFuncionarioWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* Wrapper dos inputs */
+.newFuncionarioWrapper {
+    display: flex;
+    flex-direction: column;
+    border: solid 1rem #213356; /* Mantém a borda aqui */
+    background-color: #213356;  /* Mantém o fundo aqui */
+    border-radius: 2rem;
+    width: 30rem;
+}
+
+.boxOrientation {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+/* Botão de envio */
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 1rem;
+    background-color: #0047FF;
+    color: #FFF;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.inputField {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    border: none;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 40rem; /* Aumenta a largura dos inputs */
+}
+
+/* Ícone da seta dentro do botão */
+.submitButtonIcon {
+    font-size: 3rem; /* Ajuste o tamanho do ícone conforme necessário */
+}
+
+
+.submitButton:active {
+    scale: 105%;
+    background-color: #EF5E22;
+}
+
+.submitButton:hover {
+    scale: 101%;
+    background-color: #EF5E22;
+}

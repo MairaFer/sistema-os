@@ -1,0 +1,222 @@
+.selecaoTipoOs {
+    background-color: #252630;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.div {
+    background-color: #252630;
+    height: 56.75rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 120rem;
+}
+
+.overlapGroup {
+    height: 56.75rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.barraPage {
+    background-color: #0047ff;
+    height: 17.5rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.textWrapper {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 5rem;
+    font-weight: 400;
+    left: 19.6875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 7.625rem;
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 2.375rem;
+    font-weight: 400;
+    left: 19.875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 13.4375rem;
+}
+
+.backButton {
+    background-color: #ff611e;
+    border-style: none;
+    border-radius: 3rem;
+    height: 5rem;
+    left: 19.5rem;
+    position: absolute;
+    top: 1.5rem;
+    width: 5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.goBack {
+    filter: invert();
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    width: 60%;
+}
+
+.backButton:hover {
+    scale: 99%;
+    background-color: #EF5E22;
+}
+
+.funcionarioFormContainer {
+    position: absolute;
+    top: 20rem;
+    left: 19.5rem;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 500;
+    width: 30rem;
+    
+}
+
+.selectfuncionarioWrapper {
+    gap: 0.5rem;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #213356;
+    border-radius: 2rem;
+    border: solid 1rem #213356;
+    width: fit-content; /* Ajusta o tamanho do contêiner para caber apenas o conteúdo */
+}
+
+
+.newfuncionarioWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Ajusta os itens ao topo, para não alinhar ao centro */
+    gap: 3rem;
+    border: none;
+    background-color: transparent;
+}
+
+
+.newfuncionarioWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 2px;
+    border: solid 1rem #213356; /* Mantém a borda aqui */
+    background-color: #213356;  /* Mantém o fundo aqui */
+    border-radius: 2rem;
+}
+
+.searchWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0px;
+    width: 100%; /* Ajuste para o tamanho total disponível */
+    max-width: none; /* Remove o limite máximo para testar */
+    /* Ajuste ou remova max-width conforme necessário */
+}
+
+
+.searchInput {
+    flex: 1; /* O campo de entrada ocupa o máximo de espaço disponível */
+    margin-right: 1rem; /* Espaço entre o campo de entrada e o botão */
+    max-width: 500px; /* Define uma largura máxima, ajuste conforme necessário */
+    width: 100%; /* O campo de entrada ocupa a largura total do contêiner disponível */
+}
+
+
+.inputFilled {
+    /* Estilos adicionais quando o campo está preenchido, se necessário */
+}
+
+.boxOrientation {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.selectfuncionario {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 2rem;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 32rem; /* Garanta que o select tenha uma largura definida */
+}
+
+
+.inputField {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    border: none;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 32rem;
+}
+
+.newfuncionarioWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+}
+
+
+.submitButton {
+    background-color: #1C53E2;
+    border-radius: 1.5rem;
+    width: 8rem;
+    height: 8rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.25s, scale 0.25s;
+    align-self: flex-start; /* Alinha o botão ao topo */
+}
+
+
+
+.submitButton:active {
+    scale: 105%;
+    background-color: #EF5E22;
+}
+
+.submitButton:hover {
+    scale: 101%;
+    background-color: #EF5E22;
+}
+
+.submitIcon {
+    filter: invert();
+    width: 50%;
+    height: 50%;
+    position: relative;
+    left: 0.2rem;
+    top: 0rem;
+}
