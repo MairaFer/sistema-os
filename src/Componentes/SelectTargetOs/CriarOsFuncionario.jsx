@@ -2,211 +2,195 @@ import React, { useState, useEffect } from "react";
 import styles from './CriarOsFuncionario.module.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import {
-    Button,
-    ThemeProvider,
-    createTheme
-} from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
 
-// Defina o tema
-const lightTheme = createTheme({
-    palette: {
-        mode: 'light',
-        text: {
-            primary: '#000',
-            secondary: '#111',
-        },
-    },
-    typography: {
-        fontFamily: '"Lexend", sans-serif',
-        h1: { fontSize: '2rem', color: '#333', fontWeight: '500' },
-        body1: { fontSize: '1.05rem', color: '#555', fontWeight: '500' },
-    },
-    components: {
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '0.25rem',
-                    transition: 'all 0.3s ease-in-out',
-                    '&.Mui-focused': {
-                        backgroundColor: '#e0f7fa',
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    },
-                },
-            },
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#0047FF',
-                    color: '#FFF',
-                    '&:hover': {
-                        backgroundColor: '#0037CC',
-                    },
-                },
-            },
-        },
-    },
-});
-
-export const CriarOsFuncionario = () => {
-    const { control } = useForm();
-    const [funcionarios, setFuncionarios] = useState([]);
-    const [filteredFuncionarios, setFilteredFuncionarios] = useState([]);
+export const SelectTypeOS = () => {
+    const [employees, setEmployees] = useState([]);
     const [search, setSearch] = useState("");
-    const [searchType, setSearchType] = useState("nome"); // Tipo de busca: 'nome' ou 'setor'
-    const navigate = useNavigate();
-    const [selectedFuncionario, setSelectedFuncionario] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [newEmployee, setNewEmployee] = useState({
+        nome_funcionario: '',
+        contato_funcionario: '',
+        setor_funcionario: ''
+    });
+    const [errors, setErrors] = useState({});
 
-    // Função para buscar todos os funcionários
-    const fetchAllFuncionarios = async () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+                console.error('Token não encontrado.');
+                return;
+            }
+
+            try {
+                const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}`);
+                setEmployees(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar funcionários:', error);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
+
+    const handleSearch = (event, value) => {
+        setSearch(value);
+    };
+
+    const handleEmployeeSelect = (event, selectedEmployee) => {
+        setSelectedEmployee(selectedEmployee || null);
+        setSearch(selectedEmployee ? selectedEmployee.nome_funcionario : "");
+    };
+
+    const handleNewEmployeeChange = (event) => {
+        const { name, value } = event.target;
+
+        if (name === 'contato_funcionario') {
+            const formattedValue = formatContact(value);
+            setNewEmployee(prevState => ({
+                ...prevState,
+                [name]: formattedValue
+            }));
+        } else {
+            setNewEmployee(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
+    };
+
+    const formatContact = (value) => {
+        const cleaned = value.replace(/\D+/g, '');
+        return cleaned.length > 11 ? cleaned.slice(0, 11) : cleaned;
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        const { nome_funcionario, contato_funcionario, setor_funcionario } = newEmployee;
+
+        if (!nome_funcionario) newErrors.nome_funcionario = "Nome do funcionário é obrigatório.";
+        if (!setor_funcionario) newErrors.setor_funcionario = "Setor é obrigatório.";
+
+        const cleanedContact = contato_funcionario.replace(/\D+/g, '');
+        if (cleanedContact.length !== 11) {
+            newErrors.contato_funcionario = "Contato deve ter exatamente 11 dígitos.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async () => {
         const token = sessionStorage.getItem('token');
         if (!token) {
             console.error('Token não encontrado.');
             return;
         }
 
+        if (selectedEmployee) {
+            sessionStorage.setItem('selectedEmployeeId', selectedEmployee.id);
+            navigate("/criar-os/finalizar");
+            return;
+        }
+
+        if (!validateForm()) return;
+
         try {
-            const response = await axios.get(
-                `https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}`
-            );
-            setFuncionarios(response.data);
+            const cleanContact = newEmployee.contato_funcionario.replace(/\D+/g, '');
+
+            const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-funcionario/${token}`, {
+                ...newEmployee,
+                contato_funcionario: cleanContact
+            });
+            const createdEmployee = response.data;
+            sessionStorage.setItem('selectedEmployeeId', createdEmployee.id);
+
+            navigate("/criar-os/finalizar");
         } catch (error) {
-            console.error('Erro ao buscar funcionários:', error);
+            console.error('Erro ao enviar dados:', error);
         }
-    };
-
-    useEffect(() => {
-        fetchAllFuncionarios();
-    }, []);
-
-    useEffect(() => {
-        if (search) {
-            let filtered = [];
-
-            if (searchType === "nome") {
-                filtered = funcionarios.filter(f => f.nome_func.toLowerCase().includes(search.toLowerCase()));
-            } else if (searchType === "setor") {
-                filtered = funcionarios.filter(f => f.setor.toLowerCase().includes(search.toLowerCase()));
-            }
-
-            setFilteredFuncionarios(filtered);
-        } else {
-            setFilteredFuncionarios([]);
-        }
-    }, [search, searchType, funcionarios]);
-
-    const handleAddFuncionario = () => {
-        navigate("/criaros/adicionar-funcionario");
     };
 
     const handleNavigateHome = () => {
         navigate("/criaros/tipo-da-os");
     };
 
-    const handleAvancar = () => {
-        if (selectedFuncionario) {
-            sessionStorage.removeItem('selectedClientId');
-            sessionStorage.setItem('selectedFuncionarioId', selectedFuncionario._id);
-            navigate("/criar-os/finalizar");
-        }
-    };
-
     return (
-        <ThemeProvider theme={lightTheme}>
-            <div className={styles.selecaoTipoOs}>
-                <div className={styles.div}>
-                    <div className={styles.overlapGroup}>
-                        <div className={styles.barraPage} />
-                        <div className={styles.textWrapper}>Criando OS</div>
-                        <p className={styles.p}>2. Adicione um Funcionário à OS</p>
-                        <button className={styles.backButton} onClick={handleNavigateHome}>
-                            <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
-                        </button>
-                    </div>
-
+        <div className={styles.selecaoTipoOs}>
+            <div className={styles.div}>
+                <div className={styles.overlapGroup}>
+                    <div className={styles.barraPage} />
+                    <div className={styles.textWrapper}>Criando OS</div>
+                    <p className={styles.p}>2. Adicione um Funcionário à OS</p>
+                    <button className={styles.backButton} onClick={handleNavigateHome}>
+                        <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
+                    </button>
                     <section className={styles.funcionarioFormContainer}>
-                        <label className="texto" htmlFor="searchTipo">Selecionar funcionário existente:</label>
-                        <div className={styles.searchTipoWrapper}>
-                            <TextField
-                                select
-                                label="Buscar por"
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                variant="filled"
-                                fullWidth
-                                sx={{ marginBottom: 2 }}
-                                SelectProps={{ native: true }}
-                            >
-                                <option value="nome">Nome</option>
-                                <option value="setor">Setor</option>
-                            </TextField>
-
-                            <Controller
-                                name="searchInput"
-                                control={control}
-                                render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        label={`Digite o ${searchType === "nome" ? "nome" : "setor"}`}
-                                        variant="filled"
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        fullWidth
-                                    />
-                                )}
-                            />
-
-                            <Autocomplete
-                                options={filteredFuncionarios}
-                                getOptionLabel={(option) => `${option.nome_func} - ${option.setor}`}
-                                value={selectedFuncionario}
-                                onChange={(event, newValue) => setSelectedFuncionario(newValue)}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Funcionários"
-                                        variant="filled"
-                                    />
-                                )}
-                                fullWidth
-                                sx={{ marginTop: 2 }}
-                                disabled={!filteredFuncionarios.length && !search}
-                            />
-
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleAvancar}
-                                sx={{ marginTop: 2, width: 280, height: 55 }}
-                                disabled={!selectedFuncionario}
-                            >
-                                Avançar
-                            </Button>
-
-                            <Typography sx={{ fontSize: '1.4rem', color: '#ffff', marginTop: '0.8rem' }} variant="body1">Ou Adicionar Novo Funcionário:</Typography>
-                            <Button
-                                variant="contained"
-                                startIcon={<AddIcon />}
-                                onClick={handleAddFuncionario}
-                                sx={{ marginTop: 2, width: 280, height: 55 }}
-                            >
-                                Adicionar Funcionário
-                            </Button>
+                        <label className="texto" htmlFor="selectFuncionario">Selecionar Funcionário Existente</label>
+                        <Autocomplete
+                            id="selectFuncionario"
+                            options={employees}
+                            getOptionLabel={(option) => `${option.nome_funcionario} - ${option.setor_funcionario}`}
+                            value={selectedEmployee}
+                            onChange={handleEmployeeSelect}
+                            inputValue={search}
+                            onInputChange={handleSearch}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Pesquisar funcionário"
+                                    className={styles.searchInput}
+                                />
+                            )}
+                            sx={{ width: 300 }}
+                        />
+                        <label className="texto">Ou Criar novo funcionário</label>
+                        <div className={styles.newFuncionarioWrapperAndButton}>
+                            <div className={styles.newFuncionarioWrapper}>
+                                <input
+                                    type="text"
+                                    name="nome_funcionario"
+                                    placeholder="Nome do funcionário*"
+                                    value={newEmployee.nome_funcionario}
+                                    onChange={handleNewEmployeeChange}
+                                    className={styles.inputField}
+                                />
+                                {errors.nome_funcionario && <p className={styles.error}>{errors.nome_funcionario}</p>}
+                                
+                                <input
+                                    type="text"
+                                    name="contato_funcionario"
+                                    placeholder="Contato"
+                                    value={newEmployee.contato_funcionario}
+                                    onChange={handleNewEmployeeChange}
+                                    className={styles.inputField}
+                                />
+                                {errors.contato_funcionario && <p className={styles.error}>{errors.contato_funcionario}</p>}
+                                
+                                <input
+                                    type="text"
+                                    name="setor_funcionario"
+                                    placeholder="Setor*"
+                                    value={newEmployee.setor_funcionario}
+                                    onChange={handleNewEmployeeChange}
+                                    className={styles.inputField}
+                                />
+                                {errors.setor_funcionario && <p className={styles.error}>{errors.setor_funcionario}</p>}
+                            </div>
+                            <button className={styles.submitButton} onClick={handleSubmit}>
+                                <img className={styles.submitIcon} src="/public/confirm.png" alt="avançar" />
+                            </button>
                         </div>
                     </section>
                 </div>
                 <div className={styles.designPage} />
             </div>
-        </ThemeProvider>
+        </div>
     );
 };
 
-export default CriarOsFuncionario;
+export default SelectTypeOS;

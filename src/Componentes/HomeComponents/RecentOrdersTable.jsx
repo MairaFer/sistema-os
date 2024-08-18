@@ -10,7 +10,7 @@ const RecentOrdersTable = ({ orders }) => {
             <TableHeadCell>Nome</TableHeadCell>
             <TableHeadCell>Chave</TableHeadCell>
             <TableHeadCell>Status</TableHeadCell>
-            <TableHeadCell>Cliente/Funcionário</TableHeadCell>
+            <TableHeadCell>Cliente</TableHeadCell>
             <TableHeadCell>Data</TableHeadCell>
           </TableHeadRow>
         </TableHead>

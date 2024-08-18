@@ -1,21 +1,7 @@
-* {
+*{
   outline: none;
 }
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-.content {
-  flex: 1;
-}
-
 #root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -41,7 +27,6 @@ body {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
