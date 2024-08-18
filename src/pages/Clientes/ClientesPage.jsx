@@ -147,25 +147,20 @@ const Cliente = () => {
             <Title>CPF/CNPJ</Title>
           </TitleContainer>
           
-          <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nome</TableCell>
-                  <TableCell sx={{ backgroundColor: '#FFA726', color: '#fff' }}>CPF/CNPJ</TableCell>
-                  <TableCell>Ações</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+          <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%'}}>
+            <Table sx={{ border: 'none'}}>
+              <TableBody >
                 {filteredClients.map((client) => (
-                  <TableRow key={client._id}>
-                    <TableCell>{client.nome_cliente}</TableCell>
-                    <TableCell sx={{ backgroundColor: '#FFA726', color: '#fff' }}>
-                      {client.cpf_cliente || client.cnpj_cliente}
+                  <TableRow  key={client._id}>
+                    <TableCell sx={{bgcolor: 'white'}} >{client.nome_cliente}</TableCell>
+                    <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '20px 0 0 20px', width: '30%' }}>
+                      <th style={{paddingLeft: '25%', width: '300px', fontSize: '1rem'}}>
+                        {client.cpf_cliente || client.cnpj_cliente}
+                      </th>
                     </TableCell>
-                    <TableCell>
-                      <IconButton onClick={(event) => handleMenuClick(event, client)}>
-                        <MoreVertIcon />
+                    <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}} >
+                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, client)}>
+                        <MoreVertIcon sx={{color: 'white'}} />
                       </IconButton>
                     </TableCell>
                   </TableRow>
