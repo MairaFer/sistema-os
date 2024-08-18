@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalStyle from './GlobalStyle';
 import Sidebar from './Componentes/HomeComponents/Sidebar.jsx';
 import Home from './pages/Home/Home';
-import Header from './Componentes/Header/Header';
 import Footer from './Componentes/Footer/Footer';
 import LoginPage from './Componentes/LoginPage/LoginPageComponent';
 import Cliente from './pages/Clientes/ClientesPage';
@@ -25,11 +24,14 @@ import AddClienteOs from './pages/AddClienteOS/AddClienteOSPage.jsx'
 import AddFuncionarioOs from './pages/AddFuncionarioOS/AddFuncionarioOSPage.jsx'
 
 const Content = styled.div`
-  margin-left: 250px;
-  padding: 20px;
+  margin-left: 3.75rem;
+  padding-bottom: 1.25rem;
+  padding-left: 1.25rem;
   min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  header: none;
 `;
 
 function App() {
@@ -47,12 +49,10 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <Home />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/tipo-da-os" element={
@@ -61,34 +61,30 @@ function App() {
                 <Content>
                   <SelectTypeOsPage />
                 </Content>
-                <Footer />
               </>
             } />
-             <Route path="/criaros/adicionar-cliente" element={
+            <Route path="/criaros/adicionar-cliente" element={
               <>
                 <Sidebar />
                 <Content>
                   <AddClienteOs />
                 </Content>
-                <Footer />
               </>
             } />
-              <Route path="/criaros/adicionar-funcionario" element={
+            <Route path="/criaros/adicionar-funcionario" element={
               <>
                 <Sidebar />
                 <Content>
                   <AddFuncionarioOs />
                 </Content>
-                <Footer />
               </>
             } />
-             <Route path="/criar-os/finalizar" element={
+            <Route path="/criar-os/finalizar" element={
               <>
                 <Sidebar />
                 <Content>
                   <CompleteOsPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/funcionario" element={
@@ -97,7 +93,6 @@ function App() {
                 <Content>
                   <CriarOsFuncionarioPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/cliente" element={
@@ -106,62 +101,52 @@ function App() {
                 <Content>
                   <CriarOsClientePage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/clientes" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <Cliente />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/funcionarios" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <Funcionarios />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/servicos" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <Servicos />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/relatorios" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <Relatorios />
                 </Content>
-                <Footer />
               </>
             } />
-             <Route path="/settings" element={
+            <Route path="/settings" element={
               <>
-                <Header />
                 <Sidebar />
                 <Content>
                   <SettingsPage />
                 </Content>
-                <Footer />
               </>
             } />
           </Route>
         </Routes>
       </AuthProvider>
+      <Footer />
     </Router>
   );
 }

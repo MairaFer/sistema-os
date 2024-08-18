@@ -52,7 +52,7 @@ const ServicosPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
 
@@ -73,19 +73,31 @@ const ServicosPage = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = services.filter(service =>
-      service.nome_servico?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filter === "" || service.valor_servico?.includes(filter))
+    const sorted = [...services].sort((a, b) => {
+      const valorA = parseFloat(a.valor_servico);
+      const valorB = parseFloat(b.valor_servico);
+
+      if (sortOrder === 'asc') {
+        return valorA - valorB;
+      } else if (sortOrder === 'desc') {
+        return valorB - valorA;
+      }
+      return 0;
+    });
+
+    const filtered = sorted.filter(service =>
+      service.nome_servico?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     setFilteredServices(filtered);
-  }, [searchTerm, filter, services]);
+  }, [searchTerm, sortOrder, services]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
   };
 
   const handleMenuClick = (event, service) => {
@@ -125,19 +137,18 @@ const ServicosPage = () => {
             placeholder="Buscar serviço..." 
             value={searchTerm}
             onChange={handleSearch}
-            style={{ marginBottom: '1rem' }}
+            style={{ marginBottom: '1rem', width:'400px' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
-            <InputLabel id="filter-label">Filtrar por Valor</InputLabel>
+            <InputLabel id="sort-order-label">Ordenar por Valor</InputLabel>
             <Select
-              labelId="filter-label"
-              value={filter}
-              onChange={handleFilterChange}
-              style={{ width: '200px' }}
+              labelId="sort-order-label"
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              style={{ width: '250px' }}
             >
-              <MenuItem value="">Todos</MenuItem>
-              <MenuItem value="100">Até R$100</MenuItem>
-              <MenuItem value="200">Até R$200</MenuItem>
+              <MenuItem value="asc">Crescente</MenuItem>
+              <MenuItem value="desc">Decrescente</MenuItem>
             </Select>
           </FormControl>
         </HeaderContainer>
@@ -147,7 +158,7 @@ const ServicosPage = () => {
             <Title>Valor</Title>
           </TitleContainer>
           
-          <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%'}}>
+          <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%'}}>
             <Table sx={{ border: 'none'}}>
               <TableBody >
                 {filteredServices.map((service) => (

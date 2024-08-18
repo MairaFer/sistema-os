@@ -5,8 +5,8 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1760px;
+  margin: 1rem 3rem;
   padding: 2rem;
   background-color: #213356;
   border-radius: 10px;
@@ -14,8 +14,8 @@ export const Container = styled.div`
 `;
 
 export const FormContainer = styled.div`
-  width: 60%;
-  margin-top: 1rem;
+  width: 55%;
+
 `;
 
 export const LogoContainer = styled.div`
@@ -23,8 +23,13 @@ export const LogoContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  width: 35%;
-  margin-top: 7rem; 
+  margin-top: 1.5rem;
+`;
+
+export const InfoContainer = styled.div`
+  display: flex;
+  gap: 5rem; /* Espaçamento entre os inputs e a logo */
+  align-items: flex-start;
 `;
 
 export const Title = styled.h1`
@@ -43,8 +48,6 @@ export const Form = styled.form`
 export const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-
   label {
     font-size: 1rem;
     color: #fff;
@@ -52,7 +55,8 @@ export const Section = styled.div`
 `;
 
 export const Input = styled.input`
-  padding: 0.8rem;
+  padding: .8rem ;
+  width: 617px;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
@@ -72,6 +76,8 @@ export const Button = styled.button`
 
   &:hover {
     background-color: #0056b3;
+    scale:102%;
+    opacity: 80%;
   }
 
   &:last-of-type {

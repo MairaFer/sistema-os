@@ -122,26 +122,60 @@ const Home = () => {
           throw new Error('Token não encontrado.');
         }
 
+        // Buscar ordens de serviço
         const ordersResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/oss/${token}`);
-        const orders = ordersResponse.data.slice(0, 5);
+        const orders = ordersResponse.data;
 
+        // Buscar clientes
         const clientsResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
         const clients = clientsResponse.data;
 
+        // Buscar funcionários
+        const employeesResponse = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}`);
+        const employees = employeesResponse.data;
+
+        // Criar mapeamentos para clientes e funcionários
         const clientMap = clients.reduce((map, client) => {
           map[client._id] = client.nome_cliente;
           return map;
         }, {});
 
-        const ordersWithClientNames = orders.map(order => {
-          const clientName = order.cliente_os ? clientMap[order.cliente_os] || 'Cliente não encontrado' : 'Cliente não especificado';
-          return { ...order, cliente_os: clientName };
+        const employeeMap = employees.reduce((map, employee) => {
+          map[employee._id] = employee.nome_func;
+          return map;
+        }, {});
+
+        // Ordenar ordens de serviço pela data de criação
+        const sortedOrders = orders.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA; // Ordena em ordem decrescente
         });
 
-        if (ordersWithClientNames.length === 0) {
+        // Selecionar as 5 ordens mais recentes
+        const recentOrders = sortedOrders.slice(0, 9);
+
+        // Mapear ordens de serviço com nomes de clientes e funcionários
+        const ordersWithNames = recentOrders.map(order => {
+          const clientName = order.cliente_os
+            ? clientMap[order.cliente_os] || 'Cliente não encontrado'
+            : 'Cliente não encontrado';
+
+          const employeeName = order.funcionario_os
+            ? employeeMap[order.funcionario_os] || 'Funcionário não encontrado'
+            : 'Funcionário não encontrado';
+
+          return {
+            ...order,
+            cliente_os: clientName,
+            funcionario_os: employeeName
+          };
+        });
+
+        if (ordersWithNames.length === 0) {
           setNoRecentOrders(true);
         }
-        setRecentOrders(ordersWithClientNames);
+        setRecentOrders(ordersWithNames);
       } catch (error) {
         setError('Erro ao buscar ordens de serviço recentes.');
       } finally {
@@ -152,10 +186,10 @@ const Home = () => {
     fetchRecentOrders();
   }, []);
 
+
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
-        <p>home &gt; Página Inicial</p>
         <div className={styles.greetingContainer}>
           {loading ? (
             <Skeleton variant="text" width={200} height={50} />
@@ -210,7 +244,6 @@ const Home = () => {
         </Alert>
       </Snackbar>
     </div>
-
   );
 };
 

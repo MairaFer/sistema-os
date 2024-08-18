@@ -4,12 +4,11 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  margin-top: 2rem; 
 `;
 
 export const HeaderContainer = styled.div`
   background-color: #213356;
-  padding: 1rem;
+  padding: 2rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center; 

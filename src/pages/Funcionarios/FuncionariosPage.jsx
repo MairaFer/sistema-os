@@ -125,7 +125,7 @@ const FuncionarioPage = () => {
             placeholder="Buscar funcionário..." 
             value={searchTerm}
             onChange={handleSearch}
-            style={{ marginBottom: '1rem' }}
+            style={{ marginBottom: '1rem', width:'400px' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="filter-label">Filtrar por Setor</InputLabel>
@@ -133,7 +133,7 @@ const FuncionarioPage = () => {
               labelId="filter-label"
               value={filter}
               onChange={handleFilterChange}
-              style={{ width: '200px' }}
+              style={{ width: '250px' }}
             >
               <MenuItem value="">Todos</MenuItem>
               <MenuItem value="RH">RH</MenuItem>
