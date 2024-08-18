@@ -3,7 +3,7 @@ import axios from 'axios';
 import { 
   HeaderContainer, MainContainer, ContentContainer, Title, 
   TitleContainer, ButtonContainer 
-} from './ClienteStyled';
+} from './FuncionarioStyled'; 
 import { 
   Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
   MenuItem as MenuItemMui, createTheme, ThemeProvider, 
@@ -48,37 +48,37 @@ const lightTheme = createTheme({
   },
 });
 
-const Cliente = () => {
+const FuncionarioPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [clients, setClients] = useState([]);
-  const [filteredClients, setFilteredClients] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [filter, setFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
-    const fetchClients = async () => {
+    const fetchEmployees = async () => {
       const token = sessionStorage.getItem('token');
       try {
-        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
-        console.log('Dados dos clientes:', response.data);
-        setClients(response.data);
-        setFilteredClients(response.data);
+        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}`);
+        console.log('Dados dos funcionários:', response.data);
+        setEmployees(response.data);
+        setFilteredEmployees(response.data);
       } catch (error) {
-        console.error('Erro ao buscar clientes', error);
+        console.error('Erro ao buscar funcionários', error);
       }
     };
 
-    fetchClients();
+    fetchEmployees();
   }, []);
 
   useEffect(() => {
-    const filtered = clients.filter(client =>
-      client.nome_cliente?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filter === "" || (client.cpf_cliente?.includes(filter) || client.cnpj_cliente?.includes(filter)))
+    const filtered = employees.filter(employee =>
+      employee.nome_func?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filter === "" || employee.setor?.toLowerCase().includes(filter.toLowerCase()))
     );
-    setFilteredClients(filtered);
-  }, [searchTerm, filter, clients]);
+    setFilteredEmployees(filtered);
+  }, [searchTerm, filter, employees]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -88,30 +88,30 @@ const Cliente = () => {
     setFilter(event.target.value);
   };
 
-  const handleMenuClick = (event, client) => {
+  const handleMenuClick = (event, employee) => {
     setAnchorEl(event.currentTarget);
-    setSelectedClient(client);
+    setSelectedEmployee(employee);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedClient(null);
+    setSelectedEmployee(null);
   };
 
-  const handleViewClient = () => {
-    alert(`Visualizar cliente: ${selectedClient.nome_cliente}`);
+  const handleViewEmployee = () => {
+    alert(`Visualizar funcionário: ${selectedEmployee.nome_func}`);
     handleMenuClose();
   };
 
-  const handleDeleteClient = async () => {
+  const handleDeleteEmployee = async () => {
     const token = sessionStorage.getItem('token');
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${selectedClient._id}/${token}`);
-      setClients(clients.filter(client => client._id !== selectedClient._id));
-      setFilteredClients(filteredClients.filter(client => client._id !== selectedClient._id));
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${selectedEmployee._id}/${token}`);
+      setEmployees(employees.filter(employee => employee._id !== selectedEmployee._id));
+      setFilteredEmployees(filteredEmployees.filter(employee => employee._id !== selectedEmployee._id));
       handleMenuClose();
     } catch (error) {
-      console.error('Erro ao excluir cliente', error);
+      console.error('Erro ao excluir funcionário', error);
     }
   };
 
@@ -122,13 +122,13 @@ const Cliente = () => {
           <div style={{ marginBottom: '1rem' }} />
           <TextField 
             variant="outlined" 
-            placeholder="Buscar cliente..." 
+            placeholder="Buscar funcionário..." 
             value={searchTerm}
             onChange={handleSearch}
             style={{ marginBottom: '1rem' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
-            <InputLabel id="filter-label">Filtrar por CPF/CNPJ</InputLabel>
+            <InputLabel id="filter-label">Filtrar por Setor</InputLabel>
             <Select
               labelId="filter-label"
               value={filter}
@@ -136,30 +136,32 @@ const Cliente = () => {
               style={{ width: '200px' }}
             >
               <MenuItem value="">Todos</MenuItem>
-              <MenuItem value="CPF">CPF</MenuItem>
-              <MenuItem value="CNPJ">CNPJ</MenuItem>
+              <MenuItem value="RH">RH</MenuItem>
+              <MenuItem value="TI">TI</MenuItem>
+              <MenuItem value="Financeiro">Financeiro</MenuItem>
+              {/* Adicione outros setores conforme necessário */}
             </Select>
           </FormControl>
         </HeaderContainer>
         <ContentContainer>
           <TitleContainer>
-            <Title>Cliente</Title>
-            <Title>CPF/CNPJ</Title>
+            <Title>Funcionário</Title>
+            <Title>Setor</Title>
           </TitleContainer>
           
           <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%'}}>
             <Table sx={{ border: 'none'}}>
               <TableBody >
-                {filteredClients.map((client) => (
-                  <TableRow  key={client._id}>
-                    <TableCell sx={{bgcolor: 'white'}} >{client.nome_cliente}</TableCell>
+                {filteredEmployees.map((employee) => (
+                  <TableRow key={employee._id}>
+                    <TableCell sx={{bgcolor: 'white'}}>{employee.nome_func}</TableCell>
                     <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '20px 0 0 20px', width: '30%' }}>
                       <th style={{paddingLeft: '25%', width: '300px', fontSize: '1rem'}}>
-                        {client.cpf_cliente || client.cnpj_cliente}
+                        {employee.setor}
                       </th>
                     </TableCell>
-                    <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}} >
-                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, client)}>
+                    <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}}>
+                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, employee)}>
                         <MoreVertIcon sx={{color: 'white'}} />
                       </IconButton>
                     </TableCell>
@@ -170,7 +172,7 @@ const Cliente = () => {
           </TableContainer>
 
           <ButtonContainer>
-            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo cliente')}>
+            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo funcionário')}>
               <AddIcon />
             </Fab>
           </ButtonContainer>
@@ -180,12 +182,12 @@ const Cliente = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItemMui onClick={handleViewClient}>Ver Cliente</MenuItemMui>
-          <MenuItemMui onClick={handleDeleteClient}>Excluir Cliente</MenuItemMui>
+          <MenuItemMui onClick={handleViewEmployee}>Ver Funcionário</MenuItemMui>
+          <MenuItemMui onClick={handleDeleteEmployee}>Excluir Funcionário</MenuItemMui>
         </Menu>
       </MainContainer>
     </ThemeProvider>
   );
 };
 
-export default Cliente;
+export default FuncionarioPage;

@@ -88,10 +88,11 @@
     left: 19.5rem;
     display: flex;
     flex-direction: column;
-    color: #ffffff;
-    font-size: 1.5rem;
+    color: #fff;
+    font-size: 1.8rem;
     font-weight: 500;
-    gap: 0.7rem;
+    width: 30rem;
+    
 }
 
 .selectClientWrapper {
@@ -127,6 +128,28 @@
     border-radius: 2rem;
 }
 
+.searchWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0px;
+    width: 100%; /* Ajuste para o tamanho total disponível */
+    max-width: none; /* Remove o limite máximo para testar */
+    /* Ajuste ou remova max-width conforme necessário */
+}
+
+
+.searchInput {
+    flex: 1; /* O campo de entrada ocupa o máximo de espaço disponível */
+    margin-right: 1rem; /* Espaço entre o campo de entrada e o botão */
+    max-width: 500px; /* Define uma largura máxima, ajuste conforme necessário */
+    width: 100%; /* O campo de entrada ocupa a largura total do contêiner disponível */
+}
+
+
+.inputFilled {
+    /* Estilos adicionais quando o campo está preenchido, se necessário */
+}
 
 .boxOrientation {
     display: flex;

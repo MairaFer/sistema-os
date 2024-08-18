@@ -13,6 +13,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 
 
+let idDeCliente = sessionStorage.getItem('selectedClientId');
+let idDeFuncionario = sessionStorage.getItem('selectedFuncionarioId');
+
+console.log('ID de Cliente:', idDeCliente);
+console.log('ID de Funcionario:', idDeFuncionario);
+
+
 // Defina o tema
 const lightTheme = createTheme({
     palette: {
@@ -58,37 +65,64 @@ const lightTheme = createTheme({
     },
 });
 
+let schema;
 // Defina o schema de validação
-const schema = yup.object().shape({
-    nome_os: yup.string().required('Registre o Nome da OS.'),
-    equipamento: yup.string().required('Equipamento é obrigatório'),
-    marca: yup.string(),
-    numero_serie: yup.string(),
-    pagamento: yup.string().required('Defina a forma de pagamento.'),
-    tecnico: yup.string().required('Defina o técnico responsável.'),
-    nome_servico: yup.string().required('Defina o serviço.'),
-    valor_servico: yup.number().positive('Valor do Serviço deve ser positivo').required('Defina o valor do serviço'),
-    pecas: yup.array().of(
-        yup.object().shape({
-            nome_peca: yup.string().required('Nome da Peça é obrigatório'),
-            quantidade: yup.number().positive('Quantidade deve ser positiva').required('Quantidade é obrigatória'),
-            valor_peca: yup.number().positive('Valor Unitário deve ser positivo').required('Valor Unitário é obrigatório'),
-        })
-    ),
-    observacoes: yup.string(),
-    data_encerramento: yup.date().required('Data de encerramento é obrigatória'),
-    diagnostico: yup.string(),
-    defeitos_relatados: yup.string(),
-    acessorio: yup.boolean()
-});
+if (idDeFuncionario) {
+    schema = yup.object().shape({
+        nome_os: yup.string().required('Registre o Nome da OS.'),
+        equipamento: yup.string().required('Equipamento é obrigatório'),
+        marca: yup.string().nullable(),
+        numero_serie: yup.string().nullable(),
+        pagamento: yup.string().nullable(),
+        tecnico: yup.string().required('Defina o técnico responsável.'),
+        nome_servico: yup.string().required('Defina o serviço.'),
+        valor_servico: yup.number().nullable().default(0),
+        pecas: yup.array().of(
+            yup.object().shape({
+                nome_peca: yup.string().nullable(),
+                quantidade: yup.number().positive('Quantidade deve ser positiva').nullable(),
+                valor_peca: yup.number().positive('Valor Unitário deve ser positivo').nullable(),
+            })
+        ),
+        observacoes: yup.string().nullable(),
+        data_encerramento: yup.date().nullable(),
+        diagnostico: yup.string().nullable(),
+        defeitos_relatados: yup.string().nullable(),
+        acessorio: yup.boolean().nullable()
+    });
+} else {
+    schema = yup.object().shape({
+        nome_os: yup.string().required('Registre o Nome da OS.'),
+        equipamento: yup.string().required('Equipamento é obrigatório'),
+        marca: yup.string().nullable(),
+        numero_serie: yup.string().nullable(),
+        pagamento: yup.string().required('Defina a forma de pagamento.'),
+        tecnico: yup.string().required('Defina o técnico responsável.'),
+        nome_servico: yup.string().required('Defina o serviço.'),
+        valor_servico: yup.number().positive('Valor do Serviço deve ser positivo').required('Defina o valor do serviço').default(0),
+        pecas: yup.array().of(
+            yup.object().shape({
+                nome_peca: yup.string().nullable(),
+                quantidade: yup.number().positive('Quantidade deve ser positiva').nullable(),
+                valor_peca: yup.number().positive('Valor Unitário deve ser positivo').nullable(),
+            })
+        ),
+        observacoes: yup.string().nullable(),
+        data_encerramento: yup.date().required('Data de encerramento é obrigatória'),
+        diagnostico: yup.string().nullable(),
+        defeitos_relatados: yup.string().nullable(),
+        acessorio: yup.boolean().nullable()
+    });
+}
 
 const CreateOrder = () => {
     const navigate = useNavigate();
-    const { control, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
             pecas: [{ nome_peca: '', quantidade: '', valor_peca: '' }],
             valor_servico: '',
+            data_encerramento: null,
             acessorio: false,
         },
     });
@@ -100,6 +134,7 @@ const CreateOrder = () => {
 
     const [servicos, setServicos] = useState([]);
     const [selectedServico, setSelectedServico] = useState(null);
+    const [isServicoSelected, setIsServicoSelected] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [servicoOsError, setServicoOsError] = useState('');
 
@@ -122,22 +157,6 @@ const CreateOrder = () => {
         fetchServicos();
     }, []);
 
-    const criarServico = async (nomeServico, valorServico) => {
-        const token = sessionStorage.getItem('token');
-        if (!selectedServico) {
-            try {
-                const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-servico/${token}`, {
-                    nome_servico: nomeServico,
-                    valor_servico: valorServico,
-                });
-                return response.data;
-            } catch (error) {
-                console.error('Erro ao criar serviço', error);
-                return null;
-            }
-        }
-    };
-
     const calcularValorTotal = (quantidade, valor_peca) => {
         return quantidade * valor_peca;
     };
@@ -151,26 +170,48 @@ const CreateOrder = () => {
             return;
         }
 
-        const idDeCliente = sessionStorage.getItem('selectedClientId');
-        const idDeFuncionario = sessionStorage.getItem('selectedFuncionarioId');
-
         let servicoId = selectedServico?._id;
 
-        // Se não houver serviço selecionado e o nome do serviço estiver presente, crie um novo serviço
-        if (!servicoId && data.nome_servico) {
-            const novoServico = await criarServico(data.nome_servico, data.valor_servico);
-            if (novoServico && novoServico._id) {
-                servicoId = novoServico._id;
-                // Atualiza o estado com o novo serviço, se necessário
-                setServicos(prev => [...prev, novoServico]);
-                setSelectedServico(novoServico);
-            } else {
-                setServicoOsError('Não foi possível criar o serviço.');
+        if (!data.valor_servico) {
+            data.valor_servico = 0;
+        }
+
+        // Se o serviço não foi selecionado e o nome e valor do serviço foram fornecidos
+        if (!isServicoSelected && data.nome_servico) {
+            console.log('Nenhum serviço selecionado, criando novo serviço com nome e valor inseridos manualmente:', data.nome_servico);
+
+            try {
+                console.log('Criando novo serviço:', data.nome_servico, data.valor_servico);
+                const response = await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-servico/${token}`, {
+                    nome_servico: data.nome_servico,
+                    valor_servico: data.valor_servico,
+                });
+
+                const novoServico = response.data;
+
+                console.log('Novo serviço criado:', novoServico);
+
+                if (novoServico) {
+                    setServicos(prev => [...prev, novoServico]);
+                    setSelectedServico(novoServico);
+                    servicoId = novoServico;
+                } else {
+                    console.error('Erro ao criar novo serviço ou serviço inválido');
+                    setServicoOsError('Erro ao criar novo serviço.');
+                    return;
+                }
+            } catch (error) {
+                console.error('Erro ao criar serviço', error);
+                setServicoOsError('Erro ao criar serviço.');
+                return;
             }
-        } else if (!servicoId) {
-            setServicoOsError('O Serviço é obrigatório');
-        } else {
-            setServicoOsError('');
+        }
+
+        // Se idDeFuncionario for definido, ajuste os campos conforme necessário
+        if (idDeFuncionario) {
+            console.log('ID de Funcionario detectado, ajustando campos...');
+            data.data_encerramento = null; // Zerar o campo prazo
+            data.pagamento = 'Não Informado'; // Definir pagamento como 'Não Informado'
         }
 
         // Preparar o payload para criar a ordem de serviço
@@ -182,7 +223,7 @@ const CreateOrder = () => {
             equipamento: data.equipamento,
             marca: data.marca,
             numero_serie: data.numero_serie,
-            servico_os: servicoId || null,
+            servico_os: servicoId,
             pecas_os: data.pecas.map(peca => ({
                 ...peca,
                 valor_total: calcularValorTotal(peca.quantidade, peca.valor_peca),
@@ -191,20 +232,33 @@ const CreateOrder = () => {
             pagamento: data.pagamento,
             data_encerramento: data.data_encerramento,
         };
-
         console.log('Payload para criação da ordem de serviço:', payload);
 
         try {
-            // Enviar a requisição para criar a ordem de serviço
+            console.log('Enviando requisição para criar ordem de serviço...');
             await axios.post(`https://cyberos-sistemadeordemdeservico-api.onrender.com/criar-os/${token}`, payload);
             console.log('Ordem de serviço criada com sucesso');
-            setOpenSnackbar(true); // Mostrar o Snackbar
-            navigate('/home', { state: { success: true } }); // Redirecionar para a página inicial após a criação
+
+            idDeCliente = null;
+            idDeFuncionario = null;
+
+            sessionStorage.removeItem('selectedFuncionarioId');
+            sessionStorage.removeItem('selectedClienteId');
+
+            setOpenSnackbar(true);
+            navigate('/home', { state: { success: true } });
         } catch (error) {
             console.error('Erro ao criar ordem de serviço', error);
         }
     };
 
+    const handleNavigateHome = () => {
+        idDeCliente = null;
+        idDeFuncionario = null;
+        sessionStorage.removeItem('selectedFuncionarioId');
+        sessionStorage.removeItem('selectedClienteId');
+        navigate("/criaros/tipo-da-os");
+    };
 
     return (
         <ThemeProvider theme={lightTheme}>
@@ -216,7 +270,7 @@ const CreateOrder = () => {
                             <div className={styles.barraPage} />
                             <div className={styles.textWrapper}>Dados da OS</div>
                             <p className={styles.p}>3. Preencha os dados para criação da OS</p>
-                            <button className={styles.backButton} onClick={() => navigate("/criaros/tipo-da-os")}>
+                            <button className={styles.backButton} onClick={handleNavigateHome}>
                                 <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
                             </button>
                         </div>
@@ -298,30 +352,32 @@ const CreateOrder = () => {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} md={6}>
-                                <FormControl fullWidth margin="normal" variant="filled">
-                                    <InputLabel id="pagamento-label">Forma de Pagamento*</InputLabel>
-                                    <Controller
-                                        name="pagamento"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                labelId="pagamento-label"
-                                                error={Boolean(errors.pagamento)}
-                                            >
-                                                <MenuItem value="cartao_de_credito">Cartão de Crédito</MenuItem>
-                                                <MenuItem value="cartão_de_debito">Cartão de Débito</MenuItem>
-                                                <MenuItem value="boleto">Boleto</MenuItem>
-                                                <MenuItem value="pix">Pix</MenuItem>
-                                                <MenuItem value="transferencia_bancaria">TED</MenuItem>
-                                                <MenuItem value="dinheiro">Dinheiro</MenuItem>
-                                            </Select>
-                                        )}
-                                    />
-                                    {errors.pagamento && <p className={styles.errorMessage}>{errors.pagamento.message}</p>}
-                                </FormControl>
-                            </Grid>
+                            {!idDeFuncionario && (
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth margin="normal" variant="filled">
+                                        <InputLabel id="pagamento-label">Forma de Pagamento*</InputLabel>
+                                        <Controller
+                                            name="pagamento"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    labelId="pagamento-label"
+                                                    error={Boolean(errors.pagamento)}
+                                                >
+                                                    <MenuItem value="cartao_de_credito">Cartão de Crédito</MenuItem>
+                                                    <MenuItem value="cartão_de_debito">Cartão de Débito</MenuItem>
+                                                    <MenuItem value="boleto">Boleto</MenuItem>
+                                                    <MenuItem value="pix">Pix</MenuItem>
+                                                    <MenuItem value="transferencia_bancaria">TED</MenuItem>
+                                                    <MenuItem value="dinheiro">Dinheiro</MenuItem>
+                                                </Select>
+                                            )}
+                                        />
+                                        {errors.pagamento && <p className={styles.errorMessage}>{errors.pagamento.message}</p>}
+                                    </FormControl>
+                                </Grid>
+                            )}
 
                             <Grid item xs={12} md={6}>
                                 <Controller
@@ -340,7 +396,6 @@ const CreateOrder = () => {
                                     )}
                                 />
                             </Grid>
-
                             <Grid item xs={6}>
                                 <Controller
                                     name="servico"
@@ -364,12 +419,14 @@ const CreateOrder = () => {
                                             onChange={(e, value) => {
                                                 if (value) {
                                                     setSelectedServico(value);
-                                                    setValue('nome_servico', value.nome_servico); // Atualiza o nome do serviço
-                                                    setValue('valor_servico', value.valor_servico); // Atualiza o valor do serviço
+                                                    setIsServicoSelected(true);
+                                                    setValue('nome_servico', value.nome_servico); // Nome correto do campo
+                                                    setValue('valor_servico', value.valor_servico); // Nome correto do campo
                                                 } else {
                                                     setSelectedServico(null);
-                                                    setValue('nome_servico', ''); // Limpa o campo
-                                                    setValue('valor_servico', ''); // Limpa o campo
+                                                    setIsServicoSelected(false);
+                                                    setValue('nome_servico', ''); // Nome correto do campo
+                                                    setValue('valor_servico', ''); // Nome correto do campo
                                                 }
                                             }}
                                         />
@@ -380,7 +437,7 @@ const CreateOrder = () => {
                             <Grid item xs={12}>
                                 <Box className={styles.serviceBox}>
                                     <Controller
-                                        name="nome_servico"
+                                        name="nome_servico" // Nome correto do campo
                                         control={control}
                                         render={({ field }) => (
                                             <TextField
@@ -389,54 +446,53 @@ const CreateOrder = () => {
                                                 margin="normal"
                                                 variant="filled"
                                                 fullWidth
-                                                error={Boolean(errors.nome_servico)}
+                                                error={Boolean(errors.nome_servico)} // Nome correto do campo
                                                 helperText={errors.nome_servico?.message}
                                                 onChange={(e) => {
-                                                    setValue('nome_servico', e.target.value);
+                                                    setValue('nome_servico', e.target.value); // Nome correto do campo
                                                     if (e.target.value) {
-                                                        // Limpa a seleção do Autocomplete se o campo for preenchido manualmente
                                                         setSelectedServico(null);
+                                                        setIsServicoSelected(false);
                                                     }
                                                 }}
                                                 className={field.value ? styles.textFieldAnimation : ''}
                                             />
                                         )}
                                     />
-                                    <Controller
-                                        name="valor_servico"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                {...field}
-                                                label="Valor do Serviço*"
-                                                margin="normal"
-                                                variant="filled"
-                                                fullWidth
-                                                type="number"
-                                                error={Boolean(errors.valor_servico)}
-                                                helperText={errors.valor_servico?.message}
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">R$</InputAdornment>
-                                                    )
-                                                }}
-                                                onChange={(e) => {
-                                                    setValue('valor_servico', e.target.value);
-                                                    if (e.target.value) {
-                                                        // Limpa a seleção do Autocomplete se o campo for preenchido manualmente
-                                                        setSelectedServico(null);
-                                                    }
-                                                }}
-                                                className={field.value ? styles.textFieldAnimation : ''}
-                                            />
-                                        )}
-                                    />
+                                    {!idDeFuncionario && (
+                                        <Controller
+                                            name="valor_servico" // Nome correto do campo
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    label="Valor do Serviço*"
+                                                    margin="normal"
+                                                    variant="filled"
+                                                    fullWidth
+                                                    type="number"
+                                                    error={Boolean(errors.valor_servico)} // Nome correto do campo
+                                                    helperText={errors.valor_servico?.message}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">R$</InputAdornment>
+                                                        )
+                                                    }}
+                                                    onChange={(e) => {
+                                                        setValue('valor_servico', e.target.value); // Nome correto do campo
+                                                        if (e.target.value) {
+                                                            setSelectedServico(null);
+                                                            setIsServicoSelected(false);
+                                                        }
+                                                    }}
+                                                    className={field.value ? styles.textFieldAnimation : ''}
+                                                />
+                                            )}
+                                        />
+                                    )}
                                 </Box>
                                 {servicoOsError && <p className={styles.errorMessage}>{servicoOsError}</p>}
                             </Grid>
-
-
-
 
                             <Grid item xs={12}>
                                 <FormLabel component="legend" className={styles.formLabel} sx={{ fontSize: '1.8rem', margin: '0', color: '#fff' }}>Peças Utilizadas:</FormLabel>
@@ -566,28 +622,29 @@ const CreateOrder = () => {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} md={6}>
-                                <Controller
-                                    name="data_encerramento"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            label="Prazo da OS*"
-                                            margin="normal"
-                                            variant="filled"
-                                            fullWidth
-                                            type="date"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            error={Boolean(errors.data_encerramento)}
-                                            helperText={errors.data_encerramento?.message}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-
+                            {!idDeFuncionario && (
+                                <Grid item xs={12} md={6}>
+                                    <Controller
+                                        name="data_encerramento"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                label="Prazo da OS*"
+                                                margin="normal"
+                                                variant="filled"
+                                                fullWidth
+                                                type="date"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                error={Boolean(errors.data_encerramento)}
+                                                helperText={errors.data_encerramento?.message}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                            )}
 
                             <Grid item xs={12} md={6}>
                                 <FormControl component="fieldset">
@@ -597,8 +654,8 @@ const CreateOrder = () => {
                                         control={control}
                                         render={({ field }) => (
                                             <RadioGroup  {...field}>
-                                                <FormControlLabel sx={{ fontSize: '2rem', margin: '0', color: '#fff' }} value={true} control={<Radio />} label="Sim" />
-                                                <FormControlLabel sx={{ fontSize: '2rem', margin: '0', color: '#fff' }} value={false} control={<Radio />} label="Não" />
+                                                <FormControlLabel sx={{ fontSize: '2rem', margin: '0', color: '#fff', '& .MuiTypography-root': { color: '#fff', }, }} value={true} control={<Radio sx={{ color: 'white' }} />} label="Sim" />
+                                                <FormControlLabel sx={{ fontSize: '2rem', margin: '0', color: '#fff', '& .MuiTypography-root': { color: '#fff', }, }} value={false} control={<Radio sx={{ color: 'white' }} />} label="Não" />
                                             </RadioGroup>
                                         )}
                                     />

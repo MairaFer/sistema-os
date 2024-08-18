@@ -57,7 +57,7 @@
 }
 
 .backButton {
-    background-color: #EF5E22;
+    background-color: #ff611e;
     border-style: none;
     border-radius: 3rem;
     height: 5rem;
@@ -79,7 +79,7 @@
 
 .backButton:hover {
     scale: 99%;
-    background-color: #c24f1d;
+    background-color: #EF5E22;
 }
 
 .funcionarioFormContainer {
@@ -88,13 +88,14 @@
     left: 19.5rem;
     display: flex;
     flex-direction: column;
-    color: #ffffff;
-    font-size: 1.5rem;
+    color: #fff;
+    font-size: 1.8rem;
     font-weight: 500;
-    gap: 0.7rem;
+    width: 30rem;
+    
 }
 
-.selectFuncionarioWrapper {
+.selectfuncionarioWrapper {
     gap: 0.5rem;
     padding: 2px;
     display: flex;
@@ -107,7 +108,7 @@
 }
 
 
-.newFuncionarioWrapperAndButton {
+.newfuncionarioWrapperAndButton {
     display: flex;
     flex-direction: row;
     align-items: flex-start; /* Ajusta os itens ao topo, para não alinhar ao centro */
@@ -117,7 +118,7 @@
 }
 
 
-.newFuncionarioWrapper {
+.newfuncionarioWrapper {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -127,8 +128,36 @@
     border-radius: 2rem;
 }
 
+.searchWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0px;
+    width: 100%; /* Ajuste para o tamanho total disponível */
+    max-width: none; /* Remove o limite máximo para testar */
+    /* Ajuste ou remova max-width conforme necessário */
+}
 
-.selectFuncionario {
+
+.searchInput {
+    flex: 1; /* O campo de entrada ocupa o máximo de espaço disponível */
+    margin-right: 1rem; /* Espaço entre o campo de entrada e o botão */
+    max-width: 500px; /* Define uma largura máxima, ajuste conforme necessário */
+    width: 100%; /* O campo de entrada ocupa a largura total do contêiner disponível */
+}
+
+
+.inputFilled {
+    /* Estilos adicionais quando o campo está preenchido, se necessário */
+}
+
+.boxOrientation {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.selectfuncionario {
     padding: 10px;
     font-size: 1rem;
     border-radius: 2rem;
@@ -152,6 +181,14 @@
     width: 32rem;
 }
 
+.newfuncionarioWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+}
+
+
 .submitButton {
     background-color: #1C53E2;
     border-radius: 1.5rem;
@@ -162,6 +199,8 @@
     transition: background-color 0.25s, scale 0.25s;
     align-self: flex-start; /* Alinha o botão ao topo */
 }
+
+
 
 .submitButton:active {
     scale: 105%;

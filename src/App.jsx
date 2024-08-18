@@ -22,6 +22,7 @@ import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
 import SettingsPage from './pages/Settings/SettingsPages.jsx';
 import CompleteOsPage from './pages/CriarOs/CompleteOsPage.jsx';
 import AddClienteOs from './pages/AddClienteOS/AddClienteOSPage.jsx'
+import AddFuncionarioOs from './pages/AddFuncionarioOS/AddFuncionarioOSPage.jsx'
 
 const Content = styled.div`
   margin-left: 250px;
@@ -68,6 +69,15 @@ function App() {
                 <Sidebar />
                 <Content>
                   <AddClienteOs />
+                </Content>
+                <Footer />
+              </>
+            } />
+              <Route path="/criaros/adicionar-funcionario" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <AddFuncionarioOs />
                 </Content>
                 <Footer />
               </>

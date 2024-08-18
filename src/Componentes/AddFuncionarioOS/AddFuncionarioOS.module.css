@@ -29,7 +29,7 @@
 }
 
 .barraPage {
-    background-color: #EF5E22;
+    background-color: #0047ff;
     height: 17.5rem;
     left: 0;
     position: absolute;
@@ -62,7 +62,7 @@
 }
 
 .backButton {
-    background-color: #0047ff;
+    background-color: #EF5E22;
     border-style: none;
     border-radius: 3rem;
     height: 5rem;
@@ -84,10 +84,11 @@
 
 .backButton:hover {
     scale: 99%;
-    background-color: #003bb3;
+    background-color: #d65721;
 }
 
-.clientFormContainer {
+/* Estilo da div que contém o formulário de funcionário */
+.funcionarioFormContainer {
     position: absolute;
     top: 20rem;
     left: 19.5rem;
@@ -99,27 +100,16 @@
     gap: 0.7rem;
 }
 
-.selectClientWrapper {
-    gap: 0.5rem;
-    padding: 2px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background-color: #213356;
-    border-radius: 2rem;
-    border: solid 1rem #213356;
-    width: 30rem; /* Ajusta o tamanho do contêiner para caber apenas o conteúdo */
-}
-
-.newClientWrapperAndButton {
+/* Wrapper que contém os inputs e o botão */
+.newFuncionarioWrapperAndButton {
     display: flex;
     flex-direction: row;
-    align-items: flex-start; /* Ajusta os itens ao topo, para não alinhar ao centro */
-    border: none;
-    background-color: transparent;
+    align-items: center;
+    gap: 3rem;
 }
 
-.newClientWrapper {
+/* Wrapper dos inputs */
+.newFuncionarioWrapper {
     display: flex;
     flex-direction: column;
     border: solid 1rem #213356; /* Mantém a borda aqui */
@@ -134,6 +124,20 @@
     flex-direction: row;
 }
 
+/* Botão de envio */
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 1rem;
+    background-color: #0047FF;
+    color: #FFF;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .inputField {
     padding: 0.75rem;
     font-size: 1rem;
@@ -146,23 +150,11 @@
     width: 40rem; /* Aumenta a largura dos inputs */
 }
 
-.newClientWrapperAndButton {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
+/* Ícone da seta dentro do botão */
+.submitButtonIcon {
+    font-size: 3rem; /* Ajuste o tamanho do ícone conforme necessário */
 }
 
-.submitButton {
-    background-color: #1C53E2;
-    border-radius: 1.5rem;
-    width: 8rem;
-    height: 8rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.25s, scale 0.25s;
-    align-self: flex-start; /* Alinha o botão ao topo */
-}
 
 .submitButton:active {
     scale: 105%;

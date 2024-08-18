@@ -48,7 +48,7 @@ const lightTheme = createTheme({
   },
 });
 
-const Cliente = () => {
+const ClientesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
@@ -188,4 +188,4 @@ const Cliente = () => {
   );
 };
 
-export default Cliente;
+export default ClientesPage;

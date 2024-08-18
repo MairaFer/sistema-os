@@ -3,7 +3,7 @@ import axios from 'axios';
 import { 
   HeaderContainer, MainContainer, ContentContainer, Title, 
   TitleContainer, ButtonContainer 
-} from './ClienteStyled';
+} from './ServicosStyled';
 import { 
   Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
   MenuItem as MenuItemMui, createTheme, ThemeProvider, 
@@ -48,37 +48,37 @@ const lightTheme = createTheme({
   },
 });
 
-const Cliente = () => {
+const ServicosPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [clients, setClients] = useState([]);
-  const [filteredClients, setFilteredClients] = useState([]);
+  const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
   const [filter, setFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
 
   useEffect(() => {
-    const fetchClients = async () => {
+    const fetchServices = async () => {
       const token = sessionStorage.getItem('token');
       try {
-        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}`);
-        console.log('Dados dos clientes:', response.data);
-        setClients(response.data);
-        setFilteredClients(response.data);
+        const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${token}`);
+        console.log('Dados dos serviços:', response.data);
+        setServices(response.data);
+        setFilteredServices(response.data);
       } catch (error) {
-        console.error('Erro ao buscar clientes', error);
+        console.error('Erro ao buscar serviços', error);
       }
     };
 
-    fetchClients();
+    fetchServices();
   }, []);
 
   useEffect(() => {
-    const filtered = clients.filter(client =>
-      client.nome_cliente?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filter === "" || (client.cpf_cliente?.includes(filter) || client.cnpj_cliente?.includes(filter)))
+    const filtered = services.filter(service =>
+      service.nome_servico?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filter === "" || service.valor_servico?.includes(filter))
     );
-    setFilteredClients(filtered);
-  }, [searchTerm, filter, clients]);
+    setFilteredServices(filtered);
+  }, [searchTerm, filter, services]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -88,30 +88,30 @@ const Cliente = () => {
     setFilter(event.target.value);
   };
 
-  const handleMenuClick = (event, client) => {
+  const handleMenuClick = (event, service) => {
     setAnchorEl(event.currentTarget);
-    setSelectedClient(client);
+    setSelectedService(service);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedClient(null);
+    setSelectedService(null);
   };
 
-  const handleViewClient = () => {
-    alert(`Visualizar cliente: ${selectedClient.nome_cliente}`);
+  const handleViewService = () => {
+    alert(`Visualizar serviço: ${selectedService.nome_servico}`);
     handleMenuClose();
   };
 
-  const handleDeleteClient = async () => {
+  const handleDeleteService = async () => {
     const token = sessionStorage.getItem('token');
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${selectedClient._id}/${token}`);
-      setClients(clients.filter(client => client._id !== selectedClient._id));
-      setFilteredClients(filteredClients.filter(client => client._id !== selectedClient._id));
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${selectedService._id}/${token}`);
+      setServices(services.filter(service => service._id !== selectedService._id));
+      setFilteredServices(filteredServices.filter(service => service._id !== selectedService._id));
       handleMenuClose();
     } catch (error) {
-      console.error('Erro ao excluir cliente', error);
+      console.error('Erro ao excluir serviço', error);
     }
   };
 
@@ -122,13 +122,13 @@ const Cliente = () => {
           <div style={{ marginBottom: '1rem' }} />
           <TextField 
             variant="outlined" 
-            placeholder="Buscar cliente..." 
+            placeholder="Buscar serviço..." 
             value={searchTerm}
             onChange={handleSearch}
             style={{ marginBottom: '1rem' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
-            <InputLabel id="filter-label">Filtrar por CPF/CNPJ</InputLabel>
+            <InputLabel id="filter-label">Filtrar por Valor</InputLabel>
             <Select
               labelId="filter-label"
               value={filter}
@@ -136,30 +136,30 @@ const Cliente = () => {
               style={{ width: '200px' }}
             >
               <MenuItem value="">Todos</MenuItem>
-              <MenuItem value="CPF">CPF</MenuItem>
-              <MenuItem value="CNPJ">CNPJ</MenuItem>
+              <MenuItem value="100">Até R$100</MenuItem>
+              <MenuItem value="200">Até R$200</MenuItem>
             </Select>
           </FormControl>
         </HeaderContainer>
         <ContentContainer>
           <TitleContainer>
-            <Title>Cliente</Title>
-            <Title>CPF/CNPJ</Title>
+            <Title>Serviço</Title>
+            <Title>Valor</Title>
           </TitleContainer>
           
           <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%'}}>
             <Table sx={{ border: 'none'}}>
               <TableBody >
-                {filteredClients.map((client) => (
-                  <TableRow  key={client._id}>
-                    <TableCell sx={{bgcolor: 'white'}} >{client.nome_cliente}</TableCell>
+                {filteredServices.map((service) => (
+                  <TableRow  key={service._id}>
+                    <TableCell sx={{bgcolor: 'white'}} >{service.nome_servico}</TableCell>
                     <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '20px 0 0 20px', width: '30%' }}>
                       <th style={{paddingLeft: '25%', width: '300px', fontSize: '1rem'}}>
-                        {client.cpf_cliente || client.cnpj_cliente}
+                        {service.valor_servico}
                       </th>
                     </TableCell>
                     <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}} >
-                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, client)}>
+                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, service)}>
                         <MoreVertIcon sx={{color: 'white'}} />
                       </IconButton>
                     </TableCell>
@@ -170,7 +170,7 @@ const Cliente = () => {
           </TableContainer>
 
           <ButtonContainer>
-            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo cliente')}>
+            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo serviço')}>
               <AddIcon />
             </Fab>
           </ButtonContainer>
@@ -180,12 +180,12 @@ const Cliente = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItemMui onClick={handleViewClient}>Ver Cliente</MenuItemMui>
-          <MenuItemMui onClick={handleDeleteClient}>Excluir Cliente</MenuItemMui>
+          <MenuItemMui onClick={handleViewService}>Ver Serviço</MenuItemMui>
+          <MenuItemMui onClick={handleDeleteService}>Excluir Serviço</MenuItemMui>
         </Menu>
       </MainContainer>
     </ThemeProvider>
   );
 };
 
-export default Cliente;
+export default ServicosPage;
