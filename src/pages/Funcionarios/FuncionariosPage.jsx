@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  HeaderContainer, MainContainer, ContentContainer, Title, 
-  TitleContainer, ButtonContainer 
+  HeaderContainer, MainContainer, ContentContainer, ButtonContainer 
 } from './FuncionarioStyled'; 
 import { 
   Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
   MenuItem as MenuItemMui, createTheme, ThemeProvider, 
   Table, TableBody, TableCell, TableContainer, TableHead, 
-  TableRow, Paper, IconButton, TextField 
+  TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
+  DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
+  },
+  typography: {
+    fontFamily: 'Lexend, sans-serif',
   },
   components: {
     MuiTextField: {
@@ -45,32 +50,67 @@ const lightTheme = createTheme({
         },
       },
     },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          borderCollapse: 'separate',
+          borderSpacing: '0 8px',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: '8px 16px',
+          borderBottom: '1px solid #ddd',
+          fontSize: '1.25rem',
+          fontWeight: '500',
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&:last-child td, &:last-child th': {
+            border: 0,
+          },
+        },
+      },
+    },
   },
 });
 
 const FuncionarioPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [searchTerm, setSearchTerm] = useState('');
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [filter, setFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
       const token = sessionStorage.getItem('token');
       try {
         const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}`);
-        console.log('Dados dos funcionários:', response.data);
         setEmployees(response.data);
         setFilteredEmployees(response.data);
       } catch (error) {
         console.error('Erro ao buscar funcionários', error);
+        enqueueSnackbar('Erro ao buscar funcionários!', { variant: 'error' });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEmployees();
-  }, []);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
     const filtered = employees.filter(employee =>
@@ -95,24 +135,60 @@ const FuncionarioPage = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedEmployee(null);
   };
 
   const handleViewEmployee = () => {
-    alert(`Visualizar funcionário: ${selectedEmployee.nome_func}`);
+    if (selectedEmployee) {
+      setOpenViewModal(true);
+    } else {
+      console.warn('Nenhum funcionário selecionado');
+    }
+    handleMenuClose(); // Fecha o menu
+  };
+
+  const handleCloseViewModal = () => {
+    setOpenViewModal(false);
+  };
+
+  const handleDeleteEmployee = () => {
+    if (selectedEmployee) {
+      setOpenDialog(true);
+    }
     handleMenuClose();
   };
 
-  const handleDeleteEmployee = async () => {
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const returnTempString = () => {
+    if (!selectedEmployee) {
+      return ['Nenhum funcionário selecionado.'];
+    }
+    return `
+      Nome: ${selectedEmployee.nome_func}
+      Setor: ${selectedEmployee.setor}
+      Contato: ${selectedEmployee.contato_func}
+    `.trim().split('\n');
+  };
+
+  const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
     try {
       await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${selectedEmployee._id}/${token}`);
       setEmployees(employees.filter(employee => employee._id !== selectedEmployee._id));
       setFilteredEmployees(filteredEmployees.filter(employee => employee._id !== selectedEmployee._id));
-      handleMenuClose();
+      enqueueSnackbar('Funcionário excluído com sucesso!', { variant: 'success' });
     } catch (error) {
       console.error('Erro ao excluir funcionário', error);
+      enqueueSnackbar('Erro ao excluir funcionário!', { variant: 'error' });
+    } finally {
+      handleCloseDialog();
     }
+  };
+
+  const handleAddEmployeeClick = () => {
+    navigate('/criar-funcionario');
   };
 
   return (
@@ -120,12 +196,11 @@ const FuncionarioPage = () => {
       <MainContainer>
         <HeaderContainer>
           <div style={{ marginBottom: '1rem' }} />
-          <TextField 
-            variant="outlined" 
-            placeholder="Buscar funcionário..." 
+          <TextField
+            placeholder="Buscar funcionário..."
             value={searchTerm}
             onChange={handleSearch}
-            style={{ marginBottom: '1rem', width:'400px' }}
+            style={{ marginBottom: '1rem', width: '400px' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="filter-label">Filtrar por Setor</InputLabel>
@@ -144,48 +219,95 @@ const FuncionarioPage = () => {
           </FormControl>
         </HeaderContainer>
         <ContentContainer>
-          <TitleContainer>
-            <Title>Funcionário</Title>
-            <Title>Setor</Title>
-          </TitleContainer>
-          
-          <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%'}}>
-            <Table sx={{ border: 'none'}}>
-              <TableBody >
-                {filteredEmployees.map((employee) => (
-                  <TableRow key={employee._id}>
-                    <TableCell sx={{bgcolor: 'white'}}>{employee.nome_func}</TableCell>
-                    <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '20px 0 0 20px', width: '30%' }}>
-                      <th style={{paddingLeft: '25%', width: '300px', fontSize: '1rem'}}>
-                        {employee.setor}
-                      </th>
-                    </TableCell>
-                    <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}}>
-                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, employee)}>
-                        <MoreVertIcon sx={{color: 'white'}} />
-                      </IconButton>
-                    </TableCell>
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+              <CircularProgress />
+            </div>
+          ) : filteredEmployees.length === 0 ? (
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <p>Não há nenhum funcionário cadastrado.</p>
+            </div>
+          ) : (
+            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '60%' }}>
+              <Table sx={{ border: 'none' }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell><strong>Funcionário</strong></TableCell>
+                    <TableCell ><strong>Setor</strong></TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {filteredEmployees.map((employee) => (
+                    <TableRow key={employee._id}>
+                      <TableCell>{employee.nome_func}</TableCell>
+                      <TableCell sx={{ borderRadius: '2rem 0 0 2rem', color: '#fff', backgroundColor: '#FF5A15', width:'20rem' }}>
+                        {employee.setor}
+                      </TableCell>
+                      <TableCell sx={{width:''}}>
+                        <IconButton onClick={(event) => handleMenuClick(event, employee)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
 
           <ButtonContainer>
-            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo funcionário')}>
+            <Fab color="primary" aria-label="add" onClick={handleAddEmployeeClick}>
               <AddIcon />
             </Fab>
           </ButtonContainer>
         </ContentContainer>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItemMui onClick={handleViewEmployee}>Ver Funcionário</MenuItemMui>
-          <MenuItemMui onClick={handleDeleteEmployee}>Excluir Funcionário</MenuItemMui>
-        </Menu>
       </MainContainer>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItemMui onClick={handleViewEmployee}>Visualizar</MenuItemMui>
+        <MenuItemMui onClick={handleDeleteEmployee}>Excluir</MenuItemMui>
+      </Menu>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogContent>
+          <p>Você tem certeza que deseja excluir este funcionário?</p>
+          {returnTempString().map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <MuiButton onClick={handleCloseDialog}>Cancelar</MuiButton>
+          <MuiButton color="error" onClick={handleConfirmDelete}>Excluir</MuiButton>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openViewModal}
+        onClose={handleCloseViewModal}
+      >
+        <DialogTitle>Detalhes do Funcionário</DialogTitle>
+        <DialogContent>
+          {selectedEmployee && (
+            <>
+              <p><strong>Nome:</strong> {selectedEmployee.nome_func}</p>
+              <p><strong>Setor:</strong> {selectedEmployee.setor}</p>
+              <p><strong>Contato:</strong> {selectedEmployee.contato_func}</p>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <MuiButton onClick={handleCloseViewModal}>Fechar</MuiButton>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };

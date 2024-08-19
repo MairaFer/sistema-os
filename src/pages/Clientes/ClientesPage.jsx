@@ -232,7 +232,7 @@ const ClientesPage = () => {
               <p>Não há nenhum cliente cadastrado.</p>
             </div>
           ) : (
-            <TableContainer component={Paper} sx={{ borderRadius: '12px', overflow: 'hidden', width: '80%' }}>
+            <TableContainer component={Paper} sx={{ borderRadius: '12px',  width: '55%' }}>
               <Table sx={{ border: 'none' }}>
                 <TableHead>
                   <TableRow>
@@ -245,10 +245,10 @@ const ClientesPage = () => {
                   {filteredClients.map((client) => (
                     <TableRow key={client._id}>
                       <TableCell>{client.nome_cliente}</TableCell>
-                      <TableCell sx={{ borderRadius: '2rem', color: '#fff', backgroundColor: client.cnpj_cliente ? '#EF5E22' : '#0047FF' }}>
+                      <TableCell sx={{ width:'15rem',borderRadius: '2rem 0 0 2rem', color: '#fff', backgroundColor: client.cnpj_cliente ? '#EF5E22' : '#0047FF' }}>
                         {client.cpf_cliente || client.cnpj_cliente}
                       </TableCell>
-                      <TableCell>
+                      <TableCell sx={{width:''}}>
                         <IconButton onClick={(event) => handleMenuClick(event, client)}>
                           <MoreVertIcon />
                         </IconButton>

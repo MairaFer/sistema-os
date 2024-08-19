@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-  HeaderContainer, MainContainer, ContentContainer, Title, 
-  TitleContainer, ButtonContainer 
+import {
+  HeaderContainer, MainContainer, ContentContainer, TitleContainer,
+  ButtonContainer
 } from './ServicosStyled';
-import { 
-  Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
-  MenuItem as MenuItemMui, createTheme, ThemeProvider, 
-  Table, TableBody, TableCell, TableContainer, TableHead, 
-  TableRow, Paper, IconButton, TextField 
+import {
+  Select, MenuItem, FormControl, InputLabel, Fab, Menu,
+  MenuItem as MenuItemMui, createTheme, ThemeProvider,
+  Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
+  DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
 
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
+  },
+  typography: {
+    fontFamily: 'Lexend, sans-serif',
   },
   components: {
     MuiTextField: {
@@ -45,6 +50,33 @@ const lightTheme = createTheme({
         },
       },
     },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          borderCollapse: 'separate',
+          borderSpacing: '0 8px',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: '8px 16px',
+          borderBottom: '1px solid #ddd',
+          fontSize: '1.25rem',
+          fontWeight: '500',
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&:last-child td, &:last-child th': {
+            border: 0,
+          },
+        },
+      },
+    },
   },
 });
 
@@ -55,17 +87,22 @@ const ServicosPage = () => {
   const [sortOrder, setSortOrder] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServices = async () => {
       const token = sessionStorage.getItem('token');
       try {
         const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${token}`);
-        console.log('Dados dos serviços:', response.data);
         setServices(response.data);
         setFilteredServices(response.data);
       } catch (error) {
         console.error('Erro ao buscar serviços', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -115,16 +152,37 @@ const ServicosPage = () => {
     handleMenuClose();
   };
 
-  const handleDeleteService = async () => {
+  const handleDeleteService = () => {
+    if (selectedService) {
+      setOpenDialog(true);
+    }
+    handleMenuClose();
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
     try {
       await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${selectedService._id}/${token}`);
       setServices(services.filter(service => service._id !== selectedService._id));
       setFilteredServices(filteredServices.filter(service => service._id !== selectedService._id));
-      handleMenuClose();
     } catch (error) {
       console.error('Erro ao excluir serviço', error);
+    } finally {
+      handleCloseDialog();
     }
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  };
+  
+
+  const handleAddServiceClick = () => {
+    navigate('/criar-servico');
   };
 
   return (
@@ -137,7 +195,7 @@ const ServicosPage = () => {
             placeholder="Buscar serviço..." 
             value={searchTerm}
             onChange={handleSearch}
-            style={{ marginBottom: '1rem', width:'400px' }}
+            style={{ marginBottom: '1rem', width: '400px' }}
           />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="sort-order-label">Ordenar por Valor</InputLabel>
@@ -153,47 +211,64 @@ const ServicosPage = () => {
           </FormControl>
         </HeaderContainer>
         <ContentContainer>
-          <TitleContainer>
-            <Title>Serviço</Title>
-            <Title>Valor</Title>
-          </TitleContainer>
-          
-          <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%'}}>
-            <Table sx={{ border: 'none'}}>
-              <TableBody >
-                {filteredServices.map((service) => (
-                  <TableRow  key={service._id}>
-                    <TableCell sx={{bgcolor: 'white'}} >{service.nome_servico}</TableCell>
-                    <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '20px 0 0 20px', width: '30%' }}>
-                      <th style={{paddingLeft: '25%', width: '300px', fontSize: '1rem'}}>
-                        {service.valor_servico}
-                      </th>
-                    </TableCell>
-                    <TableCell sx={{width: '5%', backgroundColor: '#0047FF'}} >
-                      <IconButton sx={{width: '100%'}} onClick={(event) => handleMenuClick(event, service)}>
-                        <MoreVertIcon sx={{color: 'white'}} />
-                      </IconButton>
-                    </TableCell>
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+              <CircularProgress />
+            </div>
+          ) : filteredServices.length === 0 ? (
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <p>Não há nenhum serviço cadastrado.</p>
+            </div>
+          ) : (
+            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '55%' }}>
+              <Table sx={{ border: 'none' }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell><strong>Serviço</strong></TableCell>
+                    <TableCell><strong>Valor</strong></TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <ButtonContainer>
-            <Fab color="primary" aria-label="add" onClick={() => alert('Adicionar novo serviço')}>
-              <AddIcon />
-            </Fab>
-          </ButtonContainer>
+                </TableHead>
+                <TableBody>
+                  {filteredServices.map((service) => (
+                    <TableRow key={service._id}>
+                      <TableCell>{service.nome_servico}</TableCell>
+                      <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '2rem 0 0 2rem', width:'15rem' }}>
+                        {formatCurrency(service.valor_servico)}
+                      </TableCell>
+                      <TableCell sx={{width:''}}>
+                        <IconButton onClick={(event) => handleMenuClick(event, service)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItemMui onClick={handleViewService}>Visualizar</MenuItemMui>
+                          <MenuItemMui onClick={handleDeleteService}>Excluir</MenuItemMui>
+                        </Menu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </ContentContainer>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItemMui onClick={handleViewService}>Ver Serviço</MenuItemMui>
-          <MenuItemMui onClick={handleDeleteService}>Excluir Serviço</MenuItemMui>
-        </Menu>
+        <ButtonContainer>
+          <Fab color="primary" onClick={handleAddServiceClick} style={{ marginTop: '2rem' }}>
+            <AddIcon />
+          </Fab>
+        </ButtonContainer>
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogTitle>Confirmar Exclusão</DialogTitle>
+          <DialogContent>Deseja realmente excluir este serviço?</DialogContent>
+          <DialogActions>
+            <MuiButton onClick={handleCloseDialog} color="primary">Cancelar</MuiButton>
+            <MuiButton onClick={handleConfirmDelete} color="secondary">Excluir</MuiButton>
+          </DialogActions>
+        </Dialog>
       </MainContainer>
     </ThemeProvider>
   );

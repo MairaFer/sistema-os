@@ -1,0 +1,175 @@
+.selecaoTipoOs {
+    background-color: #252630;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.paragraph {
+    font-size: 2rem;
+    padding-left: 2%;
+}
+
+.div {
+    background-color: #252630;
+    height: 56.75rem;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 120rem;
+}
+
+.overlapGroup {
+    height: 56.75rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.barraPage {
+    background-color: #EF5E22;
+    height: 17.5rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.textWrapper {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 5rem;
+    font-weight: 400;
+    left: 19.6875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 7.625rem;
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 2.375rem;
+    font-weight: 400;
+    left: 19.875rem;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 13.4375rem;
+}
+
+.backButton {
+    background-color: #0047ff;
+    border-style: none;
+    border-radius: 3rem;
+    height: 5rem;
+    left: 19.5rem;
+    position: absolute;
+    top: 1.5rem;
+    width: 5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.goBack {
+    filter: invert();
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    width: 60%;
+}
+
+.backButton:hover {
+    scale: 99%;
+    background-color: #003bb3;
+}
+
+.clientFormContainer {
+    position: absolute;
+    top: 20rem;
+    left: 19.5rem;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    gap: 0.7rem;
+}
+
+.selectClientWrapper {
+    gap: 0.5rem;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #213356;
+    border-radius: 2rem;
+    border: solid 1rem #213356;
+    width: 30rem; /* Ajusta o tamanho do contêiner para caber apenas o conteúdo */
+}
+
+.newClientWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Ajusta os itens ao topo, para não alinhar ao centro */
+    border: none;
+    background-color: transparent;
+}
+
+.newClientWrapper {
+    display: flex;
+    flex-direction: column;
+    border: solid 1rem #213356; /* Mantém a borda aqui */
+    background-color: #213356;  /* Mantém o fundo aqui */
+    border-radius: 2rem;
+    width: 30rem;
+}
+
+.boxOrientation {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.inputField {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    border: none;
+    background-color: #ffffff;
+    color: #213356;
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    width: 40rem; /* Aumenta a largura dos inputs */
+}
+
+.newClientWrapperAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+}
+
+.submitButton {
+    background-color: #1C53E2;
+    border-radius: 1.5rem;
+    width: 8rem;
+    height: 8rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.25s, scale 0.25s;
+    align-self: flex-start; /* Alinha o botão ao topo */
+}
+
+.submitButton:active {
+    scale: 105%;
+    background-color: #EF5E22;
+}
+
+.submitButton:hover {
+    scale: 101%;
+    background-color: #EF5E22;
+}

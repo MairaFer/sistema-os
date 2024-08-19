@@ -22,6 +22,10 @@ import SettingsPage from './pages/Settings/SettingsPages.jsx';
 import CompleteOsPage from './pages/CriarOs/CompleteOsPage.jsx';
 import AddClienteOs from './pages/AddClienteOS/AddClienteOSPage.jsx'
 import AddFuncionarioOs from './pages/AddFuncionarioOS/AddFuncionarioOSPage.jsx'
+import CriarFuncionario from './pages/Funcionarios/CriarFuncionario.jsx'
+import CriarCliente from './pages/Clientes/CriarCliente.jsx'
+import CriarServico from './pages/Servicos/CriarServico.jsx'
+import GerenciarOsPage from './pages/GerenciarOs/GerenciarOsPage.jsx'
 
 const Content = styled.div`
   margin-left: 3.75rem;
@@ -52,6 +56,38 @@ function App() {
                 <Sidebar />
                 <Content>
                   <Home />
+                </Content>
+              </>
+            } />
+            <Route path="/gerenciaros" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <GerenciarOsPage />
+                </Content>
+              </>
+            } />
+             <Route path="/criar-servico" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <CriarServico />
+                </Content>
+              </>
+            } />
+            <Route path="/criar-cliente" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <CriarCliente />
+                </Content>
+              </>
+            } />
+            <Route path="/criar-funcionario" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <CriarFuncionario />
                 </Content>
               </>
             } />
