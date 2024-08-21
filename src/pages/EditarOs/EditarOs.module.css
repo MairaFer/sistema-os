@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+}
+
+.div {
+    background-color: #252630;
+    height: 10vh; /* Ajusta a altura para preencher a tela */
+    overflow: auto; /* Permite rolar se o conteúdo for maior que a altura */
+    width: 100%;
+    max-width: 120rem;
+    padding-top: 17.5rem; /* Espaço suficiente para a barra de navegação */
+    padding-bottom: 0;
+}
+
+.barraPage {
+    background-color: #213356;
+    height: 17.5rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.textWrapper {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 5rem;
+    font-weight: 400;
+    position: absolute;
+    left: 19.6875rem;
+    top: 7.625rem;
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Lexend-Regular", Helvetica;
+    font-size: 2.375rem;
+    font-weight: 400;
+    position: absolute;
+    left: 19.875rem;
+    top: 13.4375rem;
+}
+
+.formContainer {
+    margin-top: 25rem; /* Ajuste este valor conforme necessário para posicionar o formulário abaixo da barra */
+    padding: 0rem 0rem;
+}
+
+
+.backButton {
+    background-color: #0047ff;
+    border-style: none;
+    border-radius: 3.09375rem;
+    height: 5rem;
+    left: 19.625rem;
+    position: absolute;
+    top: 1.5rem;
+    width: 5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.goBack {
+    filter: invert();
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    width: 60%;
+}
+
+.backButton:hover{
+    scale: 99%;
+    background-color: #003bb3;
+}
+

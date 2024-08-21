@@ -52,33 +52,21 @@ const lightTheme = createTheme({
     },
 });
 
+// Atualize o schema de validação para refletir os novos campos
 const validationSchema = yup.object().shape({
     nome_funcionario: yup.string().required("Nome do funcionário é obrigatório."),
     contato_funcionario: yup
         .string()
         .matches(/^\d{11}$|^\d{10}$/, "Contato deve ter exatamente 11 dígitos.")
         .required("Contato é obrigatório."),
-    endereco_funcionario: yup.string().max(250, "Endereço pode ter no máximo 250 caracteres."),
-    cpf: yup
-        .string()
-        .required("CPF é obrigatório.")
-        .matches(/^\d{11}$/, "CPF deve ter 11 dígitos.")
-        .test('is-valid-cpf', 'CPF inválido.', value => {
-            return /^\d{11}$/.test(value);
-        }),
-    email_funcionario: yup
-        .string()
-        .email("Email inválido.")
-        .required("Email é obrigatório."),
+    setor: yup.string().required("Setor é obrigatório."),
 });
 
 export const CreateFuncionarioPage = () => {
     const [newFuncionario, setNewFuncionario] = useState({
         nome_funcionario: '',
         contato_funcionario: '',
-        endereco_funcionario: '',
-        cpf: '',
-        email_funcionario: ''
+        setor: '',
     });
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
@@ -121,7 +109,6 @@ export const CreateFuncionarioPage = () => {
 
         const funcionarioData = {
             ...newFuncionario,
-            cpf: newFuncionario.cpf,
         };
 
         try {
@@ -152,15 +139,22 @@ export const CreateFuncionarioPage = () => {
         setOpenSnackbar(false);
     };
 
+    const handleNavigateHome = () => {
+        navigate("/funcionarios");
+    };
+
     return (
         <ThemeProvider theme={lightTheme}>
             <div className={styles.selecaoTipoOs}>
                 <div className={styles.div}>
                     <div className={styles.overlapGroup}>
                         <div className={styles.barraPage} />
-                        <div className={styles.textWrapper}>Criando Funcionário</div>
+                        <div className={styles.textWrapper}>Adicionando Funcionário +</div>
+                        <button className={styles.backButton} onClick={handleNavigateHome}>
+                            <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
+                        </button>
                         <section className={styles.funcionarioFormContainer}>
-                            <Typography sx={{ fontSize: '1.5rem', color: '#ffff' }} variant="h6" gutterBottom>
+                            <Typography sx={{ fontSize: '1.5rem', color: '#ffff',  }} variant="h6" gutterBottom>
                                 Criar novo funcionário:
                             </Typography>
                             <div className={styles.newFuncionarioWrapperAndButton}>
@@ -188,35 +182,15 @@ export const CreateFuncionarioPage = () => {
                                         helperText={errors.contato_funcionario}
                                     />
                                     <TextField
-                                        name="endereco_funcionario"
-                                        label="Endereço"
+                                        name="setor"
+                                        label="Setor*"
                                         variant="filled"
                                         margin="dense"
                                         fullWidth
-                                        value={newFuncionario.endereco_funcionario}
+                                        value={newFuncionario.setor}
                                         onChange={handleNewFuncionarioChange}
-                                    />
-                                    <TextField
-                                        name="cpf"
-                                        label="CPF*"
-                                        variant="filled"
-                                        margin="dense"
-                                        fullWidth
-                                        value={newFuncionario.cpf}
-                                        onChange={handleNewFuncionarioChange}
-                                        error={!!errors.cpf}
-                                        helperText={errors.cpf}
-                                    />
-                                    <TextField
-                                        name="email_funcionario"
-                                        label="Email*"
-                                        variant="filled"
-                                        margin="dense"
-                                        fullWidth
-                                        value={newFuncionario.email_funcionario}
-                                        onChange={handleNewFuncionarioChange}
-                                        error={!!errors.email_funcionario}
-                                        helperText={errors.email_funcionario}
+                                        error={!!errors.setor}
+                                        helperText={errors.setor}
                                     />
                                 </div>
                                 <Button

@@ -39,9 +39,9 @@
 
 .textWrapper {
     color: #ffffff;
-    font-family: "Lexend-Regular", Helvetica;
+    font-family: "Lexend", sans-serif;
     font-size: 5rem;
-    font-weight: 400;
+    font-weight: 600;
     left: 19.6875rem;
     letter-spacing: 0;
     line-height: normal;
@@ -51,7 +51,7 @@
 
 .p {
     color: #ffffff;
-    font-family: "Lexend-Regular", Helvetica;
+    font-family: "Lexend", Helvetica;
     font-size: 2.375rem;
     font-weight: 400;
     left: 19.875rem;

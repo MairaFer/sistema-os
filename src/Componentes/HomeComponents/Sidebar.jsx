@@ -31,7 +31,7 @@ function Sidebar() {
     logout(); // Chamar o método de logout
   };
 
-  const isActive = (path) => (location.pathname === path ? 'active' : '');
+  const isActive = (path) => (location.pathname === path && path != '/home' ?  'active' : '');
 
   return (
     <SidebarContainer

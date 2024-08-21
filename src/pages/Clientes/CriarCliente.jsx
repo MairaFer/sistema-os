@@ -166,7 +166,7 @@ export const CreateClientPage = () => {
                 <div className={styles.div}>
                     <div className={styles.overlapGroup}>
                         <div className={styles.barraPage} />
-                        <div className={styles.textWrapper}>Novo Cliente</div>
+                        <div className={styles.textWrapper}>Adicionar Cliente +</div>
                         <button className={styles.backButton} onClick={handleNavigateHome}>
                             <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
                         </button>

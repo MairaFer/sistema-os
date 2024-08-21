@@ -66,7 +66,7 @@ const lightTheme = createTheme({
           padding: '8px 16px',
           borderBottom: '1px solid #ddd',
           fontSize: '1.25rem',
-          fontWeight: '500',
+          fontWeight: '600',
         },
       },
     },
@@ -236,8 +236,8 @@ const ClientesPage = () => {
               <Table sx={{ border: 'none' }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell><strong>Cliente</strong></TableCell>
-                    <TableCell><strong>CPF/CNPJ</strong></TableCell>
+                    <TableCell>Cliente</TableCell>
+                    <TableCell>CPF/CNPJ</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 </TableHead>

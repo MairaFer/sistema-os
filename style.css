@@ -4,7 +4,7 @@
     }
   }
   
-  @media  screen and (max-width: 1200px) {
+  /* @media  screen and (max-width: 1200px) {
     #root {
       display: none;
     }
@@ -15,4 +15,4 @@
       background: url('/public/erro-tela.png') center center no-repeat;
       background-size: cover;
     }
-  }
+  } */

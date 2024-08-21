@@ -54,26 +54,17 @@ const lightTheme = createTheme({
 
 const validationSchema = yup.object().shape({
     nome_servico: yup.string().required("Nome do serviço é obrigatório."),
-    descricao_servico: yup.string().max(500, "Descrição pode ter no máximo 500 caracteres."),
     valor_servico: yup
         .number()
         .typeError("Valor deve ser um número.")
         .required("Valor do serviço é obrigatório.")
         .positive("Valor deve ser positivo."),
-    prazo_servico: yup
-        .number()
-        .typeError("Prazo deve ser um número.")
-        .required("Prazo é obrigatório.")
-        .positive("Prazo deve ser positivo.")
-        .integer("Prazo deve ser um número inteiro."),
 });
 
 export const CreateServicoPage = () => {
     const [newServico, setNewServico] = useState({
         nome_servico: '',
-        descricao_servico: '',
-        valor_servico: '',
-        prazo_servico: ''
+        valor_servico: ''
     });
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
@@ -138,6 +129,10 @@ export const CreateServicoPage = () => {
         setOpenSnackbar(false);
     };
 
+    const handleNavigateHome = () => {
+        navigate("/servicos");
+    };
+
     return (
         <ThemeProvider theme={lightTheme}>
             <div className={styles.selecaoTipoOs}>
@@ -145,6 +140,9 @@ export const CreateServicoPage = () => {
                     <div className={styles.overlapGroup}>
                         <div className={styles.barraPage} />
                         <div className={styles.textWrapper}>Criando Serviço</div>
+                        <button className={styles.backButton} onClick={handleNavigateHome}>
+                            <img className={styles.goBack} src="/public/volte.png" alt="botão de voltar" />
+                        </button>
                         <section className={styles.servicoFormContainer}>
                             <Typography sx={{ fontSize: '1.5rem', color: '#ffff' }} variant="h6" gutterBottom>
                                 Criar novo serviço:
@@ -163,17 +161,6 @@ export const CreateServicoPage = () => {
                                         helperText={errors.nome_servico}
                                     />
                                     <TextField
-                                        name="descricao_servico"
-                                        label="Descrição"
-                                        variant="filled"
-                                        margin="dense"
-                                        fullWidth
-                                        value={newServico.descricao_servico}
-                                        onChange={handleNewServicoChange}
-                                        error={!!errors.descricao_servico}
-                                        helperText={errors.descricao_servico}
-                                    />
-                                    <TextField
                                         name="valor_servico"
                                         label="Valor*"
                                         variant="filled"
@@ -183,17 +170,6 @@ export const CreateServicoPage = () => {
                                         onChange={handleNewServicoChange}
                                         error={!!errors.valor_servico}
                                         helperText={errors.valor_servico}
-                                    />
-                                    <TextField
-                                        name="prazo_servico"
-                                        label="Prazo (dias)*"
-                                        variant="filled"
-                                        margin="dense"
-                                        fullWidth
-                                        value={newServico.prazo_servico}
-                                        onChange={handleNewServicoChange}
-                                        error={!!errors.prazo_servico}
-                                        helperText={errors.prazo_servico}
                                     />
                                 </div>
                                 <Button

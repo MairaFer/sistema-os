@@ -26,6 +26,8 @@ import CriarFuncionario from './pages/Funcionarios/CriarFuncionario.jsx'
 import CriarCliente from './pages/Clientes/CriarCliente.jsx'
 import CriarServico from './pages/Servicos/CriarServico.jsx'
 import GerenciarOsPage from './pages/GerenciarOs/GerenciarOsPage.jsx'
+import EditarOsPage from './pages/EditarOs/EditarOsPage.jsx'
+import ViewOsPage from './pages/ViewOs/ViewOsPage.jsx';
 
 const Content = styled.div`
   margin-left: 3.75rem;
@@ -67,7 +69,23 @@ function App() {
                 </Content>
               </>
             } />
-             <Route path="/criar-servico" element={
+            <Route path="/editar-os/:id" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <EditarOsPage />
+                </Content>
+              </>
+            } />
+            <Route path="/view-os/:id" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <ViewOsPage />
+                </Content>
+              </>
+            } />
+            <Route path="/criar-servico" element={
               <>
                 <Sidebar />
                 <Content>

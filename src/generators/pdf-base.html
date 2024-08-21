@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Ordem de Serviço 0001</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			font-size: 10pt;
+			line-height: 1.2;
+			margin: 0;
+			padding: 10mm 10mm;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		p {
+			margin: 0;
+		}
+
+		.table-container {
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-bottom: 15px;
+			border: 1.5pt solid #6aa84f;
+		}
+
+		th,
+		td {
+			padding: 6px;
+			text-align: left;
+			border: 1px solid #ddd;
+		}
+
+		.header-table {
+			width: 100%;
+			margin-bottom: 15px;
+			border: 1pt solid #ffffff;
+			border-collapse: collapse;
+		}
+
+		.header-table td {
+			text-align: center;
+			vertical-align: top;
+			padding: 4pt;
+		}
+
+		.header-table img {
+			max-width: 45px;
+			height: auto;
+		}
+
+		.header-table .logo-placeholder {
+			font-size: 7pt;
+			color: #999999;
+			font-style: italic;
+		}
+
+		.header-table .order-title {
+			font-size: 14pt;
+			font-weight: bold;
+		}
+
+		.section-title {
+			background-color: #434343;
+			color: #ffffff;
+			font-weight: bold;
+			padding: 4pt;
+			font-size: 10pt;
+		}
+
+		.section-content {
+			padding: 4pt;
+			background-color: #ffffff;
+			font-size: 9pt;
+		}
+
+		.section-content strong {
+			display: block;
+			margin-bottom: 4pt;
+		}
+
+		.item-list {
+			margin-left: 24pt;
+			list-style-type: disc;
+		}
+
+		.item-list li {
+			margin-bottom: 3pt;
+		}
+
+		@page {
+			size: A4;
+			margin: 10mm;
+		}
+
+		@media print {
+			body {
+				font-size: 9pt;
+			}
+
+			.header-table img {
+				max-width: 40px;
+			}
+
+			.order-title {
+				font-size: 13pt;
+			}
+
+			.section-title {
+				padding: 3pt;
+				font-size: 9pt;
+			}
+
+			.section-content {
+				padding: 3pt;
+				font-size: 8pt;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="table-container">
+		<table class="header-table">
+			<tr>
+				<td>
+					<img src="logo-empresa.png" alt="Logo da Empresa">
+					<p class="logo-placeholder">coloque aqui a marca<br>da sua empresa</p>
+				</td>
+				<td>
+					<p class="order-title">Ordem de Serviço 0001</p>
+					<p class="order-title">Manutenção Corretiva</p>
+				</td>
+				<td>
+					<img src="logo-cliente.png" alt="Logo do Cliente">
+					<p class="logo-placeholder">coloque aqui a marca<br>do seu cliente</p>
+				</td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td class="section-title">Cliente</td>
+				<td class="section-title"></td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Nome</strong>
+					Atacado bom preço
+				</td>
+				<td class="section-content">
+					<strong>Endereço</strong>
+					Av. Senador Salgado Filho, 1305, Centro, Curitiba
+				</td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Telefone</strong>
+					(41) 9908-0808
+				</td>
+				<td class="section-content">
+					<strong>CNPJ</strong>
+					15.238.396/0001-87
+				</td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td class="section-title">Equipamento ou Ativo</td>
+				<td class="section-title"></td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Nome</strong>
+					Ar condicionado
+				</td>
+				<td class="section-content">
+					<strong>Modelo</strong>
+					Split
+				</td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Marca</strong>
+					Samsung
+				</td>
+				<td class="section-content"></td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td class="section-title">Diagnóstico</td>
+				<td class="section-title"></td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Diagnóstico atual</strong>
+					<ul class="item-list">
+						<li>Problema com vazamento no fluido</li>
+						<li>Filtro sujo</li>
+						<li>Necessário ajuste e fixação</li>
+					</ul>
+				</td>
+				<td class="section-content"></td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td class="section-title">Solução</td>
+				<td class="section-title"></td>
+			</tr>
+			<tr>
+				<td class="section-content">
+					<strong>Solução aplicada</strong>
+					<ul class="item-list">
+						<li>Limpeza de filtro realizada</li>
+						<li>Reparo no vazamento efetuado</li>
+						<li>Fixação do equipamento ajustada</li>
+					</ul>
+				</td>
+				<td class="section-content"></td>
+			</tr>
+		</table>
+	</div>
+	<script src="htmlManip.js"></script>
+</body>
+
+</html>

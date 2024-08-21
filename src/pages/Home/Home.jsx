@@ -157,13 +157,9 @@ const Home = () => {
 
         // Mapear ordens de serviço com nomes de clientes e funcionários
         const ordersWithNames = recentOrders.map(order => {
-          const clientName = order.cliente_os
-            ? clientMap[order.cliente_os] || 'Cliente não encontrado'
-            : 'Cliente não encontrado';
+          const clientName = clientMap[order.cliente_os];
 
-          const employeeName = order.funcionario_os
-            ? employeeMap[order.funcionario_os] || 'Funcionário não encontrado'
-            : 'Funcionário não encontrado';
+          const employeeName = employeeMap[order.funcionario_os];
 
           return {
             ...order,

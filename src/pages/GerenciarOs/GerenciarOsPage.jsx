@@ -125,8 +125,8 @@ const OrdemDeServicoPage = () => {
 
         // Mapear ordens de serviço com nomes de clientes e funcionários
         const ordersWithNames = orders.map(order => {
-          const clientName = clientMap[order.cliente_os] || 'Cliente não encontrado';
-          const employeeName = employeeMap[order.funcionario_os] || 'Funcionário não encontrado';
+          const clientName = clientMap[order.cliente_os];
+          const employeeName = employeeMap[order.funcionario_os];
 
           return {
             ...order,
@@ -153,18 +153,18 @@ const OrdemDeServicoPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(os =>
-        (os.nome_cliente?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          os.nome_funcionario?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          os.chave_os?.includes(searchTerm))
+      (os.nome_cliente?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        os.nome_funcionario?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        os.chave_os?.includes(searchTerm))
       );
     }
 
     switch (filter) {
       case 'data_asc':
-        filtered = filtered.sort((a, b) => new Date(a.data_os) - new Date(b.data_os));
+        filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       case 'data_desc':
-        filtered = filtered.sort((a, b) => new Date(b.data_os) - new Date(a.data_os));
+        filtered = filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
       case 'status_em_aberto':
         filtered = filtered.filter(os => os.status_os === 'Em Aberto');
@@ -208,10 +208,9 @@ const OrdemDeServicoPage = () => {
     handleMenuClose();
   };
 
-  const handleDownloadPdf = () => {
+  const handleViewOs = () => {
     if (selectedOs) {
-      // Aqui você pode adicionar a lógica para gerar e baixar o PDF
-      console.log('Baixar PDF da OS:', selectedOs.chave_os);
+      navigate(`/view-os/${selectedOs._id}`)
     } else {
       console.warn('Nenhuma ordem de serviço selecionada');
     }
@@ -271,24 +270,21 @@ const OrdemDeServicoPage = () => {
               <MenuItem value="status_finalizada">Status: Finalizada</MenuItem>
             </Select>
           </FormControl>
-          <Fab color="primary" aria-label="add" onClick={() => navigate('/criar-os')}>
-            <AddIcon />
-          </Fab>
         </HeaderContainer>
         <ContentContainer>
           {loading ? (
             <CircularProgress />
           ) : (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%', backgroundColor:'whitesmoke' }}>
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Nome</TableCell>
                     <TableCell>Chave OS</TableCell>
-                    <TableCell>Cliente</TableCell>
-                    <TableCell>Funcionário</TableCell>
+                    <TableCell>Cliente/Funcionario</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Data</TableCell>
-                    <TableCell>Ações</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -301,13 +297,13 @@ const OrdemDeServicoPage = () => {
                   ) : (
                     filteredOsList.map(os => (
                       <TableRow key={os._id}>
-                        <TableCell>{os.chave_os}</TableCell>
-                        <TableCell>{os.cliente_os}</TableCell>
-                        <TableCell>{os.funcionario_os}</TableCell>
+                        <TableCell>{os.nome_os}</TableCell>
+                        <TableCell>{os.key_search}</TableCell>
+                        <TableCell>{os.cliente_os || os.funcionario_os}</TableCell>
                         <TableCell>{os.status_os}</TableCell>
-                        <TableCell>{new Date(os.data_os).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(os.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <IconButton onClick={(event) => handleMenuClick(event, os)}>
+                          <IconButton sx={{ width: '' }} onClick={(event) => handleMenuClick(event, os)}>
                             <MoreVertIcon />
                           </IconButton>
                         </TableCell>
@@ -325,7 +321,7 @@ const OrdemDeServicoPage = () => {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleEditOs}>Editar</MenuItem>
-          <MenuItem onClick={handleDownloadPdf}>Baixar PDF</MenuItem>
+          <MenuItem onClick={handleViewOs}>Visualizar</MenuItem>
           <MenuItem onClick={handleDeleteOs}>Excluir</MenuItem>
         </Menu>
         <Dialog

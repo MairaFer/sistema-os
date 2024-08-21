@@ -20,7 +20,7 @@ const RecentOrdersTable = ({ orders }) => {
               <TableCell>{order.nome_os}</TableCell>
               <TableCell>{order.key_search}</TableCell>
               <TableCell>{order.status_os}</TableCell>
-              <TableCell>{order.cliente_os}</TableCell>
+              <TableCell>{order.cliente_os || order.funcionario_os}</TableCell>
               <TableCell>{new Date(order.createdAt).toLocaleDateString('pt-BR')}</TableCell>
             </TableRow>          
           ))}
