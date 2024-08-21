@@ -121,7 +121,7 @@ const EditOrder = () => {
     };
 
     const handleCancel = () => {
-        navigate('/home'); // Navega para a página inicial ou para a página desejada
+        navigate('/gerenciaros'); // Navega para a página inicial ou para a página desejada
     };
 
     return (

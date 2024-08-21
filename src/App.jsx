@@ -200,7 +200,6 @@ function App() {
           </Route>
         </Routes>
       </AuthProvider>
-      <Footer />
     </Router>
   );
 }

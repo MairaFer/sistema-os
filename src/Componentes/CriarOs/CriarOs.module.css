@@ -4,7 +4,7 @@
 
 .div {
     background-color: #252630;
-    height: 10vh; /* Ajusta a altura para preencher a tela */
+    height: 6vh; /* Ajusta a altura para preencher a tela */
     overflow: auto; /* Permite rolar se o conteúdo for maior que a altura */
     width: 100%;
     max-width: 120rem;
@@ -73,3 +73,8 @@
     background-color: #003bb3;
 }
 
+.submitButtonContainer{
+    padding-top: 3%;
+    padding-bottom: 5%;
+    height: 5rem;
+}
