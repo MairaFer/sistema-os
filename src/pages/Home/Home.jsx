@@ -216,7 +216,7 @@ const Home = () => {
           </button>
         </div>
         <div className={styles.recentOrdersContainer}>
-          <h2>OS's Recentes</h2>
+          <h2 style={{fontFamily: "Lexend", fontWeight: 400}}>OS's Recentes</h2>
           {loading ? (
             Array(5).fill().map((_, index) => (
               <Skeleton key={index} variant="rectangular" width="100%" height={50} style={{ marginBottom: '10px' }} />
