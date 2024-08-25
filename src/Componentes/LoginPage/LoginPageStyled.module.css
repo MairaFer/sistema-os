@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap');
+
 *{
   outline: none;
 }
@@ -20,7 +21,7 @@
   flex-direction: row; /* Muda a direção para linha */
   align-items: center; /* Centraliza verticalmente */
   justify-content: center; /* Centraliza horizontalmente */
-  height: 91vh;
+  height: 87.1vh;
   background-color: var(--bg-base);
   color: white;
   padding: 0% 10% 0% 10%;

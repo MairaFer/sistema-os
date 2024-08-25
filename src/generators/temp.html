@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem de Serviço 0001</title>
+    <title>Ordem de Serviço ${order.key_search}</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             font-size: 10pt;
             line-height: 1.2;
@@ -14,48 +14,39 @@
             padding: 10mm;
             box-sizing: border-box;
         }
-
         h1, h2, h3, h4, h5, h6, p {
             margin: 0;
         }
-
         .table-container {
             width: 100%;
             page-break-inside: avoid;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
             border: 1px solid #ddd;
         }
-
         th, td {
             padding: 8px;
             text-align: left;
         }
-
         .header-table {
             margin-bottom: 15px;
         }
-
         .header-table td {
             text-align: center;
             vertical-align: top;
             padding: 5px;
         }
-
         .header-table img {
             max-width: 60px;
             height: auto;
         }
-
         .header-table .company-details {
             font-size: 10pt;
             font-weight: bold;
         }
-
         .section-title {
             background-color: #434343;
             color: #ffffff;
@@ -63,72 +54,58 @@
             padding: 5px;
             font-size: 10pt;
         }
-
         .section-content {
             padding: 5px;
             background-color: #ffffff;
             font-size: 9pt;
         }
-
         .section-content strong {
             display: block;
             margin-bottom: 4pt;
         }
-
         .item-list {
             margin-left: 24pt;
             list-style-type: disc;
         }
-
         .item-list li {
             margin-bottom: 3pt;
         }
-
         .signature-section {
             margin-top: 20px;
             display: flex;
             justify-content: space-between;
         }
-
         .signature-section div {
             width: 45%;
         }
-
         .signature-section .signature {
             border-top: 1px solid #000;
             width: 100%;
             padding: 5px;
             display: inline-block;
         }
-
         @page {
             size: A4;
             margin: 10mm;
         }
-
         @media print {
             body {
                 font-size: 9pt;
             }
-
             .header-table img {
                 max-width: 50px;
             }
-
             .company-details {
                 font-size: 9pt;
             }
-
             .section-title {
                 font-size: 9pt;
                 padding: 4px;
             }
-
             .section-content {
                 font-size: 8pt;
                 padding: 4px;
             }
-
             .signature-section div {
                 width: 45%;
                 margin-bottom: 0;
@@ -146,46 +123,48 @@
                     <img src="logo-empresa.png" alt="Logo da Empresa">
                 </td>
                 <td class="company-details">
-                    <p>Nome da Empresa</p>
-                    <p>CNPJ da Empresa</p>
-                    <p>Telefone da Empresa</p>
-                    <p>Endereço da Empresa</p>
+                    <p>${data.nome_da_empresa}</p>
+                    <p>${data.cnpj_user}</p>
+                    <p>${data.contato_userEmpresa}</p>
+                    <p>${data.endereco_userEmpresa}</p>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Ordem de Serviço 0001</td>
-                <td class="section-title">Data: 01/08/2024</td>
+                <td class="section-title">Ordem de Serviço - ${order.nome_os} ${order.key_search}</td>
+                <td class="section-title">Data: ${order.createdAt || ''}</td>
             </tr>
         </table>
 
         <table>
-            <tr>
-                <td class="section-title">Cliente</td>
-                <td class="section-title"></td>
-            </tr>
-            <tr>
-                <td class="section-content">
-                    <strong>Nome</strong>
-                    Atacado bom preço
-                </td>
-                <td class="section-content">
-                    <strong>Telefone</strong>
-                    (41) 9908-0808
-                </td>
-            </tr>
-            <tr>
-                <td class="section-content">
-                    <strong>CPF/CNPJ</strong>
-                    15.238.396/0001-87
-                </td>
-                <td class="section-content">
-                    <strong>Endereço</strong>
-                    Av. Senador Salgado Filho, 1305, Centro, Curitiba
-                </td>
-            </tr>
+        <tr>
+            <td class="section-title">
+                ${nomeCliente ? 'Cliente' : 'Funcionário'}
+            </td>
+            <td class="section-title"></td>
+        </tr>
+        <tr>
+            <td class="section-content">
+                <strong>${nomeCliente ? 'Nome' : 'Nome'}</strong>
+                ${nomeCliente || nomeFuncionario}
+            </td>
+            <td class="section-content">
+                <strong>${nomeCliente ? 'Telefone' : 'Contato'}</strong>
+                ${telefoneCliente || contatoFunc}
+            </td>
+        </tr>
+        <tr>
+            <td class="section-content">
+                <strong>${nomeCliente ? 'CPF/CNPJ' : 'Setor'}</strong>
+                ${cpfCnpjCliente || SetorFunc}
+            </td>
+            <td class="section-content">
+                <strong>${nomeCliente ? 'Endereço' : ''}</strong>
+                ${enderecoCliente || ''}
+            </td>
+        </tr>
         </table>
 
         <table>
@@ -196,17 +175,17 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    Ar condicionado
+                    ${order.equipamento || ''}
                 </td>
                 <td class="section-content">
                     <strong>Marca</strong>
-                    Samsung
+                    ${order.marca || ''}
                 </td>
             </tr>
             <tr>
                 <td class="section-content">
                     <strong>Número de Série</strong>
-                    123456789
+                    ${order.numeroSerie || ''}
                 </td>
                 <td class="section-content"></td>
             </tr>
@@ -220,11 +199,11 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    Manutenção Corretiva
+                    ${nomeServico}
                 </td>
                 <td class="section-content">
                     <strong>Valor</strong>
-                    R$ 150,00
+                    R$ ${valorServico}
                 </td>
             </tr>
         </table>
@@ -237,9 +216,7 @@
             <tr>
                 <td class="section-content" colspan="2">
                     <ul class="item-list">
-                        <li>Peça 1</li>
-                        <li>Peça 2</li>
-                        <li>Peça 3</li>
+                        ${listapecas_os}
                     </ul>
                 </td>
             </tr>
@@ -253,9 +230,7 @@
             <tr>
                 <td class="section-content" colspan="2">
                     <ul class="item-list">
-                        <li>Problema com vazamento no fluido</li>
-                        <li>Filtro sujo</li>
-                        <li>Necessário ajuste e fixação</li>
+                        ${listaDefeitos}
                     </ul>
                 </td>
             </tr>
@@ -269,7 +244,7 @@
             <tr>
                 <td class="section-content" colspan="2">
                     <ul class="item-list">
-                        <li>Diagnóstico atual</li>
+                        ${listaDiagnostico}
                     </ul>
                 </td>
             </tr>
@@ -283,8 +258,7 @@
             <tr>
                 <td class="section-content" colspan="2">
                     <ul class="item-list">
-                        <li>Observação 1</li>
-                        <li>Observação 2</li>
+                        ${listaObservacoes}
                     </ul>
                 </td>
             </tr>
@@ -292,17 +266,21 @@
 
         <table>
             <tr>
-                <td class="section-title">Prazo de Entrega e Técnico Responsável</td>
+                <td class="section-title">Informações Extra</td>
                 <td class="section-title"></td>
             </tr>
             <tr>
                 <td class="section-content">
                     <strong>Data</strong>
-                    30/08/2024
+                    ${data_encerramento || ''}
                 </td>
                 <td class="section-content">
                     <strong>Técnico</strong>
-                    Nome do Técnico
+                    ${order.tecnico || ''}
+                </td>
+                 <td class="section-content">
+                    <strong>Técnico</strong>
+                    ${order.pagamento || ''}
                 </td>
             </tr>
         </table>
@@ -314,21 +292,21 @@
             </tr>
             <tr>
                 <td class="section-content">
-                    <input type="checkbox" checked disabled> Sim
-                </td>
-                <td class="section-content">
-                    <input type="checkbox" disabled> Não
+                    <input type="checkbox" ${acessorio ? 'checked' : ''} disabled> Sim
+                    <input type="checkbox" ${!acessorio ? 'checked' : ''} disabled> Não
                 </td>
             </tr>
         </table>
 
         <div class="signature-section">
             <div>
-                <strong>Assinatura do Cliente:</strong>
+                <strong>Assinatura do Cliente:</strong>  
+
                 <div class="signature"></div>
             </div>
             <div>
                 <strong>Assinatura da Empresa:</strong>
+
                 <div class="signature"></div>
             </div>
         </div>

@@ -210,12 +210,15 @@ const OrdemDeServicoPage = () => {
 
   const handleViewOs = () => {
     if (selectedOs) {
-      navigate(`/view-os/${selectedOs._id}`)
+        sessionStorage.setItem('selectedOsId', selectedOs._id);
+        console.log(selectedOs);
+        navigate(`/view-os/${selectedOs._id}`);
     } else {
-      console.warn('Nenhuma ordem de serviço selecionada');
+        console.warn('Nenhuma ordem de serviço selecionada');
     }
     handleMenuClose();
-  };
+};
+
 
   const handleDeleteOs = () => {
     if (selectedOs) {
