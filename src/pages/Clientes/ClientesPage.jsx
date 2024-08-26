@@ -16,7 +16,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 
-// Definindo o tema com a fonte Lexend
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
