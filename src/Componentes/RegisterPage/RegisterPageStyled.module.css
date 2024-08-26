@@ -23,8 +23,8 @@
 }
 
 .logoRegister {
-  width: 40%;
-  margin-right: 2rem;
+  width: 37%; 
+  margin-right: 11rem;
   padding-bottom: 6%;
 }
 
@@ -56,6 +56,7 @@
   align-items: center;
   padding: 0% 0% 0% 0%;
   font-weight: 100;
+  font-size: 1.4rem; 
   margin-bottom: 1.2rem;
 }
 
