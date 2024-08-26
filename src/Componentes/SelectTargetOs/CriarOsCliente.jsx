@@ -136,7 +136,7 @@ export const SelectTypeOS = () => {
         if (navigateToNextPage && navigateAllowed && clients.length > 0) {
             sessionStorage.removeItem('selectedFuncionarioId');
             sessionStorage.setItem('selectedClientId', clients[0]._id);
-            navigate("/criar-os/finalizar");
+            navigate("/criar-os/finalizar-client");
         } else {
             setNavigateAllowed(false); // Resetar a permissão de navegação
             setSelectedClient(null); // Limpar a seleção se não avançar

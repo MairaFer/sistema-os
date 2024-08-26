@@ -7,8 +7,8 @@ import Home from './pages/Home/Home';
 import LoginPage from './Componentes/LoginPage/LoginPageComponent';
 import Cliente from './pages/Clientes/ClientesPage';
 import Funcionarios from './pages/Funcionarios/FuncionariosPage';
-import CriarOsFuncionarioPage from './pages/CriarOs/SelectFuncionarioPage.jsx'
-import CriarOsClientePage from './pages/CriarOs/SelectClientePage.jsx'
+import CriarOsFuncionarioPage from './pages/CriarOsFuncionario/SelectFuncionarioPage.jsx'
+import CriarOsClientePage from './pages/CriarOsCliente/SelectClientePage.jsx'
 import Servicos from './pages/Servicos/ServicosPage';
 import Register from './pages/Register/RegisterPage.jsx';
 import ForgotPassword from './pages/ForgotPassword/ForgotPasswordPage.jsx';
@@ -18,7 +18,8 @@ import Relatorios from './pages/Relatorios/RelatoriosPage.jsx';
 import { AuthProvider } from './context/authContext';
 import PrivateRoute from './Componentes/PrivateRoute/PrivateRoute';
 import SettingsPage from './pages/Settings/SettingsPages.jsx';
-import CompleteOsPage from './pages/CriarOs/CompleteOsPage.jsx';
+import CompleteOsClientePage from './pages/CriarOsCliente/CompleteOsClientePage.jsx';
+import CompleteOsFuncionarioPage from './pages/CriarOsFuncionario/CompleteOsFuncionarioPage.jsx';
 import AddClienteOs from './pages/AddClienteOS/AddClienteOSPage.jsx'
 import AddFuncionarioOs from './pages/AddFuncionarioOS/AddFuncionarioOSPage.jsx'
 import CriarFuncionario from './pages/Funcionarios/CriarFuncionario.jsx'
@@ -123,11 +124,20 @@ function App() {
                 </Content>
               </>
             } />
-            <Route path="/criar-os/finalizar" element={
+            <Route path="/criar-os/finalizar-func" element={
               <>
                 <Sidebar />
                 <Content>
-                  <CompleteOsPage />
+                  <CompleteOsFuncionarioPage />
+
+                </Content>
+              </>
+            } />
+             <Route path="/criar-os/finalizar-client" element={
+              <>
+                <Sidebar />
+                <Content>
+                  <CompleteOsClientePage />
 
                 </Content>
               </>

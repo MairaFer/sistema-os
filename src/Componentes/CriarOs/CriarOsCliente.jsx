@@ -67,53 +67,28 @@ const lightTheme = createTheme({
 
 let schema;
 // Defina o schema de validação
-if (idDeFuncionario) {
-    schema = yup.object().shape({
-        nome_os: yup.string().required('Registre o Nome da OS.'),
-        equipamento: yup.string().required('Equipamento é obrigatório'),
-        marca: yup.string().nullable(),
-        numero_serie: yup.string().nullable(),
-        pagamento: yup.string().nullable(),
-        tecnico: yup.string().required('Defina o técnico responsável.'),
-        nome_servico: yup.string().required('Defina o serviço.'),
-        valor_servico: yup.number().nullable().default(0),
-        pecas: yup.array().of(
-            yup.object().shape({
-                nome_peca: yup.string().nullable(),
-                quantidade: yup.number().positive('Quantidade deve ser positiva').nullable(),
-                valor_peca: yup.number().positive('Valor Unitário deve ser positivo').nullable(),
-            })
-        ),
-        observacoes: yup.string().nullable(),
-        data_encerramento: yup.date().nullable(),
-        diagnostico: yup.string().nullable(),
-        defeitos_relatados: yup.string().nullable(),
-        acessorio: yup.boolean().nullable()
-    });
-} else {
-    schema = yup.object().shape({
-        nome_os: yup.string().required('Registre o Nome da OS.'),
-        equipamento: yup.string().required('Equipamento é obrigatório'),
-        marca: yup.string().nullable(),
-        numero_serie: yup.string().nullable(),
-        pagamento: yup.string().required('Defina a forma de pagamento.'),
-        tecnico: yup.string().required('Defina o técnico responsável.'),
-        nome_servico: yup.string().required('Defina o serviço.'),
-        valor_servico: yup.number().positive('Valor do Serviço deve ser positivo').required('Defina o valor do serviço').default(0),
-        pecas: yup.array().of(
-            yup.object().shape({
-                nome_peca: yup.string().nullable(),
-                quantidade: yup.number().positive('Quantidade deve ser positiva').nullable(),
-                valor_peca: yup.number().positive('Valor Unitário deve ser positivo').nullable(),
-            })
-        ),
-        observacoes: yup.string().nullable(),
-        data_encerramento: yup.date().required('Data de encerramento é obrigatória'),
-        diagnostico: yup.string().nullable(),
-        defeitos_relatados: yup.string().nullable(),
-        acessorio: yup.boolean().nullable()
-    });
-}
+schema = yup.object().shape({
+    nome_os: yup.string().required('Registre o Nome da OS.'),
+    equipamento: yup.string().required('Equipamento é obrigatório'),
+    marca: yup.string().nullable(),
+    numero_serie: yup.string().nullable(),
+    pagamento: yup.string().required('Defina a forma de pagamento.'),
+    tecnico: yup.string().required('Defina o técnico responsável.'),
+    nome_servico: yup.string().required('Defina o serviço.'),
+    valor_servico: yup.number().positive('Valor do Serviço deve ser positivo').required('Defina o valor do serviço').default(0),
+    pecas: yup.array().of(
+        yup.object().shape({
+            nome_peca: yup.string().nullable(),
+            quantidade: yup.number().positive('Quantidade deve ser positiva').nullable(),
+            valor_peca: yup.number().positive('Valor Unitário deve ser positivo').nullable(),
+        })
+    ),
+    observacoes: yup.string().nullable(),
+    data_encerramento: yup.date().required('Data de encerramento é obrigatória'),
+    diagnostico: yup.string().nullable(),
+    defeitos_relatados: yup.string().nullable(),
+    acessorio: yup.boolean().nullable()
+});
 
 const CreateOrder = () => {
     const navigate = useNavigate();
@@ -170,11 +145,7 @@ const CreateOrder = () => {
             return;
         }
 
-        let servicoId = selectedServico?._id;
-
-        if (!data.valor_servico) {
-            data.valor_servico = 0;
-        }
+        let servicoId = selectedServico._id;
 
         // Se o serviço não foi selecionado e o nome e valor do serviço foram fornecidos
         if (!isServicoSelected && data.nome_servico) {
@@ -187,7 +158,7 @@ const CreateOrder = () => {
                     valor_servico: data.valor_servico,
                 });
 
-                const novoServico = response.data;
+                const novoServico = response.data._id;
 
                 console.log('Novo serviço criado:', novoServico);
 
@@ -205,13 +176,6 @@ const CreateOrder = () => {
                 setServicoOsError('Erro ao criar serviço.');
                 return;
             }
-        }
-
-        // Se idDeFuncionario for definido, ajuste os campos conforme necessário
-        if (idDeFuncionario) {
-            console.log('ID de Funcionario detectado, ajustando campos...');
-            data.data_encerramento = null; // Zerar o campo prazo
-            data.pagamento = 'Não Informado'; // Definir pagamento como 'Não Informado'
         }
 
         // Preparar o payload para criar a ordem de serviço
@@ -352,7 +316,6 @@ const CreateOrder = () => {
                                 />
                             </Grid>
 
-                            {!idDeFuncionario && (
                                 <Grid item xs={12} md={6}>
                                     <FormControl fullWidth margin="normal" variant="filled">
                                         <InputLabel id="pagamento-label">Forma de Pagamento*</InputLabel>
@@ -377,7 +340,6 @@ const CreateOrder = () => {
                                         {errors.pagamento && <p className={styles.errorMessage}>{errors.pagamento.message}</p>}
                                     </FormControl>
                                 </Grid>
-                            )}
 
                             <Grid item xs={12} md={6}>
                                 <Controller
@@ -459,7 +421,7 @@ const CreateOrder = () => {
                                             />
                                         )}
                                     />
-                                    {!idDeFuncionario && (
+    
                                         <Controller
                                             name="valor_servico" // Nome correto do campo
                                             control={control}
@@ -489,7 +451,6 @@ const CreateOrder = () => {
                                                 />
                                             )}
                                         />
-                                    )}
                                 </Box>
                                 {servicoOsError && <p className={styles.errorMessage}>{servicoOsError}</p>}
                             </Grid>
@@ -622,7 +583,6 @@ const CreateOrder = () => {
                                 />
                             </Grid>
 
-                            {!idDeFuncionario && (
                                 <Grid item xs={12} md={6}>
                                     <Controller
                                         name="data_encerramento"
@@ -644,7 +604,7 @@ const CreateOrder = () => {
                                         )}
                                     />
                                 </Grid>
-                            )}
+                            
 
                             <Grid item xs={12} md={6}>
                                 <FormControl component="fieldset">

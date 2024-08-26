@@ -114,7 +114,7 @@ export const CriarOsFuncionario = () => {
         if (selectedFuncionario) {
             sessionStorage.removeItem('selectedClientId');
             sessionStorage.setItem('selectedFuncionarioId', selectedFuncionario._id);
-            navigate("/criar-os/finalizar");
+            navigate("/criar-os/finalizar-func");
         }
     };
 

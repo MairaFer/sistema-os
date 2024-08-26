@@ -223,8 +223,9 @@ const OrdemDeServicoPage = () => {
 
   const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
+    console.log(selectedOs._id);
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/os/${token}/${selectedOs._id}/deletar`);
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/os/deletar/${token}/${selectedOs._id}`);
       setOsList(osList.filter(os => os._id !== selectedOs._id));
       setFilteredOsList(filteredOsList.filter(os => os._id !== selectedOs._id));
       enqueueSnackbar('Ordem de serviço excluída com sucesso!', { variant: 'success' });
