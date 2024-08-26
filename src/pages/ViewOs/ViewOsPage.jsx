@@ -3,10 +3,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from './ViewOs.module.css';
-import html2pdf from 'html2pdf.js';
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import axios from 'axios';
+import { generateOrderPDF } from '../../generators/htmlManip.js'; // Importando a função
 
 const lightTheme = createTheme({
     palette: {
@@ -43,50 +44,21 @@ export const ViewOsPage = () => {
 
     const handleDownload = async (type) => {
         try {
-            let url = '';
-            if (type === "empresa") {
-                url = `https://cyberos-sistemadeordemdeservico-api.onrender.com/ordem-servico/${id}/download/empresa`;
-            } else if (type === "beneficiario") {
-                url = `https://cyberos-sistemadeordemdeservico-api.onrender.com/ordem-servico/${id}/download/beneficiario`;
-            }
+            // Gerar o PDF usando a função importada
+            await generateOrderPDF(id, type);
 
-            const response = await axios.get(url, { responseType: 'blob' });
+            // Após gerar o PDF, você pode definir o caminho do arquivo temporário para o download
+            const pdfUrl = `../../temp/${id}/${type}`;
+
+            // Atualizar o estado para mostrar o preview
+            const response = await axios.get(pdfUrl, { responseType: 'blob' });
             const blob = new Blob([response.data], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `OS_${id}_${type}.pdf`;
-            link.click();
+            setCustomPdf({
+                uri: URL.createObjectURL(blob),
+                name: `OS_${id}_${type}.pdf`
+            });
         } catch (error) {
-            console.error('Erro ao baixar o PDF:', error);
-        }
-    };
-
-    const generateCustomPdf = async () => {
-        try {
-            const response = await axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/ordem-servico/${id}`);
-            const orderDetails = response.data;
-
-            // Modificar o HTML com os dados da API
-            const htmlTemplate = document.querySelector('#os-template').innerHTML;
-            const modifiedHtml = modifyHtmlContent(htmlTemplate, orderDetails);
-
-            // Gerar o PDF usando html2pdf
-            const element = document.createElement('div');
-            element.innerHTML = modifiedHtml;
-            document.body.appendChild(element);
-
-            const opt = {
-                margin:       0,
-                filename:     `OS_${id}_custom.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().from(element).set(opt).save();
-            document.body.removeChild(element);
-        } catch (error) {
-            console.error('Erro ao gerar o PDF:', error);
+            console.error('Erro ao gerar ou baixar o PDF:', error);
         }
     };
 
@@ -95,12 +67,13 @@ export const ViewOsPage = () => {
     };
 
     useEffect(() => {
-        generateCustomPdf();
-
+        // Limpar o PDF ao desmontar o componente
         return () => {
-            setCustomPdf(null);
+            if (customPdf) {
+                URL.revokeObjectURL(customPdf.uri);
+            }
         };
-    }, [id]);
+    }, [customPdf]);
 
     return (
         <ThemeProvider theme={lightTheme}>
@@ -120,15 +93,15 @@ export const ViewOsPage = () => {
                                 <div className={styles.downloadButtonsContainer}>
                                     <Button
                                         variant="contained"
-                                        onClick={() => handleDownload("empresa")}
+                                        onClick={() => handleDownload("Empresa")}
                                         className={styles.downloadButton}
                                         startIcon={<DownloadIcon />}
                                     >
-                                        Baixar Via da Empresa
+                                        Baixar Minha Via
                                     </Button>
                                     <Button
                                         variant="contained"
-                                        onClick={() => handleDownload("beneficiario")}
+                                        onClick={() => handleDownload("")}
                                         className={styles.downloadButton}
                                         startIcon={<DownloadIcon />}
                                     >
@@ -136,6 +109,13 @@ export const ViewOsPage = () => {
                                     </Button>
                                 </div>
                             </div>
+                            {customPdf && (
+                                <DocViewer
+                                    documents={[{ uri: customPdf.uri, fileType: 'application/pdf', fileName: customPdf.name }]}
+                                    pluginRenderers={DocViewerRenderers}
+                                    style={{ height: '500px', width: '100%', marginTop: '20px' }}
+                                />
+                            )}
                         </section>
                     </div>
                     <div className={styles.designPage} />
@@ -146,17 +126,3 @@ export const ViewOsPage = () => {
 };
 
 export default ViewOsPage;
-
-const modifyHtmlContent = (htmlTemplate, orderDetails) => {
-    return htmlTemplate
-        .replace('{{orderId}}', orderDetails.id)
-        .replace('{{clientName}}', orderDetails.clientName)
-        .replace('{{clientAddress}}', orderDetails.clientAddress)
-        .replace('{{clientPhone}}', orderDetails.clientPhone)
-        .replace('{{clientCnpj}}', orderDetails.clientCnpj)
-        .replace('{{equipmentModel}}', orderDetails.equipmentModel)
-        .replace('{{diagnosis}}', orderDetails.diagnosis.join('</li><li>'))
-        .replace('{{solutions}}', orderDetails.solutions.join('</li><li>'))
-        .replace('{{logoEmpresa}}', orderDetails.logoEmpresa)
-        .replace('{{logoClientePlaceholder}}', orderDetails.logoClientePlaceholder);
-};

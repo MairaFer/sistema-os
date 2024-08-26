@@ -27,7 +27,6 @@ import CriarServico from './pages/Servicos/CriarServico.jsx'
 import GerenciarOsPage from './pages/GerenciarOs/GerenciarOsPage.jsx'
 import EditarOsPage from './pages/EditarOs/EditarOsPage.jsx'
 import ViewOsPage from './pages/ViewOs/ViewOsPage.jsx';
-import Footer from './Componentes/Footer/Footer';
 
 const Content = styled.div`
   margin-left: 3.75rem;
@@ -59,7 +58,6 @@ function App() {
                 <Content>
                   <Home />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/gerenciaros" element={
@@ -68,7 +66,6 @@ function App() {
                 <Content>
                   <GerenciarOsPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/editar-os/:id" element={
@@ -77,7 +74,6 @@ function App() {
                 <Content>
                   <EditarOsPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/view-os/:id" element={
@@ -86,7 +82,6 @@ function App() {
                 <Content>
                   <ViewOsPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criar-servico" element={
@@ -95,7 +90,6 @@ function App() {
                 <Content>
                   <CriarServico />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criar-cliente" element={
@@ -104,7 +98,6 @@ function App() {
                 <Content>
                   <CriarCliente />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criar-funcionario" element={
@@ -113,7 +106,6 @@ function App() {
                 <Content>
                   <CriarFuncionario />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/tipo-da-os" element={
@@ -122,7 +114,6 @@ function App() {
                 <Content>
                   <SelectTypeOsPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/adicionar-cliente" element={
@@ -131,7 +122,6 @@ function App() {
                 <Content>
                   <AddClienteOs />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/adicionar-funcionario" element={
@@ -140,7 +130,6 @@ function App() {
                 <Content>
                   <AddFuncionarioOs />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criar-os/finalizar" element={
@@ -148,7 +137,7 @@ function App() {
                 <Sidebar />
                 <Content>
                   <CompleteOsPage />
-                  <Footer />
+
                 </Content>
               </>
             } />
@@ -158,7 +147,6 @@ function App() {
                 <Content>
                   <CriarOsFuncionarioPage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/criaros/cliente" element={
@@ -167,7 +155,6 @@ function App() {
                 <Content>
                   <CriarOsClientePage />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/clientes" element={
@@ -176,7 +163,6 @@ function App() {
                 <Content>
                   <Cliente />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/funcionarios" element={
@@ -185,7 +171,6 @@ function App() {
                 <Content>
                   <Funcionarios />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/servicos" element={
@@ -194,7 +179,6 @@ function App() {
                 <Content>
                   <Servicos />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/relatorios" element={
@@ -203,7 +187,6 @@ function App() {
                 <Content>
                   <Relatorios />
                 </Content>
-                <Footer />
               </>
             } />
             <Route path="/settings" element={
@@ -212,7 +195,6 @@ function App() {
                 <Content>
                   <SettingsPage />
                 </Content>
-                <Footer />
               </>
             } />
           </Route>
