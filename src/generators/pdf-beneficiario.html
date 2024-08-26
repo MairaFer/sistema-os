@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem de Serviço 0001</title>
+    <title>Ordem de Serviço</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,48 +14,39 @@
             padding: 10mm;
             box-sizing: border-box;
         }
-
         h1, h2, h3, h4, h5, h6, p {
             margin: 0;
         }
-
         .table-container {
             width: 100%;
             page-break-inside: avoid;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
             border: 1px solid #ddd;
         }
-
         th, td {
             padding: 8px;
             text-align: left;
         }
-
         .header-table {
             margin-bottom: 15px;
         }
-
         .header-table td {
             text-align: center;
             vertical-align: top;
             padding: 5px;
         }
-
         .header-table img {
             max-width: 60px;
             height: auto;
         }
-
         .header-table .company-details {
             font-size: 10pt;
             font-weight: bold;
         }
-
         .section-title {
             background-color: #434343;
             color: #ffffff;
@@ -63,72 +54,58 @@
             padding: 5px;
             font-size: 10pt;
         }
-
         .section-content {
             padding: 5px;
             background-color: #ffffff;
             font-size: 9pt;
         }
-
         .section-content strong {
             display: block;
             margin-bottom: 4pt;
         }
-
         .item-list {
             margin-left: 24pt;
             list-style-type: disc;
         }
-
         .item-list li {
             margin-bottom: 3pt;
         }
-
         .signature-section {
             margin-top: 20px;
             display: flex;
             justify-content: space-between;
         }
-
         .signature-section div {
             width: 45%;
         }
-
         .signature-section .signature {
             border-top: 1px solid #000;
             width: 100%;
             padding: 5px;
             display: inline-block;
         }
-
         @page {
             size: A4;
             margin: 10mm;
         }
-
         @media print {
             body {
                 font-size: 9pt;
             }
-
             .header-table img {
                 max-width: 50px;
             }
-
             .company-details {
                 font-size: 9pt;
             }
-
             .section-title {
                 font-size: 9pt;
                 padding: 4px;
             }
-
             .section-content {
                 font-size: 8pt;
                 padding: 4px;
             }
-
             .signature-section div {
                 width: 45%;
                 margin-bottom: 0;
@@ -143,47 +120,47 @@
         <table class="header-table">
             <tr>
                 <td>
-                    <img src="logo-empresa.png" alt="Logo da Empresa">
+                    <img id="logo" src="logo-empresa.png" alt="Logo da Empresa">
                 </td>
                 <td class="company-details">
-                    <p>Nome da Empresa</p>
-                    <p>CNPJ da Empresa</p>
-                    <p>Telefone da Empresa</p>
-                    <p>Endereço da Empresa</p>
+                    <p id="empresa-nome">Nome da Empresa</p>
+                    <p id="cnpjcpf">CNPJ/CPF</p>
+                    <p id="telefone">Telefone</p>
+                    <p id="endereco">Endereço</p>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Ordem de Serviço 0001</td>
-                <td class="section-title">Data: 01/08/2024</td>
+                <td class="section-title">Ordem de Serviço - <span id="os-nome">Nome OS</span> <span id="os-key-search">Chave de Pesquisa</span></td>
+                <td class="section-title">Data: <span id="data-criacao">Data</span></td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Cliente</td>
+                <td class="section-title" id="cliente-ou-funcionario-title"></td>
                 <td class="section-title"></td>
             </tr>
             <tr>
                 <td class="section-content">
-                    <strong>Nome</strong>
-                    Atacado bom preço
+                    <strong id="nome-label">Nome</strong>
+                    <span id="nome-cliente-ou-funcionario">Nome</span>
                 </td>
                 <td class="section-content">
-                    <strong>Telefone</strong>
-                    (41) 9908-0808
+                    <strong id="telefone-label">Telefone</strong>
+                    <span id="telefone-cliente-ou-funcionario">Telefone</span>
                 </td>
             </tr>
             <tr>
                 <td class="section-content">
-                    <strong>CPF/CNPJ</strong>
-                    15.238.396/0001-87
+                    <strong id="cpf-cnpj-label">CPF/CNPJ</strong>
+                    <span id="cpf-cnpj-cliente-ou-funcionario">CPF/CNPJ</span>
                 </td>
                 <td class="section-content">
-                    <strong>Endereço</strong>
-                    Av. Senador Salgado Filho, 1305, Centro, Curitiba
+                    <strong id="endereco-label">Endereço</strong>
+                    <span id="endereco-cliente">Endereço</span>
                 </td>
             </tr>
         </table>
@@ -196,17 +173,17 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    Ar condicionado
+                    <span id="equipamento-nome">Nome</span>
                 </td>
                 <td class="section-content">
                     <strong>Marca</strong>
-                    Samsung
+                    <span id="equipamento-marca">Marca</span>
                 </td>
             </tr>
             <tr>
                 <td class="section-content">
                     <strong>Número de Série</strong>
-                    123456789
+                    <span id="numero-serie">Número de Série</span>
                 </td>
                 <td class="section-content"></td>
             </tr>
@@ -220,11 +197,11 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    Manutenção Corretiva
+                    <span id="servico-nome">Nome</span>
                 </td>
                 <td class="section-content">
                     <strong>Valor</strong>
-                    R$ 150,00
+                    R$ <span id="servico-valor">Valor</span>
                 </td>
             </tr>
         </table>
@@ -236,10 +213,8 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        <li>Peça 1</li>
-                        <li>Peça 2</li>
-                        <li>Peça 3</li>
+                    <ul class="item-list" id="pecas-lista">
+                        <!-- Lista de peças vai aqui -->
                     </ul>
                 </td>
             </tr>
@@ -252,88 +227,26 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        <li>Problema com vazamento no fluido</li>
-                        <li>Filtro sujo</li>
-                        <li>Necessário ajuste e fixação</li>
-                    </ul>
+                    <span id="defeitos-relatados">Defeitos Relatados</span>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Diagnóstico</td>
+                <td class="section-title">Técnico Responsável</td>
                 <td class="section-title"></td>
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        <li>Diagnóstico atual</li>
-                    </ul>
+                    <span id="tecnico-responsavel">Técnico Responsável</span>
                 </td>
             </tr>
         </table>
 
-        <table>
-            <tr>
-                <td class="section-title">Observações</td>
-                <td class="section-title"></td>
-            </tr>
-            <tr>
-                <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        <li>Observação 1</li>
-                        <li>Observação 2</li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-
-        <table>
-            <tr>
-                <td class="section-title">Prazo de Entrega e Técnico Responsável</td>
-                <td class="section-title"></td>
-            </tr>
-            <tr>
-                <td class="section-content">
-                    <strong>Data</strong>
-                    30/08/2024
-                </td>
-                <td class="section-content">
-                    <strong>Técnico</strong>
-                    Nome do Técnico
-                </td>
-            </tr>
-        </table>
-
-        <table>
-            <tr>
-                <td class="section-title">Possui Acessórios? (Carregadores, Cabos...)</td>
-                <td class="section-title"></td>
-            </tr>
-            <tr>
-                <td class="section-content">
-                    <input type="checkbox" checked disabled> Sim
-                </td>
-                <td class="section-content">
-                    <input type="checkbox" disabled> Não
-                </td>
-            </tr>
-        </table>
-
-        <div class="signature-section">
-            <div>
-                <strong>Assinatura do Cliente:</strong>
-                <div class="signature"></div>
-            </div>
-            <div>
-                <strong>Assinatura da Empresa:</strong>
-                <div class="signature"></div>
-            </div>
-        </div>
     </div>
 
+    <script src="htmlManip.js"></script>
 </body>
 
 </html>

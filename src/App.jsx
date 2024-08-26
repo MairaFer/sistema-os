@@ -26,7 +26,6 @@ import CriarCliente from './pages/Clientes/CriarCliente.jsx'
 import CriarServico from './pages/Servicos/CriarServico.jsx'
 import GerenciarOsPage from './pages/GerenciarOs/GerenciarOsPage.jsx'
 import EditarOsPage from './pages/EditarOs/EditarOsPage.jsx'
-import ViewOsPage from './pages/ViewOs/ViewOsPage.jsx';
 
 const Content = styled.div`
   margin-left: 3.75rem;
@@ -73,14 +72,6 @@ function App() {
                 <Sidebar />
                 <Content>
                   <EditarOsPage />
-                </Content>
-              </>
-            } />
-            <Route path="/view-os/:id" element={
-              <>
-                <Sidebar />
-                <Content>
-                  <ViewOsPage />
                 </Content>
               </>
             } />
