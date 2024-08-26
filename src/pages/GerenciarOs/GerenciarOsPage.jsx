@@ -11,10 +11,10 @@ import {
   TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { populateOrderDetails, sendHtmlForPdfConverter } from '../../generators/htmlManip';
 
 const lightTheme = createTheme({
   palette: {
@@ -94,6 +94,8 @@ const OrdemDeServicoPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    
     const fetchOsList = async () => {
       try {
         const token = sessionStorage.getItem('token');
@@ -208,18 +210,6 @@ const OrdemDeServicoPage = () => {
     handleMenuClose();
   };
 
-  const handleViewOs = () => {
-    if (selectedOs) {
-        sessionStorage.setItem('selectedOsId', selectedOs._id);
-        console.log(selectedOs);
-        navigate(`/view-os/${selectedOs._id}`);
-    } else {
-        console.warn('Nenhuma ordem de serviço selecionada');
-    }
-    handleMenuClose();
-};
-
-
   const handleDeleteOs = () => {
     if (selectedOs) {
       setOpenDialog(true);
@@ -233,8 +223,9 @@ const OrdemDeServicoPage = () => {
 
   const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
+    console.log(selectedOs._id);
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/os/${token}/${selectedOs._id}/deletar`);
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/os/deletar/${token}/${selectedOs._id}`);
       setOsList(osList.filter(os => os._id !== selectedOs._id));
       setFilteredOsList(filteredOsList.filter(os => os._id !== selectedOs._id));
       enqueueSnackbar('Ordem de serviço excluída com sucesso!', { variant: 'success' });
@@ -245,6 +236,18 @@ const OrdemDeServicoPage = () => {
       handleCloseDialog();
     }
   };
+
+
+const handleDownload = async (type) => {
+    try {
+        // Gerar o PDF usando a função importada
+        await populateOrderDetails(selectedOs._id);
+        await sendHtmlForPdfConverter(type);
+        console.log("PDF CRIADO");
+    } catch (error) {
+        console.error('Erro ao gerar ou baixar o PDF:', error);
+    }
+};
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -324,7 +327,8 @@ const OrdemDeServicoPage = () => {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleEditOs}>Editar</MenuItem>
-          <MenuItem onClick={handleViewOs}>Visualizar</MenuItem>
+          <MenuItem onClick={() => handleDownload("empresa")}>Emitir OS Empresa</MenuItem>
+          <MenuItem onClick={() => handleDownload("beneficiario")}>Emitir OS Beneficiário</MenuItem>
           <MenuItem onClick={handleDeleteOs}>Excluir</MenuItem>
         </Menu>
         <Dialog
@@ -346,4 +350,3 @@ const OrdemDeServicoPage = () => {
 };
 
 export default OrdemDeServicoPage;
-

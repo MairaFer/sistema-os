@@ -175,7 +175,7 @@ const FuncionarioPage = () => {
   const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${selectedEmployee._id}/${token}`);
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/funcionarios/${token}/${selectedEmployee._id}/deletar`);
       setEmployees(employees.filter(employee => employee._id !== selectedEmployee._id));
       setFilteredEmployees(filteredEmployees.filter(employee => employee._id !== selectedEmployee._id));
       enqueueSnackbar('Funcionário excluído com sucesso!', { variant: 'success' });

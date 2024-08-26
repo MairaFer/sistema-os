@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  HeaderContainer, MainContainer, ContentContainer, TitleContainer,
-  ButtonContainer
-} from './ServicosStyled';
-import {
-  Select, MenuItem, FormControl, InputLabel, Fab, Menu,
-  MenuItem as MenuItemMui, createTheme, ThemeProvider,
-  Table, TableBody, TableCell, TableContainer, TableHead,
+import { 
+  HeaderContainer, MainContainer, ContentContainer, ButtonContainer 
+} from './ServicosStyled'; 
+import { 
+  Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
+  MenuItem as MenuItemMui, createTheme, ThemeProvider, 
+  Table, TableBody, TableCell, TableContainer, TableHead, 
   TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 
 const lightTheme = createTheme({
@@ -81,12 +81,13 @@ const lightTheme = createTheme({
 });
 
 const ServicosPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [searchTerm, setSearchTerm] = useState('');
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [sortOrder, setSortOrder] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -101,13 +102,14 @@ const ServicosPage = () => {
         setFilteredServices(response.data);
       } catch (error) {
         console.error('Erro ao buscar serviços', error);
+        enqueueSnackbar('Erro ao buscar serviços!', { variant: 'error' });
       } finally {
         setLoading(false);
       }
     };
 
     fetchServices();
-  }, []);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
     const sorted = [...services].sort((a, b) => {
@@ -137,23 +139,28 @@ const ServicosPage = () => {
     setSortOrder(event.target.value);
   };
 
-  const handleMenuClick = (event, service) => {
+  const handleMenuClick = (event, serviceId) => {
     setAnchorEl(event.currentTarget);
-    setSelectedService(service);
+    setSelectedServiceId(serviceId);  // Store the selected service ID
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedService(null);
+    setSelectedServiceId(null);  // Clear selected service ID on close
   };
 
   const handleViewService = () => {
-    alert(`Visualizar serviço: ${selectedService.nome_servico}`);
+    if (selectedServiceId) {
+      const service = services.find(service => service._id === selectedServiceId);
+      if (service) {
+        alert(`Visualizar serviço: ${service.nome_servico}`);
+      }
+    }
     handleMenuClose();
   };
 
   const handleDeleteService = () => {
-    if (selectedService) {
+    if (selectedServiceId) {
       setOpenDialog(true);
     }
     handleMenuClose();
@@ -165,21 +172,25 @@ const ServicosPage = () => {
 
   const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
-    try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${selectedService._id}/${token}`);
-      setServices(services.filter(service => service._id !== selectedService._id));
-      setFilteredServices(filteredServices.filter(service => service._id !== selectedService._id));
-    } catch (error) {
-      console.error('Erro ao excluir serviço', error);
-    } finally {
-      handleCloseDialog();
+    if (selectedServiceId) {
+      try {
+        await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/deletar/${token}/${selectedServiceId}`);
+        setServices(services.filter(service => service._id !== selectedServiceId));
+        setFilteredServices(filteredServices.filter(service => service._id !== selectedServiceId));
+        enqueueSnackbar('Serviço excluído com sucesso!', { variant: 'success' });
+      } catch (error) {
+        console.error('Erro ao excluir serviço', error);
+        enqueueSnackbar('Erro ao excluir serviço!', { variant: 'error' });
+      } finally {
+        handleCloseDialog();
+        setSelectedServiceId(null);  // Clear selected service ID after deletion
+      }
     }
   };
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   };
-  
 
   const handleAddServiceClick = () => {
     navigate('/criar-servico');
@@ -189,7 +200,6 @@ const ServicosPage = () => {
     <ThemeProvider theme={lightTheme}>
       <MainContainer>
         <HeaderContainer>
-          <div style={{ marginBottom: '1rem' }} />
           <TextField 
             variant="outlined" 
             placeholder="Buscar serviço..." 
@@ -236,13 +246,13 @@ const ServicosPage = () => {
                       <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '2rem 0 0 2rem', width:'15rem' }}>
                         {formatCurrency(service.valor_servico)}
                       </TableCell>
-                      <TableCell sx={{width:''}}>
-                        <IconButton onClick={(event) => handleMenuClick(event, service)}>
+                      <TableCell>
+                        <IconButton onClick={(event) => handleMenuClick(event, service._id)}>
                           <MoreVertIcon />
                         </IconButton>
                         <Menu
                           anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
+                          open={Boolean(anchorEl) && selectedServiceId === service._id}
                           onClose={handleMenuClose}
                         >
                           <MenuItemMui onClick={handleViewService}>Visualizar</MenuItemMui>
@@ -257,16 +267,21 @@ const ServicosPage = () => {
           )}
         </ContentContainer>
         <ButtonContainer>
-          <Fab color="primary" onClick={handleAddServiceClick} style={{ marginTop: '2rem' }}>
+          <Fab color="primary" aria-label="add" onClick={handleAddServiceClick}>
             <AddIcon />
           </Fab>
         </ButtonContainer>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+        >
           <DialogTitle>Confirmar Exclusão</DialogTitle>
-          <DialogContent>Deseja realmente excluir este serviço?</DialogContent>
+          <DialogContent>
+            <p>Tem certeza de que deseja excluir este serviço?</p>
+          </DialogContent>
           <DialogActions>
-            <MuiButton onClick={handleCloseDialog} color="primary">Cancelar</MuiButton>
-            <MuiButton onClick={handleConfirmDelete} color="secondary">Excluir</MuiButton>
+            <MuiButton onClick={handleCloseDialog}>Cancelar</MuiButton>
+            <MuiButton onClick={handleConfirmDelete} color="error">Excluir</MuiButton>
           </DialogActions>
         </Dialog>
       </MainContainer>

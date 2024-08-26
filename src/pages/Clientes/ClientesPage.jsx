@@ -179,8 +179,9 @@ const ClientesPage = () => {
   
   const handleConfirmDelete = async () => {
     const token = sessionStorage.getItem('token');
+    console.log(selectedClient._id);
     try {
-      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/${token}/${selectedClient._id}/deletar`);
+      await axios.delete(`https://cyberos-sistemadeordemdeservico-api.onrender.com/clientes/deletar/${token}/${selectedClient._id}`);
       setClients(clients.filter(client => client._id !== selectedClient._id));
       setFilteredClients(filteredClients.filter(client => client._id !== selectedClient._id));
       enqueueSnackbar('Cliente excluído com sucesso!', { variant: 'success' });

@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem de Serviço ${order.key_search}</title>
+    <title>Ordem de Serviço</title>
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
             font-size: 10pt;
             line-height: 1.2;
@@ -120,51 +120,49 @@
         <table class="header-table">
             <tr>
                 <td>
-                    <img src="logo-empresa.png" alt="Logo da Empresa">
+                    <img id="logo" src="logo-empresa.png" alt="Logo da Empresa">
                 </td>
                 <td class="company-details">
-                    <p>${data.nome_da_empresa}</p>
-                    <p>${data.cnpj_user}</p>
-                    <p>${data.contato_userEmpresa}</p>
-                    <p>${data.endereco_userEmpresa}</p>
+                    <p id="empresa-nome">Nome da Empresa</p>
+                    <p id="cnpjcpf">CNPJ/CPF</p>
+                    <p id="telefone">Telefone</p>
+                    <p id="endereco">Endereço</p>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Ordem de Serviço - ${order.nome_os} ${order.key_search}</td>
-                <td class="section-title">Data: ${order.createdAt || ''}</td>
+                <td class="section-title">Ordem de Serviço - <span id="os-nome">Nome OS</span> <span id="os-key-search">Chave de Pesquisa</span></td>
+                <td class="section-title">Data: <span id="data-criacao">Data</span></td>
             </tr>
         </table>
 
         <table>
-        <tr>
-            <td class="section-title">
-                ${nomeCliente ? 'Cliente' : 'Funcionário'}
-            </td>
-            <td class="section-title"></td>
-        </tr>
-        <tr>
-            <td class="section-content">
-                <strong>${nomeCliente ? 'Nome' : 'Nome'}</strong>
-                ${nomeCliente || nomeFuncionario}
-            </td>
-            <td class="section-content">
-                <strong>${nomeCliente ? 'Telefone' : 'Contato'}</strong>
-                ${telefoneCliente || contatoFunc}
-            </td>
-        </tr>
-        <tr>
-            <td class="section-content">
-                <strong>${nomeCliente ? 'CPF/CNPJ' : 'Setor'}</strong>
-                ${cpfCnpjCliente || SetorFunc}
-            </td>
-            <td class="section-content">
-                <strong>${nomeCliente ? 'Endereço' : ''}</strong>
-                ${enderecoCliente || ''}
-            </td>
-        </tr>
+            <tr>
+                <td class="section-title" id="cliente-ou-funcionario-title"></td>
+                <td class="section-title"></td>
+            </tr>
+            <tr>
+                <td class="section-content">
+                    <strong id="nome-label">Nome</strong>
+                    <span id="nome-cliente-ou-funcionario">Nome</span>
+                </td>
+                <td class="section-content">
+                    <strong id="telefone-label">Telefone</strong>
+                    <span id="telefone-cliente-ou-funcionario">Telefone</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="section-content">
+                    <strong id="cpf-cnpj-label">CPF/CNPJ</strong>
+                    <span id="cpf-cnpj-cliente-ou-funcionario">CPF/CNPJ</span>
+                </td>
+                <td class="section-content">
+                    <strong id="endereco-label">Endereço</strong>
+                    <span id="endereco-cliente">Endereço</span>
+                </td>
+            </tr>
         </table>
 
         <table>
@@ -175,17 +173,17 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    ${order.equipamento || ''}
+                    <span id="equipamento-nome">Nome</span>
                 </td>
                 <td class="section-content">
                     <strong>Marca</strong>
-                    ${order.marca || ''}
+                    <span id="equipamento-marca">Marca</span>
                 </td>
             </tr>
             <tr>
                 <td class="section-content">
                     <strong>Número de Série</strong>
-                    ${order.numeroSerie || ''}
+                    <span id="numero-serie">Número de Série</span>
                 </td>
                 <td class="section-content"></td>
             </tr>
@@ -199,11 +197,11 @@
             <tr>
                 <td class="section-content">
                     <strong>Nome</strong>
-                    ${nomeServico}
+                    <span id="servico-nome">Nome</span>
                 </td>
                 <td class="section-content">
                     <strong>Valor</strong>
-                    R$ ${valorServico}
+                    R$ <span id="servico-valor">Valor</span>
                 </td>
             </tr>
         </table>
@@ -215,8 +213,8 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        ${listapecas_os}
+                    <ul class="item-list" id="pecas-lista">
+                        <!-- Lista de peças vai aqui -->
                     </ul>
                 </td>
             </tr>
@@ -229,9 +227,7 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        ${listaDefeitos}
-                    </ul>
+                    <span id="defeitos-relatados">Defeitos Relatados</span>
                 </td>
             </tr>
         </table>
@@ -243,9 +239,7 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        ${listaDiagnostico}
-                    </ul>
+                    <span id="diagnostico">Diagnóstico</span>
                 </td>
             </tr>
         </table>
@@ -257,61 +251,68 @@
             </tr>
             <tr>
                 <td class="section-content" colspan="2">
-                    <ul class="item-list">
-                        ${listaObservacoes}
-                    </ul>
+                    <span id="observacoes">Observações</span>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Informações Extra</td>
+                <td class="section-title">Data de Encerramento</td>
                 <td class="section-title"></td>
             </tr>
             <tr>
                 <td class="section-content">
-                    <strong>Data</strong>
-                    ${data_encerramento || ''}
+                    <span id="data-encerramento">Data de Encerramento</span>
                 </td>
-                <td class="section-content">
-                    <strong>Técnico</strong>
-                    ${order.tecnico || ''}
-                </td>
-                 <td class="section-content">
-                    <strong>Técnico</strong>
-                    ${order.pagamento || ''}
+                <td class="section-content"></td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td class="section-title">Técnico Responsável</td>
+                <td class="section-title"></td>
+            </tr>
+            <tr>
+                <td class="section-content" colspan="2">
+                    <span id="tecnico-responsavel">Técnico Responsável</span>
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="section-title">Possui Acessórios? (Carregadores, Cabos...)</td>
+                <td class="section-title">Acessório</td>
                 <td class="section-title"></td>
             </tr>
             <tr>
-                <td class="section-content">
-                    <input type="checkbox" ${acessorio ? 'checked' : ''} disabled> Sim
-                    <input type="checkbox" ${!acessorio ? 'checked' : ''} disabled> Não
+                <td class="section-content" colspan="2">
+                    <label>
+                        <input type="radio" name="acessorio" value="sim" id="acessorio-sim">
+                        Sim
+                    </label>
+                    <label>
+                        <input type="radio" name="acessorio" value="nao" id="acessorio-nao">
+                        Não
+                    </label>
                 </td>
             </tr>
         </table>
+        
 
         <div class="signature-section">
             <div>
-                <strong>Assinatura do Cliente:</strong>  
-
-                <div class="signature"></div>
+                <div class="signature">Assinatura Cliente</div>
             </div>
             <div>
-                <strong>Assinatura da Empresa:</strong>
-
-                <div class="signature"></div>
+                <div class="signature">Assinatura Técnico</div>
             </div>
         </div>
+
     </div>
 
+    <script type="module" src="htmlManip.js"></script>
 </body>
 
 </html>
