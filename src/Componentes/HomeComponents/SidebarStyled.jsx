@@ -1,76 +1,78 @@
 import styled from 'styled-components';
-// SidebarContainer
+
 export const SidebarContainer = styled.div`
   height: 100vh;
-  width: ${props => (props.isExpanded ? '250px' : '80px')};
+  width: ${props => (props.isExpanded ? '250px' : '70px')};
   position: fixed;
-  top: 0;
-  left: 0;
   background-color: #213356;
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Mantém a separação entre o menu e o rodapé */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   font-family: 'Lexend', sans-serif;
-  transition: width 0.3s;
+  transition: width 0.7s;
   z-index: 1001;
   overflow: hidden;
 `;
 
-// Menu da Sidebar
+export const SidebarLogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 14px;
+`;
+
 export const SidebarMenu = styled.ul`
   list-style-type: none;
   padding: 1rem 0.18rem 0 0;
-  margin: auto 0; /* Centraliza verticalmente */
+  margin: auto 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza horizontalmente */
+  align-items: center;
 `;
 
-// Item do Menu da Sidebar
 export const SidebarMenuItem = styled.li`
   padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; /* Garantir que o item ocupe a largura total disponível */
+  margin-bottom: ${props => (props.isExpanded ? '5px' : '7px')};
+  width: 100%;
   box-sizing: border-box;
   &.active {
-    background-color: #34495e; /* Cor para a tela ativa */
-    border-radius: 4px; /* Adiciona bordas arredondadas */
-    padding: 10px 20px; /* Padding uniforme */
+    background-color: #34495e;
+    border-radius: 4px;
+    padding: 10px 20px;
   }
   &:hover {
     background-color: #34495e;
-    border-radius: 4px; /* Adiciona bordas arredondadas */
-    padding: 10px 20px; /* Padding uniforme */
-    transition: background-color 0.3s;
+    border-radius: 4px;
+    padding: 10px 20px;
+    transition: background-color 0.7s;
   }
 `;
 
-// Link da Sidebar
 export const SidebarLink = styled.a`
   color: ${props => (props.red ? '#e74c3c' : 'white')};
   text-decoration: none;
   display: flex;
   align-items: center;
   width: 100%;
-  font-size: 1.1rem; /* Aumenta o tamanho da fonte */
-  font-weight: 400; /* Adiciona negrito ao texto */
+  font-size: 1.1rem;
+  font-weight: 400;
   &:hover {
     text-decoration: none;
   }
 `;
 
-// Ícone da Sidebar
 export const Icon = styled.span`
-  margin-right: ${props => (props.isExpanded ? '20px' : '0')}; /* Aumenta o espaçamento para 20px */
+  margin-right: ${props => (props.isExpanded ? '20px' : '0')};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px; /* Aumenta o tamanho dos ícones */
+  font-size: 23px;
   color: ${props => (props.red ? '#e74c3c' : 'white')};
 `;
 
@@ -80,7 +82,7 @@ export const SidebarFooter = styled.div`
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza itens no rodapé */
+  align-items: center;
 `;
 
 // Item do Rodapé da Sidebar
@@ -93,13 +95,12 @@ export const SidebarFooterItem = styled.div`
   box-sizing: border-box;
   &:hover {
     background-color: #34495e;
-    border-radius: 4px; /* Adiciona bordas arredondadas */
-    padding: 10px 20px; /* Padding uniforme */
-    transition: background-color 0.3s;
+    border-radius: 4px;
+    padding: 10px 20px;
+    transition: background-color 0.7s;
   }
 `;
 
-// Divisor do Rodapé da Sidebar
 export const Divider = styled.div`
   height: 0.5px;
   background-color: #ecf0f1;
