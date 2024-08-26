@@ -21,7 +21,7 @@ export const OverviewTitle = styled.h2`
 
 export const CardContainer = styled.div`
   background: white;
-  border: 2px solid; /* Certifique-se de que a propriedade borderColor está definida */
+  border: 2px solid; 
   border-radius: 10px;
   padding: 20px;
   width: 150px;

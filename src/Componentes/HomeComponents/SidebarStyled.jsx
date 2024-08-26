@@ -76,7 +76,6 @@ export const Icon = styled.span`
   color: ${props => (props.red ? '#e74c3c' : 'white')};
 `;
 
-// Rodapé da Sidebar
 export const SidebarFooter = styled.div`
   width: 100%;
   margin-bottom: 20px;
@@ -85,7 +84,6 @@ export const SidebarFooter = styled.div`
   align-items: center;
 `;
 
-// Item do Rodapé da Sidebar
 export const SidebarFooterItem = styled.div`
   padding: 10px 20px;
   display: flex;
