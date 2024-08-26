@@ -14,7 +14,7 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { populateOrderDetails, sendHtmlForPdfConverter } from '../../generators/htmlManip';
+import { generateAndDownloadPDF } from '../../generators/htmlManip';
 
 const lightTheme = createTheme({
   palette: {
@@ -241,8 +241,7 @@ const OrdemDeServicoPage = () => {
 const handleDownload = async (type) => {
     try {
         // Gerar o PDF usando a função importada
-        await populateOrderDetails(selectedOs._id);
-        await sendHtmlForPdfConverter(type);
+        generateAndDownloadPDF();
         console.log("PDF CRIADO");
     } catch (error) {
         console.error('Erro ao gerar ou baixar o PDF:', error);

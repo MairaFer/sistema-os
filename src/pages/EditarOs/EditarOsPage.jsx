@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
-
-import { Grid, TextField, Button, Box, IconButton, Snackbar, Alert, InputAdornment, FormLabel } from '@mui/material';
+import { Grid, TextField, Button, Box, IconButton, Snackbar, Alert, InputAdornment, FormLabel, MenuItem, Select } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -61,6 +60,7 @@ const EditOrder = () => {
             pecas: [{ nome_peca: '', quantidade: '', valor_peca: '' }],
             diagnostico: '',
             observacoes: '',
+            status: '', // Adicione o status aqui
         },
     });
 
@@ -81,6 +81,7 @@ const EditOrder = () => {
                     diagnostico: data.diagnostico,
                     pecas: data.pecas_os,
                     observacoes: data.observacoes,
+                    status: data.status || '', // Adicione o status aqui
                 });
             } catch (error) {
                 console.error('Erro ao carregar dados da ordem de serviço:', error);
@@ -105,6 +106,7 @@ const EditOrder = () => {
                 valor_total: calcularValorTotal(peca.quantidade, peca.valor_peca),
             })),
             observacoes: data.observacoes || '',
+            status: data.status || '', // Adicione o status aqui
         };
         console.log('Payload para atualização da ordem de serviço:', payload);
 
@@ -264,8 +266,8 @@ const EditOrder = () => {
                                 <Button
                                     variant="contained"
                                     startIcon={<AddCircleIcon />}
+                                    sx={{ marginTop: '1rem', marginBottom: '1rem' }}
                                     onClick={() => append({ nome_peca: '', quantidade: '', valor_peca: '' })}
-                                    className={styles.addPieceButton}
                                 >
                                     Adicionar Peça
                                 </Button>
@@ -284,27 +286,71 @@ const EditOrder = () => {
                                             fullWidth
                                             multiline
                                             rows={4}
+                                            error={Boolean(errors.observacoes)}
+                                            helperText={errors.observacoes?.message}
                                         />
                                     )}
                                 />
                             </Grid>
 
-                            <Grid item xs={12} className={styles.submitButtonContainer}>
-                                <Button variant="outlined" color="secondary" onClick={handleCancel} className={styles.cancelButton}>
-                                    Cancelar
-                                </Button>
-                                <Button variant="contained" color="primary" type="submit" className={styles.submitButton}>
-                                    Salvar Alterações
-                                </Button>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="status"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            variant="filled"
+                                            fullWidth
+                                            label="Status"
+                                            error={Boolean(errors.status)}
+                                            displayEmpty
+                                        >
+                                            <MenuItem value="">Selecione o Status</MenuItem>
+                                            <MenuItem value="pendente">Pendente</MenuItem>
+                                            <MenuItem value="concluido">Concluído</MenuItem>
+                                            <MenuItem value="cancelado">Cancelado</MenuItem>
+                                        </Select>
+                                    )}
+                                />
                             </Grid>
                         </Grid>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{ fontWeight: 'bold', fontSize: '1rem' }}
+                            >
+                                Atualizar OS
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ fontWeight: 'bold', fontSize: '1rem' }}
+                                onClick={handleCancel}
+                            >
+                                Cancelar
+                            </Button>
+                        </Box>
                     </form>
+
+                    <Snackbar
+                        open={openSnackbar}
+                        autoHideDuration={6000}
+                        onClose={() => setOpenSnackbar(false)}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        <Alert
+                            onClose={() => setOpenSnackbar(false)}
+                            severity="success"
+                            sx={{ width: '100%' }}
+                        >
+                            Ordem de serviço atualizada com sucesso!
+                        </Alert>
+                    </Snackbar>
                 </section>
-                <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
-                    <Alert onClose={() => setOpenSnackbar(false)} severity="success">
-                        Ordem de Serviço atualizada com sucesso!
-                    </Alert>
-                </Snackbar>
             </div>
         </ThemeProvider>
     );
