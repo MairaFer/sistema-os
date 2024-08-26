@@ -8,8 +8,8 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    padding-right: 0; /* Remova o padding desnecessário */
-    margin-left: 0; /* Remove qualquer margem extra */
+    padding-right: 0;
+    margin-left: 0; 
 }
 
 .mainContent {
@@ -22,9 +22,10 @@
 
 .greetingContainer {
     font-family: Lexend, sans-serif;
-    background-color: rgba(33, 51, 86, 0.8); /* Adicione temporariamente para visualização */
+    background-color: rgba(33, 51, 86, 0.8);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 7px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -41,7 +42,7 @@
     margin-left: 0;
 }
 .greeting {
-  color: #ff6600;
+  color: #c4c8d2;
   margin: 1rem 0;
   text-align: left;
 }
@@ -68,7 +69,7 @@
   font-family: Lexend, sans-serif;
   font-size: 1.5rem;
   font-weight: 450;
-  background-color: #007bff;
+  background-color: #f25c21;
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;

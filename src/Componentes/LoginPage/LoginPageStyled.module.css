@@ -29,7 +29,7 @@
 
 .logoLogin {
   width: 37%; /* Ajuste o tamanho conforme necessário */
-  margin-right: 2rem; /* Espaço entre o logotipo e o formulário */
+  margin-right: 11rem;
   padding-bottom: 6%;
 }
 
@@ -61,6 +61,7 @@
   align-items: center;
   padding: 0% 2% 0% 2%;
   font-weight: 100;
+  font-size: 1.4rem; 
   margin-bottom: 1.2rem;
 }
 

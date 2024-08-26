@@ -11,8 +11,9 @@ export const Button = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.s ease;
   min-width: 150px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 
   &:hover {
     background-color: #0056b3;
