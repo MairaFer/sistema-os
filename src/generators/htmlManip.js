@@ -163,7 +163,7 @@ export async function sendHtmlForPdfConverter(type) {
         const html = await htmlResponse.text();
 
         const formData = new FormData();
-        const blob = new Blob([html], { type: 'text/html' });
+        let blob = new Blob([html], { type: 'text/html' });
         formData.append('file', blob, 'document.html');
 
         const response = await axios.post(
