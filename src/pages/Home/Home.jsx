@@ -152,7 +152,7 @@ const Home = () => {
           return dateB - dateA; // Ordena em ordem decrescente
         });
 
-        // Selecionar as 5 ordens mais recentes
+        // Selecionar as 9 ordens mais recentes
         const recentOrders = sortedOrders.slice(0, 9);
 
         // Mapear ordens de serviço com nomes de clientes e funcionários

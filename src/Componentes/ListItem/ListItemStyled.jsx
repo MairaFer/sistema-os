@@ -11,7 +11,7 @@ export const ListItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 7px;
   background-color: #f9f9f9;
 `;
 
@@ -26,7 +26,7 @@ export const IdentifierBox = styled.div`
   color: #fff;
   background-color: #EF5E22; 
   padding: 10px 100px;
-  border-radius: 20px;
+  border-radius: 7px;
 `;
 
 export const ThreeDotsButton = styled.button`
