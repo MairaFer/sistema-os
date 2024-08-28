@@ -9,12 +9,11 @@ import {
   MenuItem as MenuItemMui, createTheme, ThemeProvider,
   Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
-  DialogContent, DialogTitle, Button as MuiButton, CircularProgress
+  DialogContent, DialogTitle, Button as MuiButton, CircularProgress, Backdrop
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { generateAndDownloadPDF } from '../../generators/htmlManip';
 
 const lightTheme = createTheme({
   palette: {
@@ -92,6 +91,7 @@ const OrdemDeServicoPage = () => {
   const [selectedOs, setSelectedOs] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isBackdropOpen, setIsBackdropOpen] = useState(false);
 
   useEffect(() => {
 
@@ -131,8 +131,8 @@ const OrdemDeServicoPage = () => {
 
           return {
             ...order,
-            cliente_os: clientName,
-            funcionario_os: employeeName
+            cliente_v: clientName,
+            funcionario_V: employeeName
           };
         });
 
@@ -237,12 +237,14 @@ const OrdemDeServicoPage = () => {
   };
 
   const fetchPdfDataAndGenerate = async (order) => {
+    setIsBackdropOpen(true)
+
     try {
       const token = sessionStorage.getItem('token');
       if (!token) {
         throw new Error('Token não encontrado.');
       }
-  
+
       // Fazer requisições paralelas para obter os dados necessários
       const [
         clientsResponse,
@@ -255,51 +257,53 @@ const OrdemDeServicoPage = () => {
         axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/user/${token}`),
         axios.get(`https://cyberos-sistemadeordemdeservico-api.onrender.com/servicos/${token}`)
       ]);
-  
+
       const clients = clientsResponse.data;
       const employees = employeesResponse.data;
       const user = userResponse.data;
       const services = servicesResponse.data;
-  
+
       // Criar mapeamentos para clientes, funcionários e serviços
       const clientMap = clients.reduce((map, client) => {
         map[client._id] = client;
         return map;
       }, {});
-  
+
       const employeeMap = employees.reduce((map, employee) => {
         map[employee._id] = employee;
         return map;
       }, {});
-  
+
       const serviceMap = services.reduce((map, service) => {
         map[service._id] = service;
         return map;
       }, {});
-  
+
       // Mapear dados de cliente, funcionário e serviço para a ordem
       const client = clientMap[order.cliente_os] || {};
       const employee = employeeMap[order.funcionario_os] || {};
-      const service = serviceMap[order.servico_os] || {}; // Supondo que exista um campo `servico_os` na ordem
-      
-      console.log(client);
+      const service = serviceMap[order.servico_os] || {};
+
+      console.log('Cliente:', client);
+      console.log('Funcionário:', employee);
+      console.log('Serviço:', service);
 
       // Construir os dados necessários para o PDF
       const orderData = {
-        logoUrl: user.picturePathLogo,
+        logoUrl: user.picturePathLogo || '',
         nome_empresa: user.nome_empresa || '',
         cnpj_user: user.cnpj_user || '',
         contato_userEmpresa: user.contato_userEmpresa || '',
         endereco_userEmpresa: user.endereco_userEmpresa || '',
-        nome_os: order.nome_os,
-        key_search: order.key_search,
-        createdAt: new Date(order.createdAt).toLocaleDateString('pt-BR'),
-        corf: client ? 'Cliente' : 'Funcionário',
-        nome_corF: client ? client.nome_cliente : employee.nome_func,
-        contato_corF: client.contato_cliente || employee.contato_func,
+        nome_os: order.nome_os || '',
+        key_search: order.key_search || '',
+        createdAt: order.createdAt ? new Date(order.createdAt).toLocaleDateString('pt-BR') : '',
+        corf: client._id ? 'Cliente' : 'Funcionário',
+        nome_corF: client.nome_cliente || employee.nome_func || '',
+        contato_corF: client.contato_cliente || employee.contato_func || '',
         cpfCnpj: client.cpf_cliente || client.cnpj_cliente || '',
-        endOrSetor: client ? 'Endereço' : 'Setor',
-        endOrSetor_info: client ? client.endereco_cliente : employee.setor,
+        endOrSetor: client._id ? 'Endereço' : 'Setor',
+        endOrSetor_info: client.endereco_cliente || employee.setor || '',
         equipamento: order.equipamento || '',
         marca: order.marca || '',
         numero_serie: order.numero_serie || '',
@@ -313,10 +317,11 @@ const OrdemDeServicoPage = () => {
         tecnico: order.tecnico || ''
       };
 
-      console.log(orderData);
-      
+      console.log('Dados da Ordem:', orderData);
+
       // Enviar o PDF gerado para a API
       try {
+
         const response = await axios.post(
           `https://cyberos-sistemadeordemdeservico-api.onrender.com/generate-pdf/${token}`,
           orderData,
@@ -324,7 +329,7 @@ const OrdemDeServicoPage = () => {
             responseType: 'blob' // Configura o Axios para tratar a resposta como um blob
           }
         );
-  
+
         // Cria um URL para o blob e inicia o download
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
         const link = document.createElement('a');
@@ -333,129 +338,139 @@ const OrdemDeServicoPage = () => {
         document.body.appendChild(link);
         link.click();
         link.remove();
-  
+
         console.log('PDF gerado com sucesso:', response.data);
+        enqueueSnackbar('PDF gerado com sucesso!', { variant: 'success' });
       } catch (pdfError) {
+        enqueueSnackbar('Erro ao gerar pdf', { variant: 'error' });
         console.error('Erro ao gerar PDF:', pdfError.message);
       }
     } catch (error) {
       console.error('Erro ao buscar dados:', error.message);
+    } finally {
+      setIsBackdropOpen(false); // Fecha o Backdrop quando o processo é concluído
     }
-  };  
-
-    const handleDownload = async () => {
-      try {
-        console.log(selectedOs);
-        if (selectedOs && selectedOs._id) {
-          await fetchPdfDataAndGenerate(selectedOs);
-          console.log("PDF criado com sucesso.");
-        } else {
-          console.warn('Nenhuma ordem de serviço selecionada');
-        }
-      } catch (error) {
-        console.error('Erro ao gerar ou baixar o PDF:', error);
-      }
-    };
-
-
-    return (
-      <ThemeProvider theme={lightTheme}>
-        <MainContainer>
-          <HeaderContainer>
-            <div style={{ marginBottom: '1rem' }} />
-            <TextField
-              placeholder="Buscar por nome ou chave da OS..."
-              value={searchTerm}
-              onChange={handleSearch}
-              style={{ marginBottom: '1rem', width: '400px' }}
-            />
-            <FormControl style={{ marginLeft: '1rem' }} variant="filled">
-              <InputLabel id="filter-label">Filtrar por Data ou Status</InputLabel>
-              <Select
-                labelId="filter-label"
-                value={filter}
-                onChange={handleFilterChange}
-                style={{ width: '250px' }}
-              >
-                <MenuItem value="">Todos</MenuItem>
-                <MenuItem value="data_asc">Data OS Crescente</MenuItem>
-                <MenuItem value="data_desc">Data OS Decrescente</MenuItem>
-                <MenuItem value="status_em_aberto">Status: Em Aberto</MenuItem>
-                <MenuItem value="status_aguardando_autorizacao">Status: Aguardando Autorização</MenuItem>
-                <MenuItem value="status_finalizada">Status: Finalizada</MenuItem>
-              </Select>
-            </FormControl>
-          </HeaderContainer>
-          <ContentContainer>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%', backgroundColor: 'whitesmoke' }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Nome</TableCell>
-                      <TableCell>Chave OS</TableCell>
-                      <TableCell>Cliente/Funcionario</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Data</TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredOsList.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} align="center">
-                          Não há nenhuma ordem de serviço cadastrada.
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredOsList.map(os => (
-                        <TableRow key={os._id}>
-                          <TableCell>{os.nome_os}</TableCell>
-                          <TableCell>{os.key_search}</TableCell>
-                          <TableCell>{os.cliente_os || os.funcionario_os}</TableCell>
-                          <TableCell>{os.status_os}</TableCell>
-                          <TableCell>{new Date(os.createdAt).toLocaleDateString()}</TableCell>
-                          <TableCell>
-                            <IconButton sx={{ width: '' }} onClick={(event) => handleMenuClick(event, os)}>
-                              <MoreVertIcon />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </ContentContainer>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleEditOs}>Editar</MenuItem>
-            <MenuItem onClick={() => handleDownload("empresa")}>Emitir OS Empresa</MenuItem>
-            <MenuItem onClick={() => handleDownload("beneficiario")}>Emitir OS Beneficiário</MenuItem>
-            <MenuItem onClick={handleDeleteOs}>Excluir</MenuItem>
-          </Menu>
-          <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-          >
-            <DialogTitle>Confirmar Exclusão</DialogTitle>
-            <DialogContent>
-              Tem certeza de que deseja excluir esta ordem de serviço?
-            </DialogContent>
-            <DialogActions>
-              <MuiButton onClick={handleCloseDialog}>Cancelar</MuiButton>
-              <MuiButton color="error" onClick={handleConfirmDelete}>Excluir</MuiButton>
-            </DialogActions>
-          </Dialog>
-        </MainContainer>
-      </ThemeProvider>
-    );
   };
 
-  export default OrdemDeServicoPage;
+  const handleDownload = async () => {
+    try {
+      console.log(selectedOs);
+      if (selectedOs && selectedOs._id) {
+        await fetchPdfDataAndGenerate(selectedOs);
+        console.log("PDF criado com sucesso.");
+      } else {
+        console.warn('Nenhuma ordem de serviço selecionada');
+      }
+    } catch (error) {
+      console.error('Erro ao gerar ou baixar o PDF:', error);
+    }
+  };
+
+
+  return (
+    <ThemeProvider theme={lightTheme}>
+      <MainContainer>
+        <HeaderContainer>
+          <div style={{ marginBottom: '1rem' }} />
+          <TextField
+            placeholder="Buscar por nome ou chave da OS..."
+            value={searchTerm}
+            onChange={handleSearch}
+            style={{ marginBottom: '1rem', width: '400px' }}
+          />
+          <FormControl style={{ marginLeft: '1rem' }} variant="filled">
+            <InputLabel id="filter-label">Filtrar por Data ou Status</InputLabel>
+            <Select
+              labelId="filter-label"
+              value={filter}
+              onChange={handleFilterChange}
+              style={{ width: '250px' }}
+            >
+              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value="data_asc">Data OS Crescente</MenuItem>
+              <MenuItem value="data_desc">Data OS Decrescente</MenuItem>
+              <MenuItem value="status_em_aberto">Status: Em Aberto</MenuItem>
+              <MenuItem value="status_aguardando_autorizacao">Status: Aguardando Autorização</MenuItem>
+              <MenuItem value="status_finalizada">Status: Finalizada</MenuItem>
+            </Select>
+          </FormControl>
+        </HeaderContainer>
+        <ContentContainer>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%', backgroundColor: 'whitesmoke' }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nome</TableCell>
+                    <TableCell>Chave OS</TableCell>
+                    <TableCell>Cliente/Funcionario</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Data</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredOsList.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} align="center">
+                        Não há nenhuma ordem de serviço cadastrada.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredOsList.map(os => (
+                      <TableRow key={os._id}>
+                        <TableCell>{os.nome_os}</TableCell>
+                        <TableCell>{os.key_search}</TableCell>
+                        <TableCell>{os.cliente_v || os.funcionario_v}</TableCell>
+                        <TableCell>{os.status_os}</TableCell>
+                        <TableCell>{new Date(os.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          <IconButton sx={{ width: '' }} onClick={(event) => handleMenuClick(event, os)}>
+                            <MoreVertIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </ContentContainer>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleEditOs}>Editar</MenuItem>
+          <MenuItem onClick={() => handleDownload("empresa")}>Emitir OS Empresa</MenuItem>
+          <MenuItem onClick={() => handleDownload("beneficiario")}>Emitir OS Beneficiário</MenuItem>
+          <MenuItem onClick={handleDeleteOs}>Excluir</MenuItem>
+        </Menu>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+        >
+          <DialogTitle>Confirmar Exclusão</DialogTitle>
+          <DialogContent>
+            Tem certeza de que deseja excluir esta ordem de serviço?
+          </DialogContent>
+          <DialogActions>
+            <MuiButton onClick={handleCloseDialog}>Cancelar</MuiButton>
+            <MuiButton color="error" onClick={handleConfirmDelete}>Excluir</MuiButton>
+          </DialogActions>
+        </Dialog>
+      </MainContainer>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isBackdropOpen}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </ThemeProvider>
+  );
+};
+
+export default OrdemDeServicoPage; 
