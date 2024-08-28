@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   HeaderContainer, MainContainer, ContentContainer,
-  ButtonContainer
+  ButtonContainer, HeaderTableCellStyled 
 } from './ClienteStyled';
 import {
   TableContainerStyled,
@@ -20,7 +20,6 @@ import {
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
@@ -37,7 +36,7 @@ const lightTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#c4c8d2',
+          backgroundColor: '#E3EAF8',
           borderRadius: '50px',
         },
       },
@@ -72,9 +71,10 @@ const lightTheme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          padding: '8px 20px',
-          fontSize: '1.1rem',
-          fontWeight: '600',
+          padding: '8px 16px',
+          borderBottom: '1px solid #ddd',
+          fontSize: '1.25rem',
+          fontWeight: '500',
         },
       },
     },
@@ -250,14 +250,14 @@ const ClientesPage = () => {
             </div>
           ) : (
             <TableContainerStyled>
-  <TableStyled>
-    <TableHeadStyled>
-      <TableRowStyled>
-        <TableCellStyled>Cliente</TableCellStyled>
-        <TableCellStyled>CPF/CNPJ</TableCellStyled>
-        <TableCellStyled></TableCellStyled>
-      </TableRowStyled>
-    </TableHeadStyled>
+               <TableStyled>
+               <TableHeadStyled>
+  <TableRowStyled>
+    <HeaderTableCellStyled>Cliente</HeaderTableCellStyled>
+    <HeaderTableCellStyled>CPF/CNPJ</HeaderTableCellStyled>
+    <TableCellStyled></TableCellStyled> {/* Esta célula não precisa de estilo especial */}
+  </TableRowStyled>
+</TableHeadStyled>
     <TableBody>
       {filteredClients.map((client) => (
         <TableRowStyled key={client._id}>
@@ -293,8 +293,8 @@ const ClientesPage = () => {
           onClose={handleMenuClose}
           PaperProps={{
             style: {
-              zIndex: 1300, // Garante que o menu está acima de outros elementos
-              backgroundColor: '#fff', // Cor de fundo do menu
+              zIndex: 2300, // Garante que o menu está acima de outros elementos
+              backgroundColor: '#ffffff', // Cor de fundo do menu
       color: '#fff', // Cor do texto do menu
             },
           }}

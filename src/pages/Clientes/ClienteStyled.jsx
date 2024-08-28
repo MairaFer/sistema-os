@@ -11,7 +11,7 @@ export const TableContainerStyled = styled(TableContainer)`
 
 export const TableStyled = styled(Table)`
   border: none;
-  background-color: #c4c8d2;
+  background-color: #E3EAF8;
 `;
 
 export const TableHeadStyled = styled(TableHead)`
@@ -45,7 +45,12 @@ export const CpfCellStyled = styled(TableCell)`
   font-weight: bold;
   border-radius: 0.6rem 0.6rem 0.6rem 0.6rem;
 `;
-
+export const HeaderTableCellStyled = styled(TableCell)`
+  padding: 8px 20px;
+  font-size: 1.4rem; /* Aumenta o tamanho da fonte */
+  font-weight: 00;  /* Aumenta a espessura da fonte */
+  color: #2F4165;    /* Muda a cor para #2F4165 */
+`;
 export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;

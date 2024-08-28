@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  HeaderContainer, MainContainer, ContentContainer, ButtonContainer 
+  HeaderContainer, MainContainer, ContentContainer,
+  ButtonContainer, HeaderTableCellStyled 
 } from './FuncionarioStyled'; 
-import { 
-  Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
-  MenuItem as MenuItemMui, createTheme, ThemeProvider, 
-  Table, TableBody, TableCell, TableContainer, TableHead, 
-  TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
+import {
+  TableContainerStyled,
+  TableStyled,
+  TableHeadStyled,
+  TableCellStyled,
+  TableRowStyled,
+  SetorCellStyled,
+} from './FuncionarioStyled'; 
+import {
+  Select, MenuItem, FormControl, InputLabel, Fab, Menu,
+  MenuItem as MenuItemMui, createTheme, ThemeProvider, TableBody, IconButton, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
@@ -26,15 +34,15 @@ const lightTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
-          borderRadius: '4px',
+          backgroundColor: '#E3EAF8',
+          borderRadius: '50px',
         },
       },
     },
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#2074d4',
           borderRadius: '4px',
         },
       },
@@ -54,7 +62,7 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           borderCollapse: 'separate',
-          borderSpacing: '0 8px',
+          borderSpacing: '8px',
         },
       },
     },
@@ -228,34 +236,32 @@ const FuncionarioPage = () => {
               <p>Não há nenhum funcionário cadastrado.</p>
             </div>
           ) : (
-            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '60%' }}>
-              <Table sx={{ border: 'none' }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell><strong>Funcionário</strong></TableCell>
-                    <TableCell ><strong>Setor</strong></TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
+            <TableContainerStyled>
+              <TableStyled>
+                <TableHeadStyled>
+                  <TableRowStyled>
+                    <HeaderTableCellStyled>Funcionário</HeaderTableCellStyled>
+                    <HeaderTableCellStyled>Setor</HeaderTableCellStyled>
+                    <HeaderTableCellStyled></HeaderTableCellStyled>
+                  </TableRowStyled>
+                </TableHeadStyled>
                 <TableBody>
                   {filteredEmployees.map((employee) => (
-                    <TableRow key={employee._id}>
-                      <TableCell>{employee.nome_func}</TableCell>
-                      <TableCell sx={{ borderRadius: '2rem 0 0 2rem', color: '#fff', backgroundColor: '#FF5A15', width:'20rem' }}>
-                        {employee.setor}
-                      </TableCell>
-                      <TableCell sx={{width:''}}>
+                    <TableRowStyled key={employee._id}>
+                      <TableCellStyled>{employee.nome_func}</TableCellStyled>
+                      <SetorCellStyled>{employee.setor}</SetorCellStyled>
+                      <TableCellStyled>
                         <IconButton onClick={(event) => handleMenuClick(event, employee)}>
                           <MoreVertIcon />
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      </TableCellStyled>
+                    </TableRowStyled>
                   ))}
                 </TableBody>
-              </Table>
-            </TableContainer>
+              </TableStyled>
+            </TableContainerStyled>
           )}
-
+  
           <ButtonContainer>
             <Fab color="primary" aria-label="add" onClick={handleAddEmployeeClick}>
               <AddIcon />
@@ -263,7 +269,7 @@ const FuncionarioPage = () => {
           </ButtonContainer>
         </ContentContainer>
       </MainContainer>
-
+  
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -272,7 +278,7 @@ const FuncionarioPage = () => {
         <MenuItemMui onClick={handleViewEmployee}>Visualizar</MenuItemMui>
         <MenuItemMui onClick={handleDeleteEmployee}>Excluir</MenuItemMui>
       </Menu>
-
+  
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -289,7 +295,7 @@ const FuncionarioPage = () => {
           <MuiButton color="error" onClick={handleConfirmDelete}>Excluir</MuiButton>
         </DialogActions>
       </Dialog>
-
+  
       <Dialog
         open={openViewModal}
         onClose={handleCloseViewModal}
@@ -309,7 +315,7 @@ const FuncionarioPage = () => {
         </DialogActions>
       </Dialog>
     </ThemeProvider>
-  );
+  );  
 };
 
 export default FuncionarioPage;

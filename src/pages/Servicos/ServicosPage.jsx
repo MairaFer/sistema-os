@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  HeaderContainer, MainContainer, ContentContainer, ButtonContainer 
+  HeaderContainer, MainContainer, ContentContainer, ButtonContainer, HeaderTableCellStyled 
 } from './ServicosStyled'; 
-import { 
-  Select, MenuItem, FormControl, InputLabel, Fab, Menu, 
-  MenuItem as MenuItemMui, createTheme, ThemeProvider, 
-  Table, TableBody, TableCell, TableContainer, TableHead, 
-  TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
+import {
+  TableContainerStyled,
+  TableStyled,
+  TableHeadStyled,
+  TableCellStyled,
+  TableRowStyled,
+  ValorCellStyled,
+} from './ServicosStyled'; 
+import {
+  Select, MenuItem, FormControl, InputLabel, Fab, Menu,
+  MenuItem as MenuItemMui, createTheme, ThemeProvider, TableBody, IconButton, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -26,15 +33,15 @@ const lightTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
-          borderRadius: '4px',
+          backgroundColor: '#E3EAF8',
+          borderRadius: '50px',
         },
       },
     },
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#2074d4',
           borderRadius: '4px',
         },
       },
@@ -54,7 +61,7 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           borderCollapse: 'separate',
-          borderSpacing: '0 8px',
+          borderSpacing: '8px',
         },
       },
     },
@@ -230,23 +237,23 @@ const ServicosPage = () => {
               <p>Não há nenhum serviço cadastrado.</p>
             </div>
           ) : (
-            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '55%' }}>
-              <Table sx={{ border: 'none' }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell><strong>Serviço</strong></TableCell>
-                    <TableCell><strong>Valor</strong></TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
+            <TableContainerStyled>
+              <TableStyled>
+                <TableHeadStyled>
+                  <TableRowStyled>
+                    <HeaderTableCellStyled><strong>Serviço</strong></HeaderTableCellStyled>
+                    <HeaderTableCellStyled><strong>Valor</strong></HeaderTableCellStyled>
+                    <HeaderTableCellStyled></HeaderTableCellStyled>
+                  </TableRowStyled>
+                </TableHeadStyled>
                 <TableBody>
                   {filteredServices.map((service) => (
-                    <TableRow key={service._id}>
-                      <TableCell>{service.nome_servico}</TableCell>
-                      <TableCell sx={{ backgroundColor: '#FF5A15', color: '#fff', borderRadius: '2rem 0 0 2rem', width:'15rem' }}>
+                    <TableRowStyled key={service._id}>
+                      <TableCellStyled>{service.nome_servico}</TableCellStyled>
+                      <ValorCellStyled>
                         {formatCurrency(service.valor_servico)}
-                      </TableCell>
-                      <TableCell>
+                      </ValorCellStyled>
+                      <TableCellStyled>
                         <IconButton onClick={(event) => handleMenuClick(event, service._id)}>
                           <MoreVertIcon />
                         </IconButton>
@@ -258,12 +265,12 @@ const ServicosPage = () => {
                           <MenuItemMui onClick={handleViewService}>Visualizar</MenuItemMui>
                           <MenuItemMui onClick={handleDeleteService}>Excluir</MenuItemMui>
                         </Menu>
-                      </TableCell>
-                    </TableRow>
+                      </TableCellStyled>
+                    </TableRowStyled>
                   ))}
                 </TableBody>
-              </Table>
-            </TableContainer>
+              </TableStyled>
+            </TableContainerStyled>
           )}
         </ContentContainer>
         <ButtonContainer>
@@ -286,7 +293,7 @@ const ServicosPage = () => {
         </Dialog>
       </MainContainer>
     </ThemeProvider>
-  );
+  );  
 };
 
 export default ServicosPage;
