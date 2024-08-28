@@ -44,7 +44,7 @@ const lightTheme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2074d4',
+          backgroundColor: '#f25c21',
           borderRadius: '4px',
         },
       },
