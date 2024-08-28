@@ -5,7 +5,7 @@ export const TableWrapper = styled.div`
   width: 100%;
   border-radius: 7px;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 `;
 
 export const Table = styled.table`
@@ -15,7 +15,7 @@ export const Table = styled.table`
 `;
 
 export const TableHead = styled.thead`
-    background-color: #485474;
+    background-color: #2F4165;
 `;
 
 export const TableHeadRow = styled.tr`
@@ -28,7 +28,7 @@ export const TableHeadCell = styled.th`
 `;
 
 export const TableBody = styled.tbody`
-  color: #404655;
+  color: #2F4165;
 `;
 
 export const TableRow = styled.tr`

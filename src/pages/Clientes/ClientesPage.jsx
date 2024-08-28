@@ -5,12 +5,22 @@ import {
   ButtonContainer
 } from './ClienteStyled';
 import {
+  TableContainerStyled,
+  TableStyled,
+  TableHeadStyled,
+  TableCellStyled,
+  TableRowStyled,
+  CnpjCellStyled,
+  CpfCellStyled
+} from './ClienteStyled';
+import {
   Select, MenuItem, FormControl, InputLabel, Fab, Menu,
-  MenuItem as MenuItemMui, createTheme, ThemeProvider,
-  Table, TableBody, TableCell, TableContainer, TableHead,
-  TableRow, Paper, IconButton, TextField, Dialog, DialogActions,
+  MenuItem as MenuItemMui, createTheme, ThemeProvider, TableBody, IconButton, TextField, Dialog, DialogActions,
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
@@ -27,15 +37,15 @@ const lightTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
-          borderRadius: '4px',
+          backgroundColor: '#c4c8d2',
+          borderRadius: '50px',
         },
       },
     },
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#c4c8d2',
           borderRadius: '4px',
         },
       },
@@ -55,16 +65,15 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           borderCollapse: 'separate',
-          borderSpacing: '0 8px',
+          borderSpacing: ' 8px',
         },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         root: {
-          padding: '8px 16px',
-          borderBottom: '1px solid #ddd',
-          fontSize: '1.25rem',
+          padding: '8px 20px',
+          fontSize: '1.1rem',
           fontWeight: '600',
         },
       },
@@ -203,11 +212,19 @@ const ClientesPage = () => {
         <HeaderContainer>
           <div style={{ marginBottom: '1rem' }} />
           <TextField
-            placeholder="Buscar cliente..."
-            value={searchTerm}
-            onChange={handleSearch}
-            style={{ marginBottom: '1rem', width: '400px' }}
-          />
+  placeholder="Buscar cliente..."
+  value={searchTerm}
+  onChange={handleSearch}
+  style={{ marginBottom: '1rem', width: '400px' }}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <SearchIcon />
+      </InputAdornment>
+    ),
+  }}
+/>
+
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="filter-label">Filtrar por CPF/CNPJ</InputLabel>
             <Select
@@ -232,32 +249,34 @@ const ClientesPage = () => {
               <p>Não há nenhum cliente cadastrado.</p>
             </div>
           ) : (
-            <TableContainer component={Paper} sx={{ borderRadius: '12px',  width: '55%' }}>
-              <Table sx={{ border: 'none' }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Cliente</TableCell>
-                    <TableCell>CPF/CNPJ</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredClients.map((client) => (
-                    <TableRow key={client._id}>
-                      <TableCell>{client.nome_cliente}</TableCell>
-                      <TableCell sx={{ width:'15rem',borderRadius: '2rem 0 0 2rem', color: '#fff', backgroundColor: client.cnpj_cliente ? '#EF5E22' : '#0047FF' }}>
-                        {client.cpf_cliente || client.cnpj_cliente}
-                      </TableCell>
-                      <TableCell sx={{width:''}}>
-                        <IconButton onClick={(event) => handleMenuClick(event, client)}>
-                          <MoreVertIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <TableContainerStyled>
+  <TableStyled>
+    <TableHeadStyled>
+      <TableRowStyled>
+        <TableCellStyled>Cliente</TableCellStyled>
+        <TableCellStyled>CPF/CNPJ</TableCellStyled>
+        <TableCellStyled></TableCellStyled>
+      </TableRowStyled>
+    </TableHeadStyled>
+    <TableBody>
+      {filteredClients.map((client) => (
+        <TableRowStyled key={client._id}>
+          <TableCellStyled>{client.nome_cliente}</TableCellStyled>
+          {client.cnpj_cliente ? (
+            <CnpjCellStyled>{client.cnpj_cliente}</CnpjCellStyled>
+          ) : (
+            <CpfCellStyled>{client.cpf_cliente}</CpfCellStyled>
+          )}
+          <TableCellStyled>
+            <IconButton onClick={(event) => handleMenuClick(event, client)}>
+              <MoreVertIcon style={{ color: '#c4c8d2' }} />
+            </IconButton>
+          </TableCellStyled>
+        </TableRowStyled>
+      ))}
+    </TableBody>
+  </TableStyled>
+</TableContainerStyled>
           )}
 
           <ButtonContainer>
@@ -272,6 +291,13 @@ const ClientesPage = () => {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          PaperProps={{
+            style: {
+              zIndex: 1300, // Garante que o menu está acima de outros elementos
+              backgroundColor: '#fff', // Cor de fundo do menu
+      color: '#fff', // Cor do texto do menu
+            },
+          }}
         >
           <MenuItemMui onClick={handleViewClient}>Visualizar</MenuItemMui>
           <MenuItemMui style={{color: '#FF0000'}} onClick={handleDeleteClient}>Excluir</MenuItemMui>
@@ -307,3 +333,4 @@ const ClientesPage = () => {
 };
 
 export default ClientesPage;
+
