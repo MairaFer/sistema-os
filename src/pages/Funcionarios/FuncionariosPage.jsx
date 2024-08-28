@@ -18,6 +18,7 @@ import {
   DialogContent, DialogTitle, Button as MuiButton, CircularProgress
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
@@ -42,7 +43,7 @@ const lightTheme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2074d4',
+          backgroundColor: '#f25c21',
           borderRadius: '4px',
         },
       },
@@ -204,12 +205,20 @@ const FuncionarioPage = () => {
       <MainContainer>
         <HeaderContainer>
           <div style={{ marginBottom: '1rem' }} />
-          <TextField
-            placeholder="Buscar funcionário..."
-            value={searchTerm}
-            onChange={handleSearch}
-            style={{ marginBottom: '1rem', width: '400px' }}
-          />
+          <TextField 
+          variant="outlined" 
+          placeholder="Buscar funcionrio..." 
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{ marginBottom: '1rem', width: '400px' }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="filter-label">Filtrar por Setor</InputLabel>
             <Select

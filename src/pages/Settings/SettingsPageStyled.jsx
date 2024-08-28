@@ -4,18 +4,17 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
+  width: 80%;
   max-width: 1760px;
-  margin: 1rem 3rem;
   padding: 2rem;
   background-color: #213356;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 `;
 
 export const FormContainer = styled.div`
   width: 55%;
-
 `;
 
 export const LogoContainer = styled.div`
@@ -61,7 +60,7 @@ export const Input = styled.input`
   border-radius: 5px;
   font-size: 1rem;
   color: #333;
-  background: #fff;
+  background: #E3EAF8;
 `;
 
 export const Button = styled.button`

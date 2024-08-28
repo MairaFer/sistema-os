@@ -11,6 +11,7 @@ import {
   TableRowStyled,
   ValorCellStyled,
 } from './ServicosStyled'; 
+import InputAdornment from '@mui/material/InputAdornment';
 import {
   Select, MenuItem, FormControl, InputLabel, Fab, Menu,
   MenuItem as MenuItemMui, createTheme, ThemeProvider, TableBody, IconButton, TextField, Dialog, DialogActions,
@@ -18,6 +19,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList'; 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -41,7 +43,7 @@ const lightTheme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2074d4',
+          backgroundColor: '#f25c21',
           borderRadius: '4px',
         },
       },
@@ -207,13 +209,20 @@ const ServicosPage = () => {
     <ThemeProvider theme={lightTheme}>
       <MainContainer>
         <HeaderContainer>
-          <TextField 
-            variant="outlined" 
-            placeholder="Buscar serviço..." 
-            value={searchTerm}
-            onChange={handleSearch}
-            style={{ marginBottom: '1rem', width: '400px' }}
-          />
+        <TextField 
+          variant="outlined" 
+          placeholder="Buscar serviço..." 
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{ marginBottom: '1rem', width: '400px' }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
           <FormControl style={{ marginLeft: '1rem' }} variant="filled">
             <InputLabel id="sort-order-label">Ordenar por Valor</InputLabel>
             <Select
