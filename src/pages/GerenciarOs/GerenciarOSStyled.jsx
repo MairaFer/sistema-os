@@ -9,7 +9,7 @@ export const MainContainer = styled.div`
 export const HeaderContainer = styled.div`
   background-color: #213356;
   padding: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center; 
 `;

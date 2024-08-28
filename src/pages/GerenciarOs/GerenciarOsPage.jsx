@@ -26,15 +26,15 @@ const lightTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
-          borderRadius: '4px',
+          backgroundColor: '#E3EAF8',
+          borderRadius: '30px',
         },
       },
     },
     MuiSelect: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#f25c21',
           borderRadius: '4px',
         },
       },
@@ -399,7 +399,7 @@ const OrdemDeServicoPage = () => {
           {loading ? (
             <CircularProgress />
           ) : (
-            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%', backgroundColor: 'whitesmoke' }}>
+            <TableContainer component={Paper} sx={{ borderRadius: '12px', width: '80%', backgroundColor: '#E3EAF8' }}>
               <Table>
                 <TableHead>
                   <TableRow>

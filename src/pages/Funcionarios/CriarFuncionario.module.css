@@ -124,7 +124,7 @@
     flex-direction: column;
     border: solid 1rem #213356; /* Mantém a borda aqui */
     background-color: #213356;  /* Mantém o fundo aqui */
-    border-radius: 2rem;
+    border-radius: 0.2rem;
     width: 30rem;
 }
 
